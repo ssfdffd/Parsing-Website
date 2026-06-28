@@ -1494,3 +1494,273 @@ button {
   background: var(--coral);
   color: var(--cream);
 }
+
+/* ============================================
+   PAGE HERO
+   ============================================ */
+.page-hero {
+  padding: 10rem 0 4rem;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.page-title {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  margin-bottom: 1rem;
+}
+
+.page-subtitle {
+  font-size: 1.25rem;
+  color: rgba(240, 240, 224, 0.7);
+  max-width: 48rem;
+  margin: 0 auto;
+}
+
+/* ============================================
+   SERVICES PAGE
+   ============================================ */
+.services-intro {
+  background: linear-gradient(180deg, transparent 0%, rgba(64, 64, 64, 0.1) 100%);
+}
+
+.services-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.services-content p {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: rgba(240, 240, 224, 0.8);
+  margin-bottom: 2rem;
+}
+
+.services-detail {
+  background: linear-gradient(180deg, transparent 0%, rgba(64, 64, 64, 0.1) 100%);
+}
+
+.services-grid-detail {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.service-detail-card {
+  padding: 2.5rem;
+  border-radius: 1.5rem;
+  background: rgba(10, 10, 10, 0.5);
+  border: 1px solid rgba(64, 64, 64, 0.5);
+  transition: var(--transition);
+}
+
+.service-detail-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(240, 112, 128, 0.5);
+}
+
+.service-icon-large {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.service-icon-large svg {
+  width: 2rem;
+  height: 2rem;
+  color: white;
+}
+
+.service-detail-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.service-detail-card > p {
+  color: rgba(240, 240, 224, 0.7);
+  margin-bottom: 1.5rem;
+}
+
+.service-detail-card ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.service-detail-card li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: rgba(240, 240, 224, 0.8);
+  font-size: 0.9375rem;
+}
+
+.service-detail-card li::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--coral);
+}
+
+/* ============================================
+   WEBSITES SECTION - ROTATING ICONS
+   ============================================ */
+.websites-section {
+  background: linear-gradient(180deg, transparent 0%, rgba(64, 64, 64, 0.1) 100%);
+}
+
+.rotating-icons-wrapper {
+  position: relative;
+  width: 400px;
+  height: 400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rotating-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(64, 64, 64, 0.3);
+  border: 1px solid rgba(64, 64, 64, 0.5);
+  animation: spin-slow 20s linear infinite;
+}
+
+.rotating-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80px;
+  height: 80px;
+  margin: -40px 0 0 -40px;
+  transform: rotate(var(--angle)) translate(160px) rotate(calc(-1 * var(--angle)));
+  animation: spin-reverse 20s linear infinite;
+}
+
+.icon-box {
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  transition: var(--transition);
+}
+
+.icon-box svg {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.icon-box:hover {
+  transform: scale(1.15);
+}
+
+.icon-box-1 { background: linear-gradient(135deg, #3b82f6, #06b6d4); }
+.icon-box-2 { background: linear-gradient(135deg, #8b5cf6, #a855f7); }
+.icon-box-3 { background: linear-gradient(135deg, #f97316, #f59e0b); }
+.icon-box-4 { background: linear-gradient(135deg, #10b981, #14b8a6); }
+
+.rotating-center {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  height: 50%;
+  border-radius: 50%;
+  background: var(--obsidian);
+  border: 4px solid var(--graphite);
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================
+   PRICING PAGE
+   ============================================ */
+.pricing-page {
+  background: linear-gradient(180deg, transparent 0%, rgba(64, 64, 64, 0.1) 100%);
+}
+
+/* ============================================
+   CONTACT PAGE
+   ============================================ */
+.contact-page {
+  background: linear-gradient(180deg, transparent 0%, rgba(64, 64, 64, 0.1) 100%);
+}
+
+/* ============================================
+   CTA SECTION
+   ============================================ */
+.cta-section {
+  padding: 6rem 0;
+  background: linear-gradient(135deg, rgba(240, 80, 144, 0.1), rgba(240, 112, 128, 0.1));
+}
+
+.cta-box {
+  text-align: center;
+  padding: 3rem;
+  border-radius: 2rem;
+  background: rgba(10, 10, 10, 0.6);
+  border: 1px solid rgba(64, 64, 64, 0.5);
+}
+
+.cta-box h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.cta-box p {
+  color: rgba(240, 240, 224, 0.7);
+  margin-bottom: 2rem;
+  font-size: 1.125rem;
+}
+
+/* ============================================
+   RESPONSIVE UPDATES
+   ============================================ */
+@media (max-width: 768px) {
+  .rotating-icons-wrapper {
+    width: 320px;
+    height: 320px;
+  }
+  
+  .rotating-icon {
+    transform: rotate(var(--angle)) translate(120px) rotate(calc(-1 * var(--angle)));
+  }
+  
+  .icon-box {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .rotating-icon {
+    width: 60px;
+    height: 60px;
+    margin: -30px 0 0 -30px;
+  }
+  
+  .rotating-center {
+    width: 45%;
+    height: 45%;
+  }
+  
+  .services-grid-detail {
+    grid-template-columns: 1fr;
+  }
+  
+  .services-content p {
+    font-size: 1rem;
+  }
+}
