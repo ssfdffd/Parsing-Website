@@ -601,8 +601,8 @@ button {
 .service-row {
   display: flex;
   align-items: center;
-  gap: 3rem;
-  margin-bottom: 4rem;
+  gap: 2.5rem;
+  margin-bottom: 3.5rem;
 }
 
 .service-row:last-child { margin-bottom: 0; }
@@ -610,17 +610,18 @@ button {
 .service-row.reverse { flex-direction: row-reverse; }
 
 .service-text {
-  flex: 1;
+  flex: 1 1 55%;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 
 .service-text p {
-  font-size: 1.0625rem;
+  font-size: 1rem;
   line-height: 1.8;
   color: rgba(240, 240, 224, 0.85);
-  padding-bottom: 1.5rem;
+  padding-bottom: 1.25rem;
   border-bottom: 1px solid rgba(64, 64, 64, 0.5);
 }
 
@@ -629,14 +630,22 @@ button {
   padding-bottom: 0;
 }
 
+.service-image-frame {
+  flex: 0 0 320px;
+  width: 320px;
+  display: flex;
+  justify-content: center;
+}
+
 .service-image {
-  flex: 1;
   position: relative;
-  border-radius: 1.5rem;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  max-height: 320px;
+  border-radius: 1.25rem;
   overflow: hidden;
   border: 2px solid rgba(240, 112, 128, 0.3);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-  height: 420px;
+  box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.5);
 }
 
 .service-image img {
@@ -647,29 +656,29 @@ button {
   transition: transform 0.6s ease;
 }
 
-.service-image:hover img { transform: scale(1.05); }
+.service-image:hover img { transform: scale(1.06); }
 
 .service-image .image-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(240, 80, 144, 0.2), rgba(240, 112, 128, 0.2));
+  background: linear-gradient(135deg, rgba(240, 80, 144, 0.18), rgba(240, 112, 128, 0.18));
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
 .service-image:hover .image-overlay { opacity: 1; }
 
-/* Directional reveal animations, reuse existing .reveal/.visible toggle logic */
+/* Directional reveal animations */
 .reveal-left {
   opacity: 0;
-  transform: translateX(-60px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
+  transform: translateX(-40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
 }
 
 .reveal-right {
   opacity: 0;
-  transform: translateX(60px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
+  transform: translateX(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
 }
 
 .reveal-left.visible,
@@ -849,7 +858,8 @@ button {
 
   .service-row,
   .service-row.reverse { flex-direction: column; }
-  .service-image { height: 280px; order: -1; width: 100%; }
+  .service-image-frame { width: 100%; flex: none; order: -1; }
+  .service-image { max-height: 280px; aspect-ratio: 16 / 9; }
 
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
   .footer-brand { grid-column: 1 / -1; }
@@ -862,7 +872,7 @@ button {
 
   .services-intro-wrapper { padding: 1.5rem; }
   .service-row { gap: 1.5rem; margin-bottom: 2.5rem; }
-  .service-text p { font-size: 1rem; }
+  .service-text p { font-size: 0.9375rem; }
 
   .rotating-icons-wrapper { width: 320px; height: 320px; }
   .rotating-icon {
@@ -881,7 +891,7 @@ button {
 @media (max-width: 480px) {
   .hero-title { font-size: 2.5rem; }
   .section-title { font-size: 2rem; }
-  .service-image { height: 220px; }
+  .service-image { max-height: 200px; }
 }
 
 /* Scrollbar */
