@@ -172,6 +172,11 @@
     .btn-outline:hover { border-color: #F07080; color: #F07080; background: transparent; }
     .hero { padding: 7rem 1.5rem 3rem; text-align: center; }
     .hero h1 { font-size: clamp(2.8rem, 7vw, 5rem); }
+
+    /* remove extra top spacing */
+    .split-section {
+      padding-top: 1rem;
+    }
   </style>
 </head>
 <body>
@@ -200,13 +205,10 @@
     </div>
   </section>
 
-  <!-- ===== SPLIT SECTION: TWO IMAGES + PARAGRAPHS ===== -->
-  <section id="split-section" class="section">
+  <!-- ===== SPLIT SECTION: TWO IMAGES + PARAGRAPHS (no "what we do" header) ===== -->
+  <section id="split-section" class="section split-section">
     <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">What we <span class="gradient-text">build</span></h2>
-        <p class="section-subtitle">Each image is paired with its own story — slide animation brings them in.</p>
-      </div>
+      <!-- section header removed -->
 
       <!-- ===== ROW 1: image on the right, text on the left ===== -->
       <div class="split-row">
