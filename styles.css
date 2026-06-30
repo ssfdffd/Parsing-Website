@@ -1,14 +1,13 @@
 /* ============================================
-   PARSING BRAND COLORS
-   Based on official Brand Colour Guide
-   ============================================ */
+PARSING BRAND COLORS
+Based on official Brand Colour Guide
+============================================ */
 :root {
   --obsidian: #0A0A0A;
   --graphite: #404040;
   --hot-pink: #F05090;
   --coral: #F07080;
   --cream: #F0F0E0;
-  
   /* Pink Ramp */
   --pink-50: #FCE8ED;
   --pink-100: #F8C8D4;
@@ -16,7 +15,6 @@
   --pink-600: #D03060;
   --pink-800: #9E1B45;
   --pink-900: #7A1035;
-
   /* Gradients & Effects */
   --gradient: linear-gradient(135deg, var(--hot-pink) 0%, var(--coral) 100%);
   --gradient-text: linear-gradient(135deg, var(--hot-pink) 0%, var(--coral) 50%, var(--hot-pink) 100%);
@@ -92,8 +90,8 @@ button {
 }
 
 /* ============================================
-   PARTICLE BACKGROUND
-   ============================================ */
+PARTICLE BACKGROUND
+============================================ */
 #particleCanvas {
   position: fixed;
   top: 0;
@@ -106,8 +104,8 @@ button {
 }
 
 /* ============================================
-   BUTTONS
-   ============================================ */
+BUTTONS
+============================================ */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -161,28 +159,16 @@ button {
 }
 
 /* ============================================
-   LOGO MARK
-   ============================================ */
-.logo-mark {
+FAVICON LOGO REPLACEMENT
+============================================ */
+.nav-logo-img {
   width: 2.5rem;
   height: 2.5rem;
-  border-radius: 0.5rem;
-  background: var(--gradient);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2px;
+  object-fit: contain;
   flex-shrink: 0;
 }
 
-.logo-mark::before {
-  content: '';
-  width: 100%;
-  height: 100%;
-  background: var(--obsidian);
-  border-radius: 0.4rem;
-}
-
+/* Kept for rotating center icon */
 .logo-mark-large {
   width: 5rem;
   height: 5rem;
@@ -217,8 +203,8 @@ button {
 }
 
 /* ============================================
-   MOBILE NAVIGATION
-   ============================================ */
+MOBILE NAVIGATION
+============================================ */
 .mobile-nav {
   display: none;
   position: fixed;
@@ -320,8 +306,8 @@ button {
 }
 
 /* ============================================
-   DESKTOP NAVIGATION
-   ============================================ */
+DESKTOP NAVIGATION
+============================================ */
 .desktop-nav {
   position: fixed;
   top: 0;
@@ -423,8 +409,8 @@ button {
 }
 
 /* ============================================
-   HERO SECTION
-   ============================================ */
+HERO SECTION
+============================================ */
 .hero {
   min-height: 100vh;
   display: flex;
@@ -476,8 +462,8 @@ button {
 }
 
 /* ============================================
-   SECTION HEADERS
-   ============================================ */
+SECTION HEADERS
+============================================ */
 .section-header { text-align: center; margin-bottom: 4rem; }
 
 .section-badge {
@@ -509,8 +495,8 @@ button {
 }
 
 /* ============================================
-   AI SECTION - FEATURES GRID
-   ============================================ */
+AI SECTION - FEATURES GRID
+============================================ */
 .features-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -550,8 +536,8 @@ button {
 .feature-card p { color: rgba(240, 240, 224, 0.6); font-size: 0.9375rem; }
 
 /* ============================================
-   SERVICES INTRO SECTION WRAPPER
-   ============================================ */
+SERVICES INTRO SECTION WRAPPER
+============================================ */
 .services-intro {
   background: linear-gradient(180deg, transparent 0%, rgba(64, 64, 64, 0.1) 100%);
   position: relative;
@@ -596,17 +582,15 @@ button {
 }
 
 /* ============================================
-   SERVICES INTRO - INLINE IMAGE/TEXT ROWS
-   ============================================ */
+SERVICES INTRO - INLINE IMAGE/TEXT ROWS
+============================================ */
 .service-row {
   display: flex;
   align-items: center;
   gap: 2.5rem;
   margin-bottom: 3.5rem;
 }
-
 .service-row:last-child { margin-bottom: 0; }
-
 .service-row.reverse { flex-direction: row-reverse; }
 
 .service-text {
@@ -674,13 +658,11 @@ button {
   transform: translateX(-40px);
   transition: opacity 0.7s ease, transform 0.7s ease;
 }
-
 .reveal-right {
   opacity: 0;
   transform: translateX(40px);
   transition: opacity 0.7s ease, transform 0.7s ease;
 }
-
 .reveal-left.visible,
 .reveal-right.visible {
   opacity: 1;
@@ -688,8 +670,8 @@ button {
 }
 
 /* ============================================
-   WEBSITES SECTION - ROTATING ICONS
-   ============================================ */
+WEBSITES SECTION - ROTATING ICONS
+============================================ */
 .websites-section {
   background: linear-gradient(180deg, transparent 0%, rgba(64, 64, 64, 0.1) 100%);
 }
@@ -770,8 +752,8 @@ button {
 }
 
 /* ============================================
-   FOOTER
-   ============================================ */
+FOOTER
+============================================ */
 .footer {
   padding: 4rem 0 2rem;
   border-top: 1px solid rgba(64, 64, 64, 0.5);
@@ -835,8 +817,8 @@ button {
 }
 
 /* ============================================
-   REVEAL ANIMATIONS
-   ============================================ */
+REVEAL ANIMATIONS
+============================================ */
 .reveal {
   opacity: 0;
   transform: translateY(30px);
@@ -849,18 +831,18 @@ button {
 }
 
 /* ============================================
-   RESPONSIVE DESIGN
-   ============================================ */
+RESPONSIVE DESIGN
+============================================ */
 @media (max-width: 1024px) {
   .nav-tabs { display: none; }
   .nav-cta { display: none; }
   .mobile-nav { display: block; }
-
+  
   .service-row,
   .service-row.reverse { flex-direction: column; }
   .service-image-frame { width: 100%; flex: none; order: -1; }
   .service-image { max-height: 280px; aspect-ratio: 16 / 9; }
-
+  
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
   .footer-brand { grid-column: 1 / -1; }
 }
@@ -869,11 +851,11 @@ button {
   .section { padding: 4rem 0; }
   .hero { padding: 6rem 1rem 3rem; }
   .hero-cta { flex-direction: column; align-items: stretch; }
-
+  
   .services-intro-wrapper { padding: 1.5rem; }
   .service-row { gap: 1.5rem; margin-bottom: 2.5rem; }
   .service-text p { font-size: 0.9375rem; }
-
+  
   .rotating-icons-wrapper { width: 320px; height: 320px; }
   .rotating-icon {
     transform: rotate(var(--angle)) translate(120px) rotate(calc(-1 * var(--angle)));
@@ -881,7 +863,7 @@ button {
   }
   .icon-box { width: 60px; height: 60px; }
   .rotating-center { width: 45%; height: 45%; }
-
+  
   .footer-grid { grid-template-columns: 1fr; text-align: center; }
   .footer-brand { text-align: center; }
   .footer-brand .nav-logo { justify-content: center; }
