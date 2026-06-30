@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Parsing User Portal - Manage your services and payments" />
+  <title>User Portal | Parsing</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="portal.css" />
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-wrapper">
+        <div class="logo-icon">P</div>
+        <span class="logo-text">Parsing</span>
+      </div>
+      <button class="sidebar-close" id="sidebarClose">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#dashboard" class="nav-link active" data-section="dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"></rect>
+          <rect x="14" y="3" width="7" height="7"></rect>
+          <rect x="14" y="14" width="7" height="7"></rect>
+          <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+        Dashboard
+      </a>
+      <a href="#services" class="nav-link" data-section="services">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="7" width="20" height="14" rx="2"></rect>
+          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+        </svg>
+        My Services
+      </a>
+      <a href="#apply" class="nav-link" data-section="apply">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2v20M2 12h20"></path>
+        </svg>
+        Apply for Service
+      </a>
+      <a href="#payments" class="nav-link" data-section="payments">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="1" x2="12" y2="23"></line>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+        </svg>
+        Payments
+      </a>
+      <a href="#progress" class="nav-link" data-section="progress">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+        </svg>
+        Track Progress
+      </a>
+      <a href="#settings" class="nav-link" data-section="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+        Settings
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a href="index.html" class="logout-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+        Logout
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Header -->
+    <header class="top-header">
+      <button class="menu-toggle" id="menuToggle">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="header-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+        <input type="text" placeholder="Search services, payments..." />
+      </div>
+
+      <div class="header-actions">
+        <button class="notification-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <span class="notification-badge">3</span>
+        </button>
+
+        <div class="user-profile">
+          <div class="avatar">JD</div>
+          <div class="user-info">
+            <span class="user-name">John Doe</span>
+            <span class="user-email">john@example.com</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="section active">
+      <div class="section-header">
+        <h1 class="section-title">Welcome back, John!</h1>
+        <p class="section-subtitle">Here's what's happening with your services today.</p>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="7" width="20" height="14" rx="2"></rect>
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+            </svg>
+          </div>
+          <div class="stat-content">
+            <span class="stat-value">3</span>
+            <span class="stat-label">Active Services</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2v20M2 12h20"></path>
+            </svg>
+          </div>
+          <div class="stat-content">
+            <span class="stat-value">1</span>
+            <span class="stat-label">Pending Applications</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="1" x2="12" y2="23"></line>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </div>
+          <div class="stat-content">
+            <span class="stat-value">R8,500</span>
+            <span class="stat-label">Total Spent</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+            </svg>
+          </div>
+          <div class="stat-content">
+            <span class="stat-value">75%</span>
+            <span class="stat-label">Avg. Progress</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity & Quick Actions -->
+      <div class="dashboard-grid">
+        <div class="card">
+          <div class="card-header">
+            <h3>Recent Activity</h3>
+            <button class="view-all">View All</button>
+          </div>
+          <div class="activity-list">
+            <div class="activity-item">
+              <div class="activity-icon success">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+              <div class="activity-content">
+                <p class="activity-text">Website design completed</p>
+                <span class="activity-time">2 hours ago</span>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon pending">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+              </div>
+              <div class="activity-content">
+                <p class="activity-text">Payment received - R3,500</p>
+                <span class="activity-time">5 hours ago</span>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon info">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+              </div>
+              <div class="activity-content">
+                <p class="activity-text">New service application submitted</p>
+                <span class="activity-time">1 day ago</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>Quick Actions</h3>
+          </div>
+          <div class="quick-actions">
+            <button class="action-btn" onclick="navigateToSection('apply')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2v20M2 12h20"></path>
+              </svg>
+              Apply for Service
+            </button>
+            <button class="action-btn" onclick="navigateToSection('payments')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                <line x1="1" y1="10" x2="23" y2="10"></line>
+              </svg>
+              Make Payment
+            </button>
+            <button class="action-btn" onclick="navigateToSection('progress')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+              </svg>
+              Track Progress
+            </button>
+            <button class="action-btn" onclick="navigateToSection('services')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+              View Messages
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="section">
+      <div class="section-header">
+        <h1 class="section-title">My Services</h1>
+        <p class="section-subtitle">Manage and track all your active services.</p>
+      </div>
+
+      <div class="services-list">
+        <div class="service-card">
+          <div class="service-header">
+            <div class="service-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+              </svg>
+            </div>
+            <div class="service-info">
+              <h3>Static Website Design</h3>
+              <p>Order #WS-2026-001</p>
+            </div>
+            <span class="service-status active">In Progress</span>
+          </div>
+          <div class="service-details">
+            <div class="detail-item">
+              <span class="detail-label">Started:</span>
+              <span class="detail-value">June 15, 2026</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Amount:</span>
+              <span class="detail-value">R500</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Progress:</span>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 75%"></div>
+              </div>
+              <span class="progress-text">75%</span>
+            </div>
+          </div>
+          <div class="service-actions">
+            <button class="btn btn-secondary">View Details</button>
+            <button class="btn btn-primary">Contact Support</button>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-header">
+            <div class="service-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                <circle cx="12" cy="13" r="4"></circle>
+              </svg>
+            </div>
+            <div class="service-info">
+              <h3>Social Media Marketing - Growth</h3>
+              <p>Order #SM-2026-045</p>
+            </div>
+            <span class="service-status active">Active</span>
+          </div>
+          <div class="service-details">
+            <div class="detail-item">
+              <span class="detail-label">Started:</span>
+              <span class="detail-value">June 1, 2026</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Monthly:</span>
+              <span class="detail-value">R5,500</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Next Payment:</span>
+              <span class="detail-value">July 1, 2026</span>
+            </div>
+          </div>
+          <div class="service-actions">
+            <button class="btn btn-secondary">View Report</button>
+            <button class="btn btn-primary">Pay Now</button>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-header">
+            <div class="service-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+            </div>
+            <div class="service-info">
+              <h3>SEO Optimization Package</h3>
+              <p>Order #SEO-2026-012</p>
+            </div>
+            <span class="service-status completed">Completed</span>
+          </div>
+          <div class="service-details">
+            <div class="detail-item">
+              <span class="detail-label">Completed:</span>
+              <span class="detail-value">May 28, 2026</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Amount:</span>
+              <span class="detail-value">R200</span>
+            </div>
+          </div>
+          <div class="service-actions">
+            <button class="btn btn-secondary">Download Report</button>
+            <button class="btn btn-primary">Renew Service</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Apply Section -->
+    <section id="apply" class="section">
+      <div class="section-header">
+        <h1 class="section-title">Apply for Service</h1>
+        <p class="section-subtitle">Choose from our range of professional services.</p>
+      </div>
+
+      <div class="apply-container">
+        <div class="service-categories">
+          <h3>Service Categories</h3>
+          <div class="category-grid">
+            <button class="category-btn active" data-category="web">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+              </svg>
+              Web Design
+            </button>
+            <button class="category-btn" data-category="social">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                <circle cx="12" cy="13" r="4"></circle>
+              </svg>
+              Social Media
+            </button>
+            <button class="category-btn" data-category="seo">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+              </svg>
+              SEO & Marketing
+            </button>
+            <button class="category-btn" data-category="other">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+              </svg>
+              Other Services
+            </button>
+          </div>
+        </div>
+
+        <div class="application-form-container">
+          <form id="applicationForm" class="application-form">
+            <div class="form-section">
+              <h3>Service Details</h3>
+              <div class="form-group">
+                <label for="serviceType">Service Type *</label>
+                <select id="serviceType" required>
+                  <option value="">Select a service</option>
+                  <option value="static-website">Static Website - R500</option>
+                  <option value="dynamic-website">Dynamic Website - R1,200</option>
+                  <option value="social-starter">Social Media Starter - R3,500/mo</option>
+                  <option value="social-growth">Social Media Growth - R5,500/mo</option>
+                  <option value="social-premium">Social Media Premium - R7,500/mo</option>
+                  <option value="seo">SEO Package - R200</option>
+                  <option value="advertising">Advertising Package - R140</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="projectName">Project Name *</label>
+                <input type="text" id="projectName" placeholder="e.g., Company Website Redesign" required />
+              </div>
+
+              <div class="form-group">
+                <label for="description">Project Description *</label>
+                <textarea id="description" rows="5" placeholder="Describe your project requirements, goals, and any specific features you need..." required></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="timeline">Expected Timeline</label>
+                <select id="timeline">
+                  <option value="urgent">Urgent (1-2 weeks)</option>
+                  <option value="standard" selected>Standard (3-4 weeks)</option>
+                  <option value="flexible">Flexible (1-2 months)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="budget">Budget Range</label>
+                <select id="budget">
+                  <option value="500-1000">R500 - R1,000</option>
+                  <option value="1000-5000">R1,000 - R5,000</option>
+                  <option value="5000-10000">R5,000 - R10,000</option>
+                  <option value="10000+">R10,000+</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h3>Contact Information</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="contactName">Full Name *</label>
+                  <input type="text" id="contactName" required />
+                </div>
+                <div class="form-group">
+                  <label for="contactEmail">Email Address *</label>
+                  <input type="email" id="contactEmail" required />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="contactPhone">Phone Number *</label>
+                  <input type="tel" id="contactPhone" required />
+                </div>
+                <div class="form-group">
+                  <label for="companyName">Company Name</label>
+                  <input type="text" id="companyName" />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary">Save as Draft</button>
+              <button type="submit" class="btn btn-primary">Submit Application</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Payments Section -->
+    <section id="payments" class="section">
+      <div class="section-header">
+        <h1 class="section-title">Payments</h1>
+        <p class="section-subtitle">Manage your payments and view transaction history.</p>
+      </div>
+
+      <div class="payments-grid">
+        <div class="payment-summary card">
+          <h3>Payment Summary</h3>
+          <div class="summary-stats">
+            <div class="summary-item">
+              <span class="summary-label">Total Paid</span>
+              <span class="summary-value">R8,500</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Pending</span>
+              <span class="summary-value pending">R2,000</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">This Month</span>
+              <span class="summary-value">R5,500</span>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-full" onclick="showPaymentModal()">
+            Make a Payment
+          </button>
+        </div>
+
+        <div class="payment-methods card">
+          <h3>Payment Methods</h3>
+          <div class="methods-list">
+            <div class="method-item active">
+              <div class="method-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                  <line x1="1" y1="10" x2="23" y2="10"></line>
+                </svg>
+              </div>
+              <div class="method-info">
+                <span class="method-name">Visa ending in 4242</span>
+                <span class="method-default">Default</span>
+              </div>
+            </div>
+            <div class="method-item">
+              <div class="method-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                  <line x1="1" y1="10" x2="23" y2="10"></line>
+                </svg>
+              </div>
+              <div class="method-info">
+                <span class="method-name">Mastercard ending in 8888</span>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-secondary btn-full">Add Payment Method</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3>Transaction History</h3>
+          <button class="view-all">View All</button>
+        </div>
+        <div class="transactions-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Receipt</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>June 25, 2026</td>
+                <td>Social Media Marketing - Monthly</td>
+                <td>R5,500</td>
+                <td><span class="status-badge success">Completed</span></td>
+                <td><button class="btn-icon">Download</button></td>
+              </tr>
+              <tr>
+                <td>June 15, 2026</td>
+                <td>Static Website Design</td>
+                <td>R500</td>
+                <td><span class="status-badge success">Completed</span></td>
+                <td><button class="btn-icon">Download</button></td>
+              </tr>
+              <tr>
+                <td>June 10, 2026</td>
+                <td>SEO Optimization Package</td>
+                <td>R200</td>
+                <td><span class="status-badge success">Completed</span></td>
+                <td><button class="btn-icon">Download</button></td>
+              </tr>
+              <tr>
+                <td>May 28, 2026</td>
+                <td>Initial Consultation</td>
+                <td>R1,000</td>
+                <td><span class="status-badge success">Completed</span></td>
+                <td><button class="btn-icon">Download</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Progress Section -->
+    <section id="progress" class="section">
+      <div class="section-header">
+        <h1 class="section-title">Track Progress</h1>
+        <p class="section-subtitle">Monitor the status of your ongoing projects.</p>
+      </div>
+
+      <div class="progress-timeline">
+        <div class="timeline-item active">
+          <div class="timeline-marker">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <div class="timeline-content">
+            <h4>Application Submitted</h4>
+            <p>June 15, 2026 - 10:30 AM</p>
+            <span class="timeline-desc">Your service application was received and confirmed.</span>
+          </div>
+        </div>
+
+        <div class="timeline-item active">
+          <div class="timeline-marker">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <div class="timeline-content">
+            <h4>Payment Confirmed</h4>
+            <p>June 15, 2026 - 2:15 PM</p>
+            <span class="timeline-desc">Payment of R500 was successfully processed.</span>
+          </div>
+        </div>
+
+        <div class="timeline-item active">
+          <div class="timeline-marker">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <div class="timeline-content">
+            <h4>Design Phase</h4>
+            <p>June 16, 2026 - Present</p>
+            <span class="timeline-desc">Our team is working on your website design.</span>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-marker pending">
+            <span>3</span>
+          </div>
+          <div class="timeline-content">
+            <h4>Development</h4>
+            <p>Estimated: June 22, 2026</p>
+            <span class="timeline-desc">Website coding and functionality implementation.</span>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-marker pending">
+            <span>4</span>
+          </div>
+          <div class="timeline-content">
+            <h4>Testing & Review</h4>
+            <p>Estimated: June 26, 2026</p>
+            <span class="timeline-desc">Quality assurance and client review phase.</span>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-marker pending">
+            <span>5</span>
+          </div>
+          <div class="timeline-content">
+            <h4>Launch</h4>
+            <p>Estimated: June 28, 2026</p>
+            <span class="timeline-desc">Website goes live and project completion.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="progress-notes card">
+        <h3>Project Notes & Updates</h3>
+        <div class="notes-list">
+          <div class="note-item">
+            <div class="note-header">
+              <span class="note-author">Parsing Team</span>
+              <span class="note-time">2 hours ago</span>
+            </div>
+            <p class="note-text">Initial design mockups have been completed. We'll share them with you for review by end of day.</p>
+          </div>
+          <div class="note-item">
+            <div class="note-header">
+              <span class="note-author">Parsing Team</span>
+              <span class="note-time">1 day ago</span>
+            </div>
+            <p class="note-text">Project kickoff meeting scheduled. Please check your email for the meeting link.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Settings Section -->
+    <section id="settings" class="section">
+      <div class="section-header">
+        <h1 class="section-title">Account Settings</h1>
+        <p class="section-subtitle">Manage your account preferences and security.</p>
+      </div>
+
+      <div class="settings-grid">
+        <div class="card">
+          <h3>Profile Information</h3>
+          <form class="settings-form">
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" value="John Doe" />
+            </div>
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" value="john@example.com" />
+            </div>
+            <div class="form-group">
+              <label>Phone Number</label>
+              <input type="tel" value="+27 73 279 2426" />
+            </div>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <h3>Notifications</h3>
+          <div class="notification-settings">
+            <label class="toggle-setting">
+              <span>Email Notifications</span>
+              <input type="checkbox" checked />
+              <span class="toggle-slider"></span>
+            </label>
+            <label class="toggle-setting">
+              <span>SMS Updates</span>
+              <input type="checkbox" />
+              <span class="toggle-slider"></span>
+            </label>
+            <label class="toggle-setting">
+              <span>Project Milestones</span>
+              <input type="checkbox" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Security</h3>
+          <div class="security-options">
+            <button class="security-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              Change Password
+            </button>
+            <button class="security-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+              Enable 2FA
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Payment Modal -->
+  <div class="modal" id="paymentModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Make a Payment</h2>
+        <button class="modal-close" onclick="closePaymentModal()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <form id="paymentForm" class="payment-form">
+        <div class="form-group">
+          <label>Amount (ZAR)</label>
+          <input type="number" placeholder="0.00" required />
+        </div>
+        <div class="form-group">
+          <label>Payment For</label>
+          <select required>
+            <option value="">Select service</option>
+            <option>Social Media Marketing - R5,500</option>
+            <option>Website Maintenance - R200</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Payment Method</label>
+          <div class="payment-methods-select">
+            <label class="method-option active">
+              <input type="radio" name="paymentMethod" checked />
+              <span>Visa •••• 4242</span>
+            </label>
+            <label class="method-option">
+              <input type="radio" name="paymentMethod" />
+              <span>Mastercard •••• 8888</span>
+            </label>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">
+          Complete Payment
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="portal.js"></script>
+</body>
+</html>
