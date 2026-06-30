@@ -550,7 +550,7 @@ button {
 .feature-card p { color: rgba(240, 240, 224, 0.6); font-size: 0.9375rem; }
 
 /* ============================================
-   SERVICES INTRO WITH ANIMATED SLIDER
+   SERVICES INTRO SECTION WRAPPER
    ============================================ */
 .services-intro {
   background: linear-gradient(180deg, transparent 0%, rgba(64, 64, 64, 0.1) 100%);
@@ -595,45 +595,51 @@ button {
   50% { opacity: 1; }
 }
 
-/* Slider Container */
-.services-slider-container {
-  position: relative;
-  min-height: 500px; /* Prevents layout collapse */
-  padding: 1rem 0;
-}
-
-/* Individual Slide */
-.services-slide {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
+/* ============================================
+   SERVICES INTRO - INLINE IMAGE/TEXT ROWS
+   ============================================ */
+.service-row {
+  display: flex;
   align-items: center;
-  opacity: 0;
-  transform: translateX(50px);
-  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
+  gap: 3rem;
+  margin-bottom: 4rem;
 }
 
-.services-slide.active {
-  position: relative;
-  opacity: 1;
-  transform: translateX(0);
-  pointer-events: all;
+.service-row:last-child { margin-bottom: 0; }
+
+.service-row.reverse { flex-direction: row-reverse; }
+
+.service-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-/* Image Styles */
-.slide-image {
+.service-text p {
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  color: rgba(240, 240, 224, 0.85);
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(64, 64, 64, 0.5);
+}
+
+.service-text p:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.service-image {
+  flex: 1;
   position: relative;
   border-radius: 1.5rem;
   overflow: hidden;
   border: 2px solid rgba(240, 112, 128, 0.3);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-  height: 450px;
+  height: 420px;
 }
 
-.slide-image img {
+.service-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -641,10 +647,9 @@ button {
   transition: transform 0.6s ease;
 }
 
-.services-slide.active .slide-image img { transform: scale(1); }
-.slide-image:hover img { transform: scale(1.05); }
+.service-image:hover img { transform: scale(1.05); }
 
-.image-overlay {
+.service-image .image-overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(135deg, rgba(240, 80, 144, 0.2), rgba(240, 112, 128, 0.2));
@@ -652,111 +657,26 @@ button {
   transition: opacity 0.3s ease;
 }
 
-.slide-image:hover .image-overlay { opacity: 1; }
+.service-image:hover .image-overlay { opacity: 1; }
 
-.slide-image-left { animation: slideInLeft 0.8s ease; }
-.slide-image-right { animation: slideInRight 0.8s ease; }
-
-@keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-50px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes slideInRight {
-  from { opacity: 0; transform: translateX(50px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-/* Content Styles */
-.slide-content {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.slide-content p {
-  font-size: 1.0625rem;
-  line-height: 1.8;
-  color: rgba(240, 240, 224, 0.85);
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid rgba(64, 64, 64, 0.5);
+/* Directional reveal animations, reuse existing .reveal/.visible toggle logic */
+.reveal-left {
   opacity: 0;
-  transform: translateY(20px);
-  animation: fadeInUp 0.6s ease forwards;
+  transform: translateX(-60px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
-.slide-content p:last-child { border-bottom: none; padding-bottom: 0; }
-
-.services-slide.active .slide-content p:nth-child(1) { animation-delay: 0.2s; }
-.services-slide.active .slide-content p:nth-child(2) { animation-delay: 0.4s; }
-.services-slide.active .slide-content p:nth-child(3) { animation-delay: 0.6s; }
-
-@keyframes fadeInUp {
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Slider Dots */
-.slider-dots {
-  display: flex;
-  justify-content: center;
-  gap: 0.75rem;
-  margin-top: 3rem;
-  position: relative;
-  z-index: 10;
-}
-
-.slider-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: rgba(240, 240, 224, 0.3);
-  border: 2px solid transparent;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.slider-dot.active {
-  background: var(--coral);
-  border-color: var(--cream);
-  transform: scale(1.3);
-  box-shadow: 0 0 15px rgba(240, 112, 128, 0.6);
-}
-
-.slider-dot:hover { background: var(--hot-pink); transform: scale(1.2); }
-
-/* Slider Arrows */
-.slider-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: rgba(10, 10, 10, 0.8);
-  border: 2px solid rgba(240, 112, 128, 0.5);
-  color: var(--cream);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  z-index: 10;
+.reveal-right {
   opacity: 0;
-  pointer-events: none;
+  transform: translateX(60px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
-.slider-arrow svg { width: 24px; height: 24px; }
-
-.slider-arrow:hover {
-  background: var(--coral);
-  border-color: var(--hot-pink);
-  color: var(--obsidian);
-  transform: translateY(-50%) scale(1.1);
+.reveal-left.visible,
+.reveal-right.visible {
+  opacity: 1;
+  transform: translateX(0);
 }
-
-.services-slider-container:hover .slider-arrow { opacity: 1; pointer-events: all; }
-.slider-arrow-left { left: 1rem; }
-.slider-arrow-right { right: 1rem; }
 
 /* ============================================
    WEBSITES SECTION - ROTATING ICONS
@@ -926,12 +846,11 @@ button {
   .nav-tabs { display: none; }
   .nav-cta { display: none; }
   .mobile-nav { display: block; }
-  
-  .services-slide { grid-template-columns: 1fr; gap: 2rem; }
-  .slide-image { height: 300px; order: -1; }
-  .slide-image-left, .slide-image-right { animation: none; }
-  .slider-arrow { display: none; }
-  
+
+  .service-row,
+  .service-row.reverse { flex-direction: column; }
+  .service-image { height: 280px; order: -1; width: 100%; }
+
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
   .footer-brand { grid-column: 1 / -1; }
 }
@@ -940,13 +859,11 @@ button {
   .section { padding: 4rem 0; }
   .hero { padding: 6rem 1rem 3rem; }
   .hero-cta { flex-direction: column; align-items: stretch; }
-  
+
   .services-intro-wrapper { padding: 1.5rem; }
-  .services-slider-container { padding: 1rem 0; min-height: 600px; }
-  .slide-image { height: 250px; }
-  .slide-content p { font-size: 1rem; }
-  .slider-dots { margin-top: 2rem; }
-  
+  .service-row { gap: 1.5rem; margin-bottom: 2.5rem; }
+  .service-text p { font-size: 1rem; }
+
   .rotating-icons-wrapper { width: 320px; height: 320px; }
   .rotating-icon {
     transform: rotate(var(--angle)) translate(120px) rotate(calc(-1 * var(--angle)));
@@ -954,7 +871,7 @@ button {
   }
   .icon-box { width: 60px; height: 60px; }
   .rotating-center { width: 45%; height: 45%; }
-  
+
   .footer-grid { grid-template-columns: 1fr; text-align: center; }
   .footer-brand { text-align: center; }
   .footer-brand .nav-logo { justify-content: center; }
@@ -964,8 +881,7 @@ button {
 @media (max-width: 480px) {
   .hero-title { font-size: 2.5rem; }
   .section-title { font-size: 2rem; }
-  .slide-image { height: 200px; }
-  .services-slide { gap: 1.5rem; }
+  .service-image { height: 220px; }
 }
 
 /* Scrollbar */
