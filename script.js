@@ -9,18 +9,12 @@ class ParticleSystem {
     this.mouse = { x: 0, y: 0, radius: 150 };
     this.colors = ['#F07080', '#F05090', '#F4A0B8', '#F8C8D4'];
     this.connectionDistance = 150;
-    
-    // FIX: Ensure the canvas doesn't block clicks on the footer or other elements
-    if (this.canvas) {
-      this.canvas.style.pointerEvents = 'none';
-      this.canvas.style.zIndex = '-1';
-    }
-    
+
     this.init();
     this.bindEvents();
     this.animate();
   }
-  
+
   init() {
     this.resize();
     const count = Math.min(80, Math.floor((this.canvas.width * this.canvas.height) / 20000));
@@ -28,12 +22,12 @@ class ParticleSystem {
       this.particles.push(new Particle(this));
     }
   }
-  
+
   resize() {
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
   }
-  
+
   bindEvents() {
     window.addEventListener('resize', () => this.resize());
     window.addEventListener('mousemove', (e) => {
@@ -41,10 +35,10 @@ class ParticleSystem {
       this.mouse.y = e.clientY;
     });
   }
-  
+
   animate() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    
+
     // Draw gradient background
     const gradient = this.ctx.createRadialGradient(
       this.canvas.width / 2, this.canvas.height / 2, 0,
@@ -54,20 +48,20 @@ class ParticleSystem {
     gradient.addColorStop(1, 'rgba(10, 10, 10, 0.95)');
     this.ctx.fillStyle = gradient;
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    
+
     // Update and draw particles
     this.particles.forEach(p => {
       p.update(this);
       p.draw(this.ctx);
     });
-    
+
     // Draw connections
     for (let i = 0; i < this.particles.length; i++) {
       for (let j = i + 1; j < this.particles.length; j++) {
         const dx = this.particles[i].x - this.particles[j].x;
         const dy = this.particles[i].y - this.particles[j].y;
         const distance = Math.sqrt(dx * dx + dy * dy);
-        
+
         if (distance < this.connectionDistance) {
           const opacity = (1 - distance / this.connectionDistance) * 0.15;
           this.ctx.strokeStyle = `rgba(240, 112, 128, ${opacity})`;
@@ -79,7 +73,7 @@ class ParticleSystem {
         }
       }
     }
-    
+
     requestAnimationFrame(() => this.animate());
   }
 }
@@ -95,30 +89,30 @@ class Particle {
     this.color = system.colors[Math.floor(Math.random() * system.colors.length)];
     this.opacity = Math.random() * 0.5 + 0.2;
   }
-  
+
   update(system) {
     this.x += this.speedX;
     this.y += this.speedY;
-    
+
     // Mouse interaction
     const dx = system.mouse.x - this.x;
     const dy = system.mouse.y - this.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
-    
+
     if (distance < system.mouse.radius) {
       const force = (system.mouse.radius - distance) / system.mouse.radius;
       const angle = Math.atan2(dy, dx);
       this.x -= Math.cos(angle) * force * 2;
       this.y -= Math.sin(angle) * force * 2;
     }
-    
+
     // Wrap around edges
     if (this.x < 0) this.x = system.canvas.width;
     if (this.x > system.canvas.width) this.x = 0;
     if (this.y < 0) this.y = system.canvas.height;
     if (this.y > system.canvas.height) this.y = 0;
   }
-  
+
   draw(ctx) {
     ctx.save();
     ctx.globalAlpha = this.opacity;
@@ -140,45 +134,47 @@ class NavCursor {
     this.tabs = document.querySelectorAll('.nav-tab');
     this.cursor = document.getElementById('navCursor');
     this.navTabs = document.getElementById('navTabs');
-    
+
     if (!this.cursor || this.tabs.length === 0) return;
-    
+
     this.bindEvents();
+    this.setInitialCursor();
   }
-  
+
   bindEvents() {
     this.tabs.forEach(tab => {
       tab.addEventListener('mouseenter', () => this.moveCursor(tab));
       tab.addEventListener('click', () => this.navigateTo(tab));
     });
-    
+
     this.navTabs.addEventListener('mouseleave', () => {
       this.cursor.style.opacity = '0';
     });
   }
-  
+
+  setInitialCursor() {
+    // Highlight the tab matching the current page on load
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const activeTab = Array.from(this.tabs).find(tab => tab.dataset.href === currentPage);
+    if (activeTab) {
+      this.moveCursor(activeTab);
+      this.cursor.style.opacity = '1';
+    }
+  }
+
   moveCursor(tab) {
     const rect = tab.getBoundingClientRect();
     const parentRect = this.navTabs.getBoundingClientRect();
-    
+
     this.cursor.style.width = `${rect.width}px`;
     this.cursor.style.left = `${rect.left - parentRect.left}px`;
     this.cursor.style.opacity = '1';
   }
-  
-  // FIX: Check if link is an anchor (#) or a page URL
+
   navigateTo(tab) {
     const href = tab.dataset.href;
     if (href) {
-      if (href.startsWith('#')) {
-        const target = document.querySelector(href);
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth' });
-        }
-      } else {
-        // Navigate to the external page
-        window.location.href = href;
-      }
+      window.location.href = href;
     }
   }
 }
@@ -192,50 +188,39 @@ class MobileMenu {
     this.menu = document.getElementById('mobileMenu');
     this.links = document.querySelectorAll('.mobile-link');
     this.isOpen = false;
-    
+
     if (!this.hamburger || !this.menu) return;
-    
+
     this.bindEvents();
   }
-  
+
   bindEvents() {
     this.hamburger.addEventListener('click', () => this.toggle());
-    
+
     this.links.forEach((link, index) => {
       link.addEventListener('click', (e) => {
-        const href = link.getAttribute('href');
-        
-        // FIX: Only prevent default and smooth scroll if it's an internal anchor
-        if (href && href.startsWith('#')) {
-          e.preventDefault();
-          this.setActive(index);
-          this.close();
-          setTimeout(() => {
-            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
-          }, 300);
-        } else {
-          // It's a page link (e.g., services.html), allow default browser navigation
-          this.setActive(index);
-          this.close();
-        }
+        // Let the browser navigate normally to the page's href.
+        // We just close the menu and update the active state first.
+        this.setActive(index);
+        this.close();
       });
     });
   }
-  
+
   toggle() {
     this.isOpen = !this.isOpen;
     this.hamburger.classList.toggle('active', this.isOpen);
     this.menu.classList.toggle('active', this.isOpen);
     document.body.style.overflow = this.isOpen ? 'hidden' : '';
   }
-  
+
   close() {
     this.isOpen = false;
     this.hamburger.classList.remove('active');
     this.menu.classList.remove('active');
     document.body.style.overflow = '';
   }
-  
+
   setActive(index) {
     this.links.forEach(link => link.classList.remove('active'));
     this.links[index]?.classList.add('active');
@@ -249,17 +234,17 @@ class ScrollEffects {
   constructor() {
     this.desktopNav = document.getElementById('desktopNav');
     this.revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
-    
+
     this.bindEvents();
     this.initRevealObserver();
   }
-  
+
   bindEvents() {
     window.addEventListener('scroll', () => {
       this.handleScroll();
     });
   }
-  
+
   handleScroll() {
     if (window.scrollY > 50) {
       this.desktopNav?.classList.add('scrolled');
@@ -267,13 +252,14 @@ class ScrollEffects {
       this.desktopNav?.classList.remove('scrolled');
     }
   }
-  
+
   initRevealObserver() {
     if (!('IntersectionObserver' in window)) {
+      // Fallback: just show everything if IntersectionObserver isn't supported
       this.revealElements.forEach(el => el.classList.add('visible'));
       return;
     }
-    
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -285,7 +271,7 @@ class ScrollEffects {
       threshold: 0.15,
       rootMargin: '0px 0px -100px 0px'
     });
-    
+
     this.revealElements.forEach(el => observer.observe(el));
   }
 }
@@ -304,20 +290,22 @@ class ImageStack {
     this.cooldown = 400;
     this.isDragging = false;
     this.startY = 0;
-    
+
     if (this.cards.length === 0) return;
-    
+
     this.bindEvents();
     this.updateStack();
   }
-  
+
   bindEvents() {
+    // Wheel navigation
     window.addEventListener('wheel', (e) => {
       if (Math.abs(e.deltaY) > 30) {
         this.navigate(e.deltaY > 0 ? 1 : -1);
       }
     }, { passive: true });
-    
+
+    // Dot navigation
     this.dots.forEach(dot => {
       dot.addEventListener('click', () => {
         const index = parseInt(dot.dataset.index);
@@ -327,7 +315,8 @@ class ImageStack {
         }
       });
     });
-    
+
+    // Drag navigation
     const stack = document.getElementById('imageStack');
     if (stack) {
       stack.addEventListener('mousedown', (e) => this.startDrag(e));
@@ -338,53 +327,53 @@ class ImageStack {
       window.addEventListener('touchend', (e) => this.endDrag(e));
     }
   }
-  
+
   startDrag(e) {
     this.isDragging = true;
     this.startY = e.touches ? e.touches[0].clientY : e.clientY;
   }
-  
+
   onDrag(e) {
     if (!this.isDragging) return;
   }
-  
+
   endDrag(e) {
     if (!this.isDragging) return;
     this.isDragging = false;
     const endY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
     const diff = this.startY - endY;
     const threshold = 50;
-    
+
     if (Math.abs(diff) > threshold) {
       this.navigate(diff > 0 ? 1 : -1);
     }
   }
-  
+
   navigate(direction) {
     const now = Date.now();
     if (now - this.lastNavigationTime < this.cooldown) return;
     this.lastNavigationTime = now;
-    
+
     if (direction > 0) {
       this.currentIndex = this.currentIndex === this.total - 1 ? 0 : this.currentIndex + 1;
     } else {
       this.currentIndex = this.currentIndex === 0 ? this.total - 1 : this.currentIndex - 1;
     }
-    
+
     this.updateStack();
   }
-  
+
   updateStack() {
     this.cards.forEach((card, index) => {
       let diff = index - this.currentIndex;
       if (diff > this.total / 2) diff -= this.total;
       if (diff < -this.total / 2) diff += this.total;
-      
+
       let transform = '';
       let zIndex = 0;
       let opacity = 0;
       let scale = 0.6;
-      
+
       if (diff === 0) {
         transform = 'translate(-50%, -50%) translateY(0) scale(1) rotateX(0deg)';
         zIndex = 5;
@@ -421,16 +410,18 @@ class ImageStack {
         opacity = 0;
         card.classList.remove('active');
       }
-      
+
       card.style.transform = transform;
       card.style.zIndex = zIndex;
       card.style.opacity = opacity;
     });
-    
+
+    // Update dots
     this.dots.forEach((dot, index) => {
       dot.classList.toggle('active', index === this.currentIndex);
     });
-    
+
+    // Update counter
     if (this.currentIndexEl) {
       this.currentIndexEl.textContent = String(this.currentIndex + 1).padStart(2, '0');
     }
@@ -444,24 +435,25 @@ class ContactForm {
   constructor() {
     this.form = document.getElementById('contactForm');
     if (!this.form) return;
-    
+
     this.form.addEventListener('submit', (e) => this.handleSubmit(e));
   }
-  
+
   handleSubmit(e) {
     e.preventDefault();
     const formData = new FormData(this.form);
     const data = Object.fromEntries(formData);
-    
+
+    // Simulate submission
     const button = this.form.querySelector('button[type="submit"]');
     const originalHTML = button.innerHTML;
     button.innerHTML = 'Sending...';
     button.disabled = true;
-    
+
     setTimeout(() => {
       button.innerHTML = '✓ Message Sent!';
       button.style.background = 'linear-gradient(135deg, #10b981, #14b8a6)';
-      
+
       setTimeout(() => {
         this.form.reset();
         button.innerHTML = originalHTML;
@@ -473,19 +465,24 @@ class ContactForm {
 }
 
 // ============================================
-// SMOOTH SCROLL FOR ALL ANCHORS
+// SMOOTH SCROLL FOR IN-PAGE ANCHORS ONLY
 // ============================================
 function initSmoothScroll() {
+  // Only intercept links that point to an in-page anchor on the CURRENT page,
+  // e.g. href="#websites". Links like "index.html#websites" or "AI.html"
+  // are left alone so the browser navigates normally.
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
       const href = this.getAttribute('href');
-      if (href === '#') return;
-      
+      if (href === '#' || href.length < 2) return;
+
       const target = document.querySelector(href);
       if (target) {
         e.preventDefault();
         target.scrollIntoView({ behavior: 'smooth' });
       }
+      // If no matching element exists on this page, do nothing special —
+      // let default behavior happen (harmless no-op for a bare "#anchor").
     });
   });
 }
