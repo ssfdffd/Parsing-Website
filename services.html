@@ -3,516 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Parsing Services - Web Design, Social Media Marketing, SEO, and Business Growth Solutions" />
+  <meta name="description" content="Parsing Services - Web Design, Social Media Marketing, Email & Domain Services, and Business Growth Solutions" />
   <title>Services | Parsing</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <link rel="stylesheet" href="styles.css" />
-  
+  <link rel="stylesheet" href="services.css" />
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
-  <!-- GSAP for Advanced Animations -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-
-  <style>
-    :root {
-      --primary: #ff6b6b;
-      --secondary: #4ecdc4;
-      --accent: #ffe66d;
-      --dark: #0a0a0a;
-      --darker: #050505;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--darker);
-      color: #fff;
-      overflow-x: hidden;
-    }
-
-    /* Hero Section with Advanced Animations */
-    .services-hero {
-      min-height: 100vh;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
-    }
-
-    .hero-canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 10;
-      text-align: center;
-      padding: 2rem;
-      max-width: 1200px;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.75rem 1.5rem;
-      background: rgba(255, 107, 107, 0.1);
-      border: 1px solid rgba(255, 107, 107, 0.3);
-      border-radius: 50px;
-      margin-bottom: 2rem;
-      backdrop-filter: blur(10px);
-      animation: badgePulse 2s ease-in-out infinite;
-    }
-
-    @keyframes badgePulse {
-      0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.4); }
-      50% { transform: scale(1.05); box-shadow: 0 0 20px 10px rgba(255, 107, 107, 0); }
-    }
-
-    .hero-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(3rem, 8vw, 6rem);
-      font-weight: 800;
-      line-height: 1.1;
-      margin-bottom: 1.5rem;
-      overflow: hidden;
-    }
-
-    .title-line {
-      display: block;
-      transform: translateY(100px);
-      opacity: 0;
-    }
-
-    .gradient-text {
-      background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 50%, #ffe66d 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      background-size: 200% 200%;
-      animation: gradientShift 5s ease infinite;
-    }
-
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    .hero-subtitle {
-      font-size: 1.25rem;
-      color: #888;
-      max-width: 600px;
-      margin: 0 auto 3rem;
-      opacity: 0;
-      transform: translateY(30px);
-    }
-
-    .floating-icons {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-    .float-icon {
-      position: absolute;
-      font-size: 2rem;
-      opacity: 0.1;
-      animation: float 15s infinite ease-in-out;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translate(0, 0) rotate(0deg); }
-      33% { transform: translate(30px, -30px) rotate(120deg); }
-      66% { transform: translate(-20px, 20px) rotate(240deg); }
-    }
-
-    /* Section Styles */
-    .section {
-      padding: 6rem 2rem;
-      position: relative;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .section-header {
-      text-align: center;
-      margin-bottom: 4rem;
-    }
-
-    .section-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      font-weight: 700;
-      margin-bottom: 1rem;
-    }
-
-    .section-subtitle {
-      color: #888;
-      font-size: 1.125rem;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    /* Pricing Cards Grid */
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-      margin-top: 3rem;
-    }
-
-    .pricing-card {
-      background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 24px;
-      padding: 2.5rem;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      backdrop-filter: blur(10px);
-      opacity: 0;
-      transform: translateY(50px);
-    }
-
-    .pricing-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #ffe66d);
-      transform: scaleX(0);
-      transition: transform 0.4s ease;
-    }
-
-    .pricing-card:hover::before {
-      transform: scaleX(1);
-    }
-
-    .pricing-card:hover {
-      transform: translateY(-10px);
-      border-color: rgba(255, 107, 107, 0.5);
-      box-shadow: 0 20px 60px rgba(255, 107, 107, 0.2);
-    }
-
-    .pricing-card.featured {
-      border-color: rgba(255, 107, 107, 0.5);
-      transform: scale(1.05);
-    }
-
-    .pricing-card.featured:hover {
-      transform: scale(1.05) translateY(-10px);
-    }
-
-    .badge-popular {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
-      padding: 0.25rem 1rem;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .pricing-header {
-      margin-bottom: 2rem;
-    }
-
-    .pricing-name {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-      color: #fff;
-    }
-
-    .pricing-price {
-      font-size: 3rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 0.5rem;
-    }
-
-    .pricing-period {
-      color: #888;
-      font-size: 0.875rem;
-    }
-
-    .pricing-features {
-      list-style: none;
-      margin-bottom: 2rem;
-    }
-
-    .pricing-features li {
-      padding: 0.75rem 0;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      display: flex;
-      align-items: flex-start;
-      gap: 0.75rem;
-      font-size: 0.9rem;
-      color: #ccc;
-    }
-
-    .pricing-features li::before {
-      content: '✓';
-      color: #4ecdc4;
-      font-weight: bold;
-      flex-shrink: 0;
-    }
-
-    .pricing-cta {
-      width: 100%;
-      padding: 1rem;
-      background: linear-gradient(135deg, rgba(255,107,107,0.2), rgba(78,205,196,0.2));
-      border: 1px solid rgba(255,107,107,0.3);
-      border-radius: 12px;
-      color: #fff;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-align: center;
-      text-decoration: none;
-      display: block;
-    }
-
-    .pricing-cta:hover {
-      background: linear-gradient(135deg, rgba(255,107,107,0.4), rgba(78,205,196,0.4));
-      transform: translateY(-2px);
-      box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
-    }
-
-    /* Services Grid */
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-      gap: 2rem;
-      margin-top: 3rem;
-    }
-
-    .service-item {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 20px;
-      padding: 2rem;
-      transition: all 0.4s ease;
-      opacity: 0;
-      transform: translateX(-30px);
-    }
-
-    .service-item:nth-child(even) {
-      transform: translateX(30px);
-    }
-
-    .service-item:hover {
-      background: rgba(255,255,255,0.06);
-      border-color: rgba(255, 107, 107, 0.3);
-      transform: translateY(-5px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-    }
-
-    .service-icon {
-      width: 60px;
-      height: 60px;
-      background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
-      border-radius: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1.5rem;
-      font-size: 1.5rem;
-    }
-
-    .service-name {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-    }
-
-    .service-description {
-      color: #888;
-      line-height: 1.6;
-      margin-bottom: 1rem;
-    }
-
-    .service-price {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #4ecdc4;
-    }
-
-    /* Email Section */
-    .email-section {
-      background: linear-gradient(135deg, rgba(255,107,107,0.1), rgba(78,205,196,0.1));
-      border-radius: 32px;
-      padding: 4rem;
-      margin: 4rem 0;
-      border: 1px solid rgba(255,255,255,0.1);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .email-section::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -20%;
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(255,107,107,0.2), transparent);
-      animation: rotate 20s linear infinite;
-    }
-
-    @keyframes rotate {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    .email-content {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .email-features {
-      list-style: none;
-    }
-
-    .email-features li {
-      padding: 1rem 0;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      font-size: 1.1rem;
-    }
-
-    .email-features li svg {
-      width: 24px;
-      height: 24px;
-      color: #4ecdc4;
-      flex-shrink: 0;
-    }
-
-    /* CTA Section */
-    .cta-section {
-      text-align: center;
-      padding: 6rem 2rem;
-      background: linear-gradient(135deg, rgba(255,107,107,0.1), transparent);
-      border-radius: 32px;
-      margin: 4rem auto;
-      max-width: 1000px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .cta-section::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,107,107,0.1), transparent);
-      animation: pulse 4s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.5; }
-      50% { transform: translateX(-50%) scale(1.2); opacity: 0.8; }
-    }
-
-    .cta-content {
-      position: relative;
-      z-index: 1;
-    }
-
-    .btn-large {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 1.25rem 3rem;
-      background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
-      border: none;
-      border-radius: 50px;
-      color: #fff;
-      font-size: 1.125rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-decoration: none;
-      margin-top: 2rem;
-      box-shadow: 0 10px 40px rgba(255, 107, 107, 0.4);
-    }
-
-    .btn-large:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 20px 60px rgba(255, 107, 107, 0.6);
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .email-content {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-      }
-      
-      .services-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .pricing-card.featured {
-        transform: scale(1);
-      }
-      
-      .pricing-card.featured:hover {
-        transform: translateY(-10px);
-      }
-    }
-
-    /* Particle effects */
-    .particle {
-      position: absolute;
-      border-radius: 50%;
-      pointer-events: none;
-      opacity: 0.5;
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+  <!-- Particle Background Canvas -->
+  <canvas id="particleCanvas"></canvas>
+
   <!-- Mobile Navigation -->
   <nav class="mobile-nav" id="mobileNav">
     <button class="hamburger" id="hamburger" aria-label="Toggle menu">
@@ -526,27 +31,27 @@
         <span><span class="accent"></span></span>
       </div>
       <ul class="mobile-menu-items">
-        <li><a href="index.html" class="mobile-link">
+        <li><a href="index.html" class="mobile-link" data-index="0">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
           Home
         </a></li>
-        <li><a href="ai.html" class="mobile-link">
+        <li><a href="AI.html" class="mobile-link" data-index="1">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg>
           AI
         </a></li>
-        <li><a href="services.html" class="mobile-link active">
+        <li><a href="services.html" class="mobile-link active" data-index="2">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
           Services
         </a></li>
-        <li><a href="pricing.html" class="mobile-link">
+        <li><a href="pricing.html" class="mobile-link" data-index="3">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
           Pricing
         </a></li>
-        <li><a href="contact.html" class="mobile-link">
+        <li><a href="contact.html" class="mobile-link" data-index="4">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
           Contact
         </a></li>
-        <li><a href="about.html" class="mobile-link">
+        <li><a href="about.html" class="mobile-link" data-index="5">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
           About Us
         </a></li>
@@ -561,10 +66,10 @@
         <img src="favicon.ico" alt="Parsing Logo" class="nav-favicon" />
         <span><span class="accent"></span></span>
       </a>
-      
+
       <ul class="nav-tabs" id="navTabs">
         <li class="nav-tab" data-href="index.html">Home</li>
-        <li class="nav-tab" data-href="ai.html">
+        <li class="nav-tab" data-href="AI.html">
           <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg>
           AI
         </li>
@@ -581,133 +86,126 @@
 
   <!-- Hero Section -->
   <section class="services-hero">
-    <canvas class="hero-canvas" id="heroCanvas"></canvas>
-    <div class="floating-icons">
-      <div class="float-icon" style="top: 10%; left: 10%;">💻</div>
-      <div class="float-icon" style="top: 20%; right: 15%; animation-delay: 2s;">📱</div>
-      <div class="float-icon" style="bottom: 20%; left: 20%; animation-delay: 4s;">🎨</div>
-      <div class="float-icon" style="bottom: 10%; right: 10%; animation-delay: 6s;">📊</div>
-      <div class="float-icon" style="top: 50%; left: 5%; animation-delay: 3s;">🚀</div>
-      <div class="float-icon" style="top: 40%; right: 5%; animation-delay: 5s;">⚡</div>
-    </div>
-    
-    <div class="hero-content">
-      <div class="hero-badge">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        <span>Professional Services</span>
+    <div class="services-hero-content">
+      <div class="hero-badge reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        <span>What We Offer</span>
       </div>
-      
-      <h1 class="hero-title">
-        <span class="title-line">Transform Your</span>
-        <span class="title-line"><span class="gradient-text">Digital Presence</span></span>
-        <span class="title-line">With Expert Solutions</span>
+
+      <h1 class="scramble-title">
+        <span class="line">Services,</span>
+        <span class="line accent-word">Parsed.</span>
       </h1>
-      
-      <p class="hero-subtitle">
-        From stunning websites to powerful social media campaigns, we provide comprehensive digital solutions to elevate your business
+
+      <p class="services-hero-subtitle">
+        Every engagement broken down into clear, dependable building blocks — websites, social
+        growth, email infrastructure, and the strategy to tie it all together.
       </p>
+
+      <nav class="jump-tabs" aria-label="Jump to service category">
+        <a href="#web-design" class="jump-tab"><span class="idx">01</span>Web Design</a>
+        <a href="#social-media" class="jump-tab"><span class="idx">02</span>Social Media</a>
+        <a href="#email-domain" class="jump-tab"><span class="idx">03</span>Email &amp; Domain</a>
+        <a href="#growth" class="jump-tab"><span class="idx">04</span>Growth</a>
+      </nav>
     </div>
   </section>
 
   <!-- Web Design Services -->
-  <section class="section">
+  <section id="web-design" class="section">
     <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">Web Design <span class="gradient-text">Services</span></h2>
-        <p class="section-subtitle">Professional websites that deliver seamless performance and digital precision</p>
+      <div class="section-header reveal">
+        <span class="section-eyebrow">01 — Web Design</span>
+        <h2 class="section-title">Websites Built for <span class="gradient-text">Performance</span></h2>
+        <p class="section-subtitle">Seamless performance and digital precision, from a single landing page to a fully dynamic platform.</p>
       </div>
 
-      <div class="services-grid">
-        <div class="service-item">
-          <div class="service-icon">🌐</div>
-          <h3 class="service-name">Static Website</h3>
-          <p class="service-description">Perfect for small businesses and portfolios. Fast, secure, and cost-effective web presence.</p>
-          <div class="service-price">R500 - Design & Publish</div>
+      <div class="svc-grid">
+        <div class="svc-card reveal">
+          <span class="svc-card-tag">STATIC</span>
+          <h3>Static Website</h3>
+          <p>Perfect for small businesses and portfolios. Fast, secure, and cost-effective web presence.</p>
+          <div class="svc-price">R500 — Design &amp; Publish</div>
         </div>
 
-        <div class="service-item">
-          <div class="service-icon">⚡</div>
-          <h3 class="service-name">Dynamic Website</h3>
-          <p class="service-description">Interactive websites with CMS, databases, and advanced functionality for growing businesses.</p>
-          <div class="service-price">R1200 - Design & Publish</div>
+        <div class="svc-card reveal">
+          <span class="svc-card-tag">DYNAMIC</span>
+          <h3>Dynamic Website</h3>
+          <p>Interactive websites with CMS, databases, and advanced functionality for growing businesses.</p>
+          <div class="svc-price">R1 200 — Design &amp; Publish</div>
         </div>
 
-        <div class="service-item">
-          <div class="service-icon">🔒</div>
-          <h3 class="service-name">Monthly Maintenance</h3>
-          <p class="service-description">Keep your website secure and updated. Start payments after one month of service.</p>
-          <div class="service-price">R200 (Static) / R500 (Dynamic)</div>
+        <div class="svc-card reveal">
+          <span class="svc-card-tag">MAINTENANCE</span>
+          <h3>Monthly Maintenance</h3>
+          <p>Keep your website secure and updated. Payments start after the first month of service.</p>
+          <div class="svc-price">R200 (Static) / R500 (Dynamic)</div>
         </div>
 
-        <div class="service-item">
-          <div class="service-icon">💎</div>
-          <h3 class="service-name">Annual Maintenance Discount</h3>
-          <p class="service-description">Pay maintenance in full within the first three months and save big on yearly costs.</p>
-          <div class="service-price">R2000 (Static) / R5800 (Dynamic)</div>
+        <div class="svc-card reveal">
+          <span class="svc-card-tag">SAVINGS</span>
+          <h3>Annual Maintenance Discount</h3>
+          <p>Pay maintenance in full within the first three months and save on yearly costs.</p>
+          <div class="svc-price">R2 000 (Static) / R5 800 (Dynamic)</div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Social Media Marketing -->
-  <section class="section" style="background: rgba(255,255,255,0.02);">
+  <section id="social-media" class="section" style="background: linear-gradient(180deg, transparent 0%, rgba(64, 64, 64, 0.1) 100%);">
     <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">Social Media <span class="gradient-text">Marketing</span></h2>
-        <p class="section-subtitle">Strategic social media packages to grow your brand and engage your audience</p>
+      <div class="section-header reveal">
+        <span class="section-eyebrow">02 — Social Media</span>
+        <h2 class="section-title">Marketing That <span class="gradient-text">Compounds</span></h2>
+        <p class="section-subtitle">Strategic social media packages to grow your brand and engage your audience.</p>
       </div>
 
       <div class="pricing-grid">
-        <!-- Starter Package -->
-        <div class="pricing-card">
+        <div class="pricing-card reveal">
           <div class="pricing-header">
             <h3 class="pricing-name">Starter</h3>
-            <div class="pricing-price">R3500</div>
+            <div class="pricing-price">R3 500</div>
             <div class="pricing-period">per month</div>
           </div>
           <ul class="pricing-features">
-            <li>2 Weekly Social Media Posts (Facebook & Instagram)</li>
-            <li>Including Reels</li>
-            <li>Paid Facebook Advertising Management (Boosted Posts)</li>
-            <li>Basic Performance Report</li>
-            <li>2x Stories Per Month on Parsing Social</li>
+            <li>2 weekly social posts (Facebook &amp; Instagram), including Reels</li>
+            <li>Paid Facebook advertising management (boosted posts)</li>
+            <li>Basic performance report</li>
+            <li>2× stories per month on Parsing social</li>
           </ul>
           <a href="contact.html" class="pricing-cta">Get Started</a>
         </div>
 
-        <!-- Growth Package -->
-        <div class="pricing-card featured">
+        <div class="pricing-card featured reveal">
           <span class="badge-popular">Most Popular</span>
           <div class="pricing-header">
             <h3 class="pricing-name">Growth</h3>
-            <div class="pricing-price">R5500</div>
+            <div class="pricing-price">R5 500</div>
             <div class="pricing-period">per month</div>
           </div>
           <ul class="pricing-features">
-            <li>3 Weekly Social Media Posts (Facebook, Instagram & TikTok)</li>
-            <li>Including Reels</li>
-            <li>Paid Advertising Strategy and Management</li>
-            <li>Google My Business Setup & Optimization</li>
-            <li>Monthly Analytics</li>
-            <li>3x Stories Per Month on Parsing Social</li>
+            <li>3 weekly social posts (Facebook, Instagram &amp; TikTok), including Reels</li>
+            <li>Paid advertising strategy and management</li>
+            <li>Google My Business setup &amp; optimization</li>
+            <li>Monthly analytics</li>
+            <li>3× stories per month on Parsing social</li>
           </ul>
           <a href="contact.html" class="pricing-cta">Get Started</a>
         </div>
 
-        <!-- Premium Package -->
-        <div class="pricing-card">
+        <div class="pricing-card reveal">
           <div class="pricing-header">
             <h3 class="pricing-name">Premium</h3>
-            <div class="pricing-price">R7500</div>
+            <div class="pricing-price">R7 500</div>
             <div class="pricing-period">per month</div>
           </div>
           <ul class="pricing-features">
-            <li>4 Weekly Social Media Posts (All Platforms)</li>
-            <li>Including Reels</li>
-            <li>Paid Advertising Strategy & Audience Engagement</li>
-            <li>Email Marketing Campaign</li>
-            <li>Google My Business Optimization</li>
-            <li>Monthly Performance Analytics</li>
+            <li>4 weekly social posts (all platforms), including Reels</li>
+            <li>Paid advertising strategy &amp; audience engagement</li>
+            <li>Email marketing campaign</li>
+            <li>Google My Business optimization</li>
+            <li>Monthly performance analytics</li>
           </ul>
           <a href="contact.html" class="pricing-cta">Get Started</a>
         </div>
@@ -716,38 +214,43 @@
   </section>
 
   <!-- Email & Domain Services -->
-  <section class="section">
+  <section id="email-domain" class="section">
     <div class="container">
-      <div class="email-section">
+      <div class="email-section reveal">
         <div class="email-content">
           <div>
-            <h2 class="section-title" style="text-align: left; margin-bottom: 1.5rem;">Email & <span class="gradient-text">Domain Services</span></h2>
-            <p style="color: #888; margin-bottom: 2rem; font-size: 1.1rem;">Professional email addresses and domain management to establish credibility for your business</p>
+            <span class="section-eyebrow">03 — Email &amp; Domain</span>
+            <h2 class="section-title" style="text-align: left; margin-bottom: 1rem;">Infrastructure That <span class="gradient-text">Builds Trust</span></h2>
+            <p style="color: rgba(240, 240, 224, 0.7); font-size: 1.0625rem;">Professional email addresses and domain configuration to establish credibility for your business.</p>
             <ul class="email-features">
               <li>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                Custom Domain Email Setup
+                Custom domain email setup
               </li>
               <li>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                Domain Registration & Management
+                DNS &amp; domain configuration support
               </li>
               <li>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                Email Security & Spam Protection
+                Email security &amp; spam protection
               </li>
               <li>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                Email Forwarding & Aliases
+                Email forwarding &amp; aliases
               </li>
               <li>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                Professional Email Signatures
+                Professional email signatures
               </li>
             </ul>
           </div>
-          <div style="text-align: center;">
-            <div style="font-size: 8rem; opacity: 0.3;">📧</div>
+          <div class="email-visual">
+            <div class="email-ring">
+              <div class="email-ring-inner">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -755,54 +258,55 @@
   </section>
 
   <!-- Business Growth Services -->
-  <section class="section">
+  <section id="growth" class="section" style="background: linear-gradient(180deg, transparent 0%, rgba(64, 64, 64, 0.1) 100%);">
     <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">Business <span class="gradient-text">Growth</span> Services</h2>
-        <p class="section-subtitle">Additional services to help your business thrive in the digital landscape</p>
+      <div class="section-header reveal">
+        <span class="section-eyebrow">04 — Growth</span>
+        <h2 class="section-title">Strategy Behind the <span class="gradient-text">Numbers</span></h2>
+        <p class="section-subtitle">Additional services to help your business thrive in the digital landscape.</p>
       </div>
 
-      <div class="services-grid">
-        <div class="service-item">
-          <div class="service-icon">📢</div>
-          <h3 class="service-name">Business Advertising Package</h3>
-          <p class="service-description">Strategic advertising campaigns across multiple platforms to maximize your reach and ROI.</p>
-          <div class="service-price">R140</div>
+      <div class="svc-grid">
+        <div class="svc-card reveal">
+          <span class="svc-card-tag">ADVERTISING</span>
+          <h3>Business Advertising Package</h3>
+          <p>Strategic advertising campaigns across multiple platforms to maximize your reach and ROI.</p>
+          <div class="svc-price">R140</div>
         </div>
 
-        <div class="service-item">
-          <div class="service-icon">🔍</div>
-          <h3 class="service-name">Search Engine Optimization</h3>
-          <p class="service-description">Improve your search rankings and drive organic traffic to your website with proven SEO strategies.</p>
-          <div class="service-price">R200</div>
+        <div class="svc-card reveal">
+          <span class="svc-card-tag">SEO</span>
+          <h3>Search Engine Optimization</h3>
+          <p>Improve your search rankings and drive organic traffic with proven SEO strategies.</p>
+          <div class="svc-price">R200</div>
         </div>
 
-        <div class="service-item">
-          <div class="service-icon">📊</div>
-          <h3 class="service-name">Business Analysis Package</h3>
-          <p class="service-description">Comprehensive business analysis to identify opportunities and optimize performance.</p>
-          <div class="service-price">R70 (Twice a year) / R100 (Quarterly) / R140 (Monthly)</div>
+        <div class="svc-card reveal">
+          <span class="svc-card-tag">ANALYSIS</span>
+          <h3>Business Analysis Package</h3>
+          <p>Comprehensive business analysis to identify opportunities and optimize performance.</p>
+          <div class="svc-price">R70 (twice a year) / R100 (quarterly) / R140 (monthly)</div>
         </div>
 
-        <div class="service-item">
-          <div class="service-icon">🎯</div>
-          <h3 class="service-name">Once-off Dynamic Package</h3>
-          <p class="service-description">Complete dynamic website solution with all features included for a one-time payment.</p>
-          <div class="service-price">R7800</div>
+        <div class="svc-card reveal">
+          <span class="svc-card-tag">ONCE-OFF</span>
+          <h3>Once-off Dynamic Package</h3>
+          <p>Complete dynamic website solution with all features included for a one-time payment.</p>
+          <div class="svc-price">R7 800</div>
         </div>
 
-        <div class="service-item">
-          <div class="service-icon">🚀</div>
-          <h3 class="service-name">Once-off Static Package</h3>
-          <p class="service-description">Complete static website solution perfect for businesses needing a simple, fast web presence.</p>
-          <div class="service-price">R3350</div>
+        <div class="svc-card reveal">
+          <span class="svc-card-tag">ONCE-OFF</span>
+          <h3>Once-off Static Package</h3>
+          <p>Complete static website solution, perfect for businesses needing a simple, fast web presence.</p>
+          <div class="svc-price">R3 350</div>
         </div>
 
-        <div class="service-item">
-          <div class="service-icon">📈</div>
-          <h3 class="service-name">Digital Strategy Consulting</h3>
-          <p class="service-description">Expert consultation to develop a comprehensive digital strategy tailored to your business goals.</p>
-          <div class="service-price">Contact for Pricing</div>
+        <div class="svc-card reveal">
+          <span class="svc-card-tag">CONSULTING</span>
+          <h3>Digital Strategy Consulting</h3>
+          <p>Expert consultation to develop a comprehensive digital strategy tailored to your business goals.</p>
+          <div class="svc-price">Contact for Pricing</div>
         </div>
       </div>
     </div>
@@ -811,15 +315,15 @@
   <!-- CTA Section -->
   <section class="section">
     <div class="container">
-      <div class="cta-section">
+      <div class="cta-section reveal">
         <div class="cta-content">
           <h2 class="section-title">Ready to <span class="gradient-text">Get Started?</span></h2>
-          <p style="color: #888; font-size: 1.25rem; max-width: 600px; margin: 0 auto;">
-            Let's discuss how we can help transform your digital presence and grow your business
+          <p style="color: rgba(240, 240, 224, 0.7); font-size: 1.125rem; max-width: 36rem; margin: 0 auto;">
+            Let's discuss how we can help transform your digital presence and grow your business.
           </p>
           <a href="contact.html" class="btn-large">
             Contact Us Today
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
           </a>
         </div>
       </div>
@@ -875,174 +379,6 @@
   </footer>
 
   <script src="script.js"></script>
-  <script>
-    // Register GSAP ScrollTrigger
-    gsap.registerPlugin(ScrollTrigger);
-
-    // Hero Animations
-    window.addEventListener('load', () => {
-      const tl = gsap.timeline();
-      
-      // Animate title lines
-      tl.to('.title-line', {
-        y: 0,
-        opacity: 1,
-        duration: 1,
-        stagger: 0.2,
-        ease: "power4.out"
-      })
-      .to('.hero-subtitle', {
-        y: 0,
-        opacity: 1,
-        duration: 0.8,
-        ease: "power3.out"
-      }, "-=0.5");
-    });
-
-    // Particle Canvas Animation
-    const canvas = document.getElementById('heroCanvas');
-    const ctx = canvas.getContext('2d');
-    let particles = [];
-
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-
-    class Particle {
-      constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 2 + 0.5;
-        this.speedX = Math.random() * 1 - 0.5;
-        this.speedY = Math.random() * 1 - 0.5;
-        this.color = `rgba(${Math.random() > 0.5 ? '255, 107, 107' : '78, 205, 196'}, ${Math.random() * 0.5 + 0.2})`;
-      }
-
-      update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-
-        if (this.x > canvas.width) this.x = 0;
-        if (this.x < 0) this.x = canvas.width;
-        if (this.y > canvas.height) this.y = 0;
-        if (this.y < 0) this.y = canvas.height;
-      }
-
-      draw() {
-        ctx.fillStyle = this.color;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-
-    function initParticles() {
-      particles = [];
-      for (let i = 0; i < 100; i++) {
-        particles.push(new Particle());
-      }
-    }
-
-    function animateParticles() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      for (let i = 0; i < particles.length; i++) {
-        particles[i].update();
-        particles[i].draw();
-        
-        // Connect particles
-        for (let j = i; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          
-          if (distance < 100) {
-            ctx.beginPath();
-            ctx.strokeStyle = `rgba(255, 107, 107, ${0.1 * (1 - distance / 100)})`;
-            ctx.lineWidth = 0.5;
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.stroke();
-          }
-        }
-      }
-      
-      requestAnimationFrame(animateParticles);
-    }
-
-    initParticles();
-    animateParticles();
-
-    // Scroll Animations for Service Items
-    gsap.utils.toArray('.service-item').forEach((item, i) => {
-      gsap.to(item, {
-        scrollTrigger: {
-          trigger: item,
-          start: "top 85%",
-          toggleActions: "play none none reverse"
-        },
-        opacity: 1,
-        x: 0,
-        duration: 0.8,
-        delay: i * 0.1,
-        ease: "power3.out"
-      });
-    });
-
-    // Scroll Animations for Pricing Cards
-    gsap.utils.toArray('.pricing-card').forEach((card, i) => {
-      gsap.to(card, {
-        scrollTrigger: {
-          trigger: card,
-          start: "top 85%",
-          toggleActions: "play none none reverse"
-        },
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        delay: i * 0.2,
-        ease: "power3.out"
-      });
-    });
-
-    // Parallax effect for floating icons
-    document.addEventListener('mousemove', (e) => {
-      const icons = document.querySelectorAll('.float-icon');
-      const x = e.clientX / window.innerWidth;
-      const y = e.clientY / window.innerHeight;
-      
-      icons.forEach((icon, index) => {
-        const speed = (index + 1) * 20;
-        const xOffset = (0.5 - x) * speed;
-        const yOffset = (0.5 - y) * speed;
-        icon.style.transform = `translate(${xOffset}px, ${yOffset}px) rotate(${index * 60}deg)`;
-      });
-    });
-
-    // Magnetic effect for pricing cards
-    document.querySelectorAll('.pricing-card').forEach(card => {
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        
-        const rotateX = (y - centerY) / 10;
-        const rotateY = (centerX - x) / 10;
-        
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
-      });
-      
-      card.addEventListener('mouseleave', () => {
-        card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
-      });
-    });
-  </script>
+  <script src="services.js"></script>
 </body>
 </html>
