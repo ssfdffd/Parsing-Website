@@ -10,6 +10,12 @@ class ParticleSystem {
     this.colors = ['#F07080', '#F05090', '#F4A0B8', '#F8C8D4'];
     this.connectionDistance = 150;
     
+    // FIX: Ensure the canvas doesn't block clicks on the footer or other elements
+    if (this.canvas) {
+      this.canvas.style.pointerEvents = 'none';
+      this.canvas.style.zIndex = '-1';
+    }
+    
     this.init();
     this.bindEvents();
     this.animate();
@@ -160,10 +166,19 @@ class NavCursor {
     this.cursor.style.opacity = '1';
   }
   
+  // FIX: Check if link is an anchor (#) or a page URL
   navigateTo(tab) {
     const href = tab.dataset.href;
     if (href) {
-      document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+      if (href.startsWith('#')) {
+        const target = document.querySelector(href);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      } else {
+        // Navigate to the external page
+        window.location.href = href;
+      }
     }
   }
 }
@@ -188,13 +203,21 @@ class MobileMenu {
     
     this.links.forEach((link, index) => {
       link.addEventListener('click', (e) => {
-        e.preventDefault();
-        this.setActive(index);
         const href = link.getAttribute('href');
-        this.close();
-        setTimeout(() => {
-          document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
-        }, 300);
+        
+        // FIX: Only prevent default and smooth scroll if it's an internal anchor
+        if (href && href.startsWith('#')) {
+          e.preventDefault();
+          this.setActive(index);
+          this.close();
+          setTimeout(() => {
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          }, 300);
+        } else {
+          // It's a page link (e.g., services.html), allow default browser navigation
+          this.setActive(index);
+          this.close();
+        }
       });
     });
   }
@@ -247,7 +270,6 @@ class ScrollEffects {
   
   initRevealObserver() {
     if (!('IntersectionObserver' in window)) {
-      // Fallback: just show everything if IntersectionObserver isn't supported
       this.revealElements.forEach(el => el.classList.add('visible'));
       return;
     }
@@ -290,14 +312,12 @@ class ImageStack {
   }
   
   bindEvents() {
-    // Wheel navigation
     window.addEventListener('wheel', (e) => {
       if (Math.abs(e.deltaY) > 30) {
         this.navigate(e.deltaY > 0 ? 1 : -1);
       }
     }, { passive: true });
     
-    // Dot navigation
     this.dots.forEach(dot => {
       dot.addEventListener('click', () => {
         const index = parseInt(dot.dataset.index);
@@ -308,7 +328,6 @@ class ImageStack {
       });
     });
     
-    // Drag navigation
     const stack = document.getElementById('imageStack');
     if (stack) {
       stack.addEventListener('mousedown', (e) => this.startDrag(e));
@@ -408,12 +427,10 @@ class ImageStack {
       card.style.opacity = opacity;
     });
     
-    // Update dots
     this.dots.forEach((dot, index) => {
       dot.classList.toggle('active', index === this.currentIndex);
     });
     
-    // Update counter
     if (this.currentIndexEl) {
       this.currentIndexEl.textContent = String(this.currentIndex + 1).padStart(2, '0');
     }
@@ -436,7 +453,6 @@ class ContactForm {
     const formData = new FormData(this.form);
     const data = Object.fromEntries(formData);
     
-    // Simulate submission
     const button = this.form.querySelector('button[type="submit"]');
     const originalHTML = button.innerHTML;
     button.innerHTML = 'Sending...';
