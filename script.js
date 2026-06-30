@@ -228,13 +228,12 @@ class ScrollEffects {
     this.revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
     
     this.bindEvents();
-    this.checkReveal();
+    this.initRevealObserver();
   }
   
   bindEvents() {
     window.addEventListener('scroll', () => {
       this.handleScroll();
-      this.checkReveal();
     });
   }
   
@@ -246,16 +245,26 @@ class ScrollEffects {
     }
   }
   
-  checkReveal() {
-    const windowHeight = window.innerHeight;
-    const revealPoint = 150;
+  initRevealObserver() {
+    if (!('IntersectionObserver' in window)) {
+      // Fallback: just show everything if IntersectionObserver isn't supported
+      this.revealElements.forEach(el => el.classList.add('visible'));
+      return;
+    }
     
-    this.revealElements.forEach(el => {
-      const elementTop = el.getBoundingClientRect().top;
-      if (elementTop < windowHeight - revealPoint) {
-        el.classList.add('visible');
-      }
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.15,
+      rootMargin: '0px 0px -100px 0px'
     });
+    
+    this.revealElements.forEach(el => observer.observe(el));
   }
 }
 
