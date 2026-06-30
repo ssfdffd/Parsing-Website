@@ -8,6 +8,7 @@ Based on official Brand Colour Guide
   --hot-pink: #F05090;
   --coral: #F07080;
   --cream: #F0F0E0;
+  
   /* Pink Ramp */
   --pink-50: #FCE8ED;
   --pink-100: #F8C8D4;
@@ -15,6 +16,7 @@ Based on official Brand Colour Guide
   --pink-600: #D03060;
   --pink-800: #9E1B45;
   --pink-900: #7A1035;
+
   /* Gradients & Effects */
   --gradient: linear-gradient(135deg, var(--hot-pink) 0%, var(--coral) 100%);
   --gradient-text: linear-gradient(135deg, var(--hot-pink) 0%, var(--coral) 50%, var(--hot-pink) 100%);
@@ -127,13 +129,13 @@ BUTTONS
 }
 
 .btn-primary {
-  background: var(--coral); /* Primary brand colour for large areas */
+  background: var(--coral);
   color: var(--obsidian);
   box-shadow: var(--shadow-coral);
 }
 
 .btn-primary:hover {
-  background: var(--hot-pink); /* Hot pink for hover states */
+  background: var(--hot-pink);
   transform: translateY(-2px);
   box-shadow: 0 15px 50px -10px rgba(240, 80, 144, 0.6);
 }
@@ -161,41 +163,20 @@ BUTTONS
 /* ============================================
 FAVICON LOGO REPLACEMENT
 ============================================ */
-.nav-logo-img {
+.nav-favicon {
   width: 2.5rem;
   height: 2.5rem;
-  object-fit: contain;
+  border-radius: 0.5rem;
+  object-fit: cover;
   flex-shrink: 0;
+  background: var(--obsidian);
 }
 
-/* Kept for rotating center icon */
-.logo-mark-large {
-  width: 5rem;
-  height: 5rem;
-  border-radius: 1rem;
-  background: var(--gradient);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 3px;
-  font-family: 'Space Grotesk', sans-serif;
-  font-weight: 800;
-  font-size: 3rem;
-}
-
-.logo-mark-large::before {
-  content: 'P';
+.rotating-favicon {
   width: 100%;
   height: 100%;
-  background: var(--obsidian);
   border-radius: 0.85rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-image: var(--gradient);
+  object-fit: cover;
 }
 
 .accent {
@@ -590,6 +571,7 @@ SERVICES INTRO - INLINE IMAGE/TEXT ROWS
   gap: 2.5rem;
   margin-bottom: 3.5rem;
 }
+
 .service-row:last-child { margin-bottom: 0; }
 .service-row.reverse { flex-direction: row-reverse; }
 
@@ -658,11 +640,13 @@ SERVICES INTRO - INLINE IMAGE/TEXT ROWS
   transform: translateX(-40px);
   transition: opacity 0.7s ease, transform 0.7s ease;
 }
+
 .reveal-right {
   opacity: 0;
   transform: translateX(40px);
   transition: opacity 0.7s ease, transform 0.7s ease;
 }
+
 .reveal-left.visible,
 .reveal-right.visible {
   opacity: 1;
@@ -739,6 +723,7 @@ WEBSITES SECTION - ROTATING ICONS
   background: var(--obsidian);
   border: 4px solid var(--graphite);
   box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5);
+  padding: 8px; /* Added padding so favicon doesn't touch the border */
 }
 
 @keyframes spin-slow {
