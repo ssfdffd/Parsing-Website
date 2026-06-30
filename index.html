@@ -3,309 +3,335 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Parsing™ — split image & text with slide animation</title>
+  <meta name="description" content="Parsing - Taking software to the next level. Custom websites, branding, software development, SEO, AEO & GEO." />
+  <title>Parsing™ | Taking Software to the Next Level</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="stylesheet" href="styles.css" />
+  
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    /* ===== brand colours ===== */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #0A0A0A;
-      color: #F0F0E0;
-      line-height: 1.6;
-      scroll-behavior: smooth;
-    }
-    h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; font-weight: 700; }
-    a { text-decoration: none; color: inherit; }
-    .container { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
-    .section { padding: 4rem 0; position: relative; z-index: 1; }
-    .gradient-text {
-      background: linear-gradient(135deg, #F05090, #F07080);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .section-title {
-      font-size: clamp(2rem, 4vw, 3rem);
-      margin-bottom: 1rem;
-    }
-    .section-subtitle {
-      color: rgba(240,240,224,0.7);
-      max-width: 48rem;
-      margin: 0 auto;
-    }
-    .section-header { text-align: center; margin-bottom: 3rem; }
-
-    /* ===== image/text row ===== */
-    .split-row {
-      display: flex;
-      align-items: center;
-      gap: 2.5rem;
-      margin-bottom: 3rem;
-      flex-wrap: wrap;
-    }
-    .split-row.reverse { flex-direction: row-reverse; }
-    .split-text {
-      flex: 1 1 55%;
-      display: flex;
-      flex-direction: column;
-      gap: 1.2rem;
-    }
-    .split-text p {
-      font-size: 1rem;
-      color: rgba(240,240,224,0.88);
-      border-bottom: 1px solid rgba(64,64,64,0.4);
-      padding-bottom: 1rem;
-    }
-    .split-text p:last-child { border-bottom: none; padding-bottom: 0; }
-
-    /* === image frame with slide animation === */
-    .split-image-frame {
-      flex: 0 0 320px;
-      width: 320px;
-      perspective: 900px;
-    }
-    .split-image-wrap {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 4 / 5;
-      max-height: 320px;
-      border-radius: 1.25rem;
-      overflow: hidden;
-      border: 2px solid rgba(240,112,128,0.3);
-      box-shadow: 0 15px 35px -10px rgba(0,0,0,0.7);
-      background: #1a1a1a;
-      transition: transform 0.3s ease;
-    }
-    .split-image-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.7s cubic-bezier(0.2, 0.9, 0.4, 1);
-    }
-    .split-image-wrap:hover img { transform: scale(1.04); }
-    .image-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(240,80,144,0.15), rgba(240,112,128,0.15));
-      pointer-events: none;
-    }
-
-    /* ===== SLIDE ANIMATION (enter from sides) ===== */
-    .slide-from-left {
-      opacity: 0;
-      transform: translateX(-60px);
-      transition: opacity 0.8s cubic-bezier(0.2, 0.9, 0.3, 1), transform 0.8s cubic-bezier(0.2, 0.9, 0.3, 1);
-    }
-    .slide-from-right {
-      opacity: 0;
-      transform: translateX(60px);
-      transition: opacity 0.8s cubic-bezier(0.2, 0.9, 0.3, 1), transform 0.8s cubic-bezier(0.2, 0.9, 0.3, 1);
-    }
-    .slide-from-left.visible,
-    .slide-from-right.visible {
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    /* text paragraphs also slide (same timing) */
-    .slide-text {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-    .slide-text.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .slide-text:nth-child(1) { transition-delay: 0.05s; }
-    .slide-text:nth-child(2) { transition-delay: 0.15s; }
-    .slide-text:nth-child(3) { transition-delay: 0.25s; }
-
-    /* ===== extra: compact responsive ===== */
-    @media (max-width: 1024px) {
-      .split-row, .split-row.reverse { flex-direction: column; }
-      .split-image-frame { flex: 1 1 100%; width: 100%; max-width: 420px; }
-      .split-image-wrap { max-height: 280px; aspect-ratio: 16 / 9; }
-    }
-    @media (max-width: 600px) {
-      .split-image-frame { max-width: 100%; }
-      .split-image-wrap { max-height: 220px; }
-    }
-
-    /* ===== minimal nav & footer ===== */
-    .logo-mark {
-      width: 2.5rem; height: 2.5rem;
-      border-radius: 0.5rem;
-      background: linear-gradient(135deg, #F05090, #F07080);
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 800; font-size: 1.5rem; color: #0A0A0A;
-    }
-    .nav-logo { display: flex; align-items: center; gap: 0.75rem; font-weight: 700; }
-    .desktop-nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      padding: 1rem 1.5rem;
-      background: rgba(10,10,10,0.75); backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(64,64,64,0.3);
-      display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap;
-    }
-    .nav-links { display: flex; gap: 1.5rem; font-weight: 500; }
-    .nav-links a { color: rgba(240,240,224,0.7); transition: 0.2s; }
-    .nav-links a:hover { color: #F07080; }
-    .footer {
-      padding: 2rem 0; border-top: 1px solid rgba(64,64,64,0.4);
-      text-align: center; color: rgba(240,240,224,0.5);
-    }
-    .btn {
-      display: inline-block; padding: 0.6rem 1.6rem;
-      border-radius: 999px; font-weight: 600;
-      background: #F07080; color: #0A0A0A;
-      transition: 0.25s; box-shadow: 0 8px 20px -8px rgba(240,112,128,0.3);
-    }
-    .btn:hover { background: #F05090; transform: scale(1.03); }
-    .btn-outline { background: transparent; border: 2px solid #404040; color: #F0F0E0; }
-    .btn-outline:hover { border-color: #F07080; color: #F07080; background: transparent; }
-    .hero { padding: 7rem 1.5rem 3rem; text-align: center; }
-    .hero h1 { font-size: clamp(2.8rem, 7vw, 5rem); }
-
-    /* remove extra top spacing */
-    .split-section {
-      padding-top: 1rem;
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- simple navigation -->
-  <header class="desktop-nav">
-    <div class="nav-logo">
-      <span class="logo-mark">P</span>
-      <span>parsing<span style="color:#F07080">™</span></span>
+  <!-- Particle Background Canvas -->
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- Mobile Navigation -->
+  <nav class="mobile-nav" id="mobileNav">
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="mobile-menu" id="mobileMenu">
+      <div class="mobile-menu-logo">
+        <div class="logo-mark">P</div>
+        <span>parsing<span class="accent">™</span></span>
+      </div>
+      <ul class="mobile-menu-items">
+        <li><a href="index.html" class="mobile-link active" data-index="0">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          Home
+        </a></li>
+        <li><a href="#ai" class="mobile-link" data-index="1">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg>
+          AI
+        </a></li>
+        <li><a href="services.html" class="mobile-link" data-index="2">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          Services
+        </a></li>
+        <li><a href="pricing.html" class="mobile-link" data-index="3">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Pricing
+        </a></li>
+        <li><a href="contact.html" class="mobile-link" data-index="4">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Contact
+        </a></li>
+      </ul>
     </div>
-    <div class="nav-links">
-      <a href="#home">Home</a>
-      <a href="#split-section">Work</a>
-      <a href="#contact">Contact</a>
+  </nav>
+
+  <!-- Desktop Navigation -->
+  <header class="desktop-nav" id="desktopNav">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-mark">P</div>
+        <span>parsing<span class="accent">™</span></span>
+      </a>
+      
+      <ul class="nav-tabs" id="navTabs">
+        <li class="nav-tab" data-href="index.html">Home</li>
+        <li class="nav-tab" data-href="#ai">
+          <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg>
+          AI
+        </li>
+        <li class="nav-tab" data-href="services.html">Services</li>
+        <li class="nav-tab" data-href="pricing.html">Pricing</li>
+        <li class="nav-tab" data-href="contact.html">Contact</li>
+        <div class="nav-cursor" id="navCursor"></div>
+      </ul>
+
+      <a href="contact.html" class="nav-cta">Get Started</a>
     </div>
-    <a href="#contact" class="btn">Get started</a>
   </header>
 
-  <!-- hero -->
+  <!-- Hero Section -->
   <section id="home" class="hero">
-    <div class="container">
-      <h1>Taking software <br><span class="gradient-text">to the next level</span></h1>
-      <p style="max-width:600px; margin:1.2rem auto; color:rgba(240,240,224,0.7);">
-        Custom websites · branding · social media · SEO, AEO & GEO · AI solutions
+    <div class="hero-content">
+      <div class="hero-badge reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8 5.8 21.3l2.4-7.4L2 9.4h7.6z"/></svg>
+        <span>Taking Software to the Next Level</span>
+      </div>
+
+      <h1 class="hero-title reveal">
+        We Build<br />
+        <span class="gradient-text">Digital Excellence</span>
+      </h1>
+
+      <p class="hero-subtitle reveal">
+        Custom-made websites, branding, social media management, and problem-solving software. 
+        Parsing specializes in SEO, AEO, and GEO optimization.
       </p>
-      <a href="#split-section" class="btn" style="margin-top:0.5rem;">Explore our work →</a>
+
+      <div class="hero-cta reveal">
+        <a href="contact.html" class="btn btn-primary">
+          Start Your Project
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <a href="#websites" class="btn btn-secondary">View Our Work</a>
+      </div>
     </div>
   </section>
 
-  <!-- ===== SPLIT SECTION: TWO IMAGES + PARAGRAPHS (no "what we do" header) ===== -->
-  <section id="split-section" class="section split-section">
+  <!-- AI Section -->
+  <section id="ai" class="section ai-section">
     <div class="container">
-      <!-- section header removed -->
-
-      <!-- ===== ROW 1: image on the right, text on the left ===== -->
-      <div class="split-row">
-        <div class="split-text">
-          <p class="slide-text"><strong>Websites & branding</strong> — Parsing creates custom-made websites tailored to each client’s unique business needs. We work directly with you, ensuring dedicated attention and craftsmanship. Every project is visually stunning, highly functional, and user‑friendly.</p>
-          <p class="slide-text"><strong>Brand identity</strong> — From logo design to complete brand guidelines, we help you build a memorable identity that resonates with your audience. A brand is more than a logo — it’s the entire experience customers have with your business.</p>
-          <p class="slide-text"><strong>Social media management</strong> — We engage your community, drive conversations, and create content strategies that align with your objectives. We help you grow your presence across all major platforms.</p>
+      <div class="section-header reveal">
+        <div class="section-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg>
+          <span>AI-Powered Solutions</span>
         </div>
-        <div class="split-image-frame slide-from-right">
-          <div class="split-image-wrap">
-            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80" alt="Web development & branding" loading="lazy" />
-            <div class="image-overlay"></div>
-          </div>
-        </div>
+        <h2 class="section-title">
+          Harness the Power of<br />
+          <span class="gradient-text">Artificial Intelligence</span>
+        </h2>
+        <p class="section-subtitle">
+          Transform your business with cutting-edge AI technologies that drive innovation and efficiency.
+        </p>
       </div>
 
-      <!-- ===== ROW 2: image on the left, text on the right (reverse) ===== -->
-      <div class="split-row reverse">
-        <div class="split-image-frame slide-from-left">
-          <div class="split-image-wrap">
-            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80" alt="Software & AI solutions" loading="lazy" />
-            <div class="image-overlay"></div>
+      <div class="features-grid">
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/></svg>
           </div>
+          <h3>Machine Learning</h3>
+          <p>Intelligent algorithms that learn and adapt to your business needs.</p>
         </div>
-        <div class="split-text">
-          <p class="slide-text"><strong>Software that solves problems</strong> — Whether you need a web app or an enterprise solution, we build scalable, secure, and maintainable software. We bring your ideas to life using the latest technologies.</p>
-          <p class="slide-text"><strong>Machine learning & AI</strong> — Parsing is expanding into machine learning, developing its own projects that will contribute to future AI-powered products. We stay at the forefront of technology to bring innovation to your business.</p>
-          <p class="slide-text"><strong>SEO · AEO · GEO</strong> — We optimise for search engines, answer engines, and generative engines. We keep you visible and competitive in the ever‑evolving digital landscape.</p>
+
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <h3>Automation</h3>
+          <p>Streamline workflows with AI-powered automation solutions.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3>AI Security</h3>
+          <p>Protect your data with advanced AI-driven security measures.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          </div>
+          <h3>Predictive Analytics</h3>
+          <p>Make data-driven decisions with predictive modeling.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <h3>NLP Solutions</h3>
+          <p>Natural language processing for chatbots and text analysis.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
+          </div>
+          <h3>Custom AI</h3>
+          <p>Tailored AI solutions built specifically for your requirements.</p>
         </div>
       </div>
-
     </div>
   </section>
 
-  <!-- contact / footer -->
-  <section id="contact" class="section" style="background:rgba(64,64,64,0.05); border-top:1px solid rgba(64,64,64,0.3);">
-    <div class="container" style="text-align:center;">
-      <h2 class="section-title">Let’s <span class="gradient-text">build</span> something</h2>
-      <p style="margin-bottom:1.5rem; color:rgba(240,240,224,0.7);">Ready to take your software to the next level?</p>
-      <a href="#" class="btn" style="font-size:1.1rem;">Start your project →</a>
+  <!-- Services Section - Inline Image/Text Layout -->
+  <section class="section services-intro">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 class="section-title">
+          What We <span class="gradient-text">Do</span>
+        </h2>
+      </div>
+
+      <div class="services-intro-wrapper">
+        <div class="service-row">
+          <div class="service-text reveal">
+            <p>
+              Parsing specializes in creating custom-made websites that are tailored to each client's unique business needs. 
+              Working directly with clients, Parsing ensures every project receives dedicated attention and craftsmanship. 
+              Parsing believes in building digital experiences that are not only visually stunning but also highly functional 
+              and user-friendly.
+            </p>
+            <p>
+              Parsing's branding services help clients establish a strong, memorable identity that resonates with their target audience. 
+              From logo design to complete brand guidelines, Parsing ensures that every touchpoint reflects a company's values 
+              and mission. A brand is more than just a logo—it's the entire experience customers have with a business.
+            </p>
+            <p>
+              In today's digital age, social media presence is crucial for business success. Parsing's social media management 
+              services help businesses engage with their audience, build community, and drive meaningful conversations around their 
+              brand. Parsing creates content strategies that align with business objectives and help clients grow their online 
+              presence across all major platforms.
+            </p>
+          </div>
+          <div class="service-image-frame reveal-right">
+            <div class="service-image">
+              <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80" alt="Web Development & Branding" loading="lazy" />
+              <div class="image-overlay"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-row reverse">
+          <div class="service-image-frame reveal-left">
+            <div class="service-image">
+              <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80" alt="Software & AI Solutions" loading="lazy" />
+              <div class="image-overlay"></div>
+            </div>
+          </div>
+          <div class="service-text reveal">
+            <p>
+              Parsing builds software that solves real problems. Whether a client needs a simple web application or a complex enterprise 
+              solution, Parsing has the expertise to bring ideas to life using the latest technologies and best practices 
+              to ensure software is scalable, secure, and maintainable.
+            </p>
+            <p>
+              Parsing is expanding into machine learning, developing its own projects that will contribute to future 
+              AI-powered products. This continuous learning ensures Parsing stays at the forefront of technology, bringing 
+              innovative solutions to client business challenges.
+            </p>
+            <p>
+              Parsing's expertise in SEO (Search Engine Optimization), AEO (Answer Engine Optimization), and GEO (Generative Engine 
+              Optimization) ensures that businesses get found by the right people at the right time. Parsing stays ahead of 
+              the curve with the latest search trends and algorithm updates to keep clients visible and competitive 
+              in the ever-evolving digital landscape.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
+  <!-- Websites We Have Built Section -->
+  <section id="websites" class="section websites-section">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 class="section-title">
+          Websites We Have <span class="gradient-text">Built</span>
+        </h2>
+        <p class="section-subtitle">
+          Explore some of our recent projects and see how we've helped businesses transform their digital presence
+        </p>
+      </div>
+
+      <div class="rotating-icons-wrapper">
+        <div class="rotating-ring" id="rotatingRing">
+          <div class="rotating-icon" style="--angle: 0deg;">
+            <div class="icon-box icon-box-1">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+          </div>
+          <div class="rotating-icon" style="--angle: 90deg;">
+            <div class="icon-box icon-box-2">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </div>
+          </div>
+          <div class="rotating-icon" style="--angle: 180deg;">
+            <div class="icon-box icon-box-3">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            </div>
+          </div>
+          <div class="rotating-icon" style="--angle: 270deg;">
+            <div class="icon-box icon-box-4">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="rotating-center">
+          <div class="logo-mark-large">P</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <p>© 2026 Parsing™ — taking software to the next level</p>
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo">
+            <div class="logo-mark">P</div>
+            <span>parsing<span class="accent">™</span></span>
+          </a>
+          <p>Taking software to the next level. Parsing builds custom solutions that solve real problems.</p>
+        </div>
+
+        <div class="footer-links">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-social">
+          <h4>Follow Us</h4>
+          <div class="social-icons">
+            <a href="#" aria-label="Twitter">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/></svg>
+            </a>
+            <a href="#" aria-label="GitHub">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+            </a>
+            <a href="#" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.063 2.063 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </a>
+            <a href="#" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 Parsing™. All rights reserved.</p>
+      </div>
     </div>
   </footer>
 
-  <!-- ===== INTERSECTION OBSERVER: slide animations ===== -->
-  <script>
-    (function() {
-      // slide from left / right (images)
-      const leftItems = document.querySelectorAll('.slide-from-left');
-      const rightItems = document.querySelectorAll('.slide-from-right');
-      const textItems = document.querySelectorAll('.slide-text');
-
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            // optional: unobserve after reveal
-            observer.unobserve(entry.target);
-          }
-        });
-      }, {
-        threshold: 0.25,
-        rootMargin: '0px 0px -40px 0px'
-      });
-
-      // observe all slide elements
-      leftItems.forEach(el => observer.observe(el));
-      rightItems.forEach(el => observer.observe(el));
-      textItems.forEach(el => observer.observe(el));
-
-      // force a check after load (in case some are already visible)
-      window.addEventListener('load', () => {
-        leftItems.forEach(el => { if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('visible'); });
-        rightItems.forEach(el => { if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('visible'); });
-        textItems.forEach(el => { if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('visible'); });
-      });
-    })();
-  </script>
-
-  <!-- extra smoothness for nav links -->
-  <script>
-    document.querySelectorAll('.nav-links a, .hero a, .footer a').forEach(link => {
-      link.addEventListener('click', (e) => {
-        const href = link.getAttribute('href');
-        if (href && href.startsWith('#')) {
-          e.preventDefault();
-          const target = document.querySelector(href);
-          if (target) target.scrollIntoView({ behavior: 'smooth' });
-        }
-      });
-    });
-  </script>
-
+  <script src="script.js"></script>
 </body>
 </html>
