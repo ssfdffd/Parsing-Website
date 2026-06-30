@@ -225,7 +225,7 @@ class MobileMenu {
 class ScrollEffects {
   constructor() {
     this.desktopNav = document.getElementById('desktopNav');
-    this.revealElements = document.querySelectorAll('.reveal');
+    this.revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
     
     this.bindEvents();
     this.checkReveal();
