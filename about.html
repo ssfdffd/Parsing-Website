@@ -14,11 +14,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
-    /* ============================================
-       PARSING ABOUT PAGE STYLES
-       Brand Colors: Obsidian, Graphite, Coral Pink, Hot Pink, Cream
-       ============================================ */
-    
     :root {
       --obsidian: #0A0A0A;
       --graphite: #404040;
@@ -30,444 +25,153 @@
       --tint-200: #F4A0B8;
     }
 
-    body {
-      background: var(--obsidian);
-      color: var(--cream);
-      overflow-x: hidden;
-    }
+    body { background: var(--obsidian); color: var(--cream); overflow-x: hidden; }
+    #particleCanvas { pointer-events: none; z-index: -1; }
 
-    /* Ensure canvas doesn't block clicks */
-    #particleCanvas {
-      pointer-events: none;
-      z-index: -1;
-    }
-
-    /* ============================================
-       HERO SECTION
-       ============================================ */
     .about-hero {
-      min-height: 80vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-      text-align: center;
-      padding: 8rem 2rem 4rem;
+      min-height: 80vh; display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden; text-align: center; padding: 8rem 2rem 4rem;
     }
-
     .about-hero::before {
-      content: '';
-      position: absolute;
-      width: 150%;
-      height: 150%;
-      top: -25%;
-      left: -25%;
+      content: ''; position: absolute; width: 150%; height: 150%; top: -25%; left: -25%;
       background: radial-gradient(circle at 30% 50%, rgba(240, 112, 128, 0.15) 0%, transparent 50%),
                   radial-gradient(circle at 70% 50%, rgba(240, 80, 144, 0.1) 0%, transparent 50%);
-      animation: heroGlow 15s ease-in-out infinite alternate;
-      z-index: 0;
+      animation: heroGlow 15s ease-in-out infinite alternate; z-index: 0;
     }
+    @keyframes heroGlow { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(-5%, 5%) scale(1.1); } }
 
-    @keyframes heroGlow {
-      0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(-5%, 5%) scale(1.1); }
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      max-width: 800px;
-    }
-
+    .hero-content { position: relative; z-index: 2; max-width: 800px; }
     .hero-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(3rem, 8vw, 6rem);
-      font-weight: 800;
-      color: var(--cream);
-      margin-bottom: 1.5rem;
-      line-height: 1.1;
-      opacity: 0;
+      font-family: 'Space Grotesk', sans-serif; font-size: clamp(3rem, 8vw, 6rem); font-weight: 800;
+      color: var(--cream); margin-bottom: 1.5rem; line-height: 1.1; opacity: 0;
       animation: titleReveal 1.2s cubic-bezier(0.77, 0, 0.175, 1) 0.2s forwards;
     }
-
     @keyframes titleReveal {
       0% { opacity: 0; transform: translateY(50px) scale(0.95); filter: blur(10px); }
       100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
     }
-
     .hero-subtitle {
-      font-size: 1.25rem;
-      color: rgba(240, 240, 224, 0.7);
-      max-width: 600px;
-      margin: 0 auto;
-      line-height: 1.6;
-      opacity: 0;
-      animation: fadeUp 1s ease 0.6s forwards;
+      font-size: 1.25rem; color: rgba(240, 240, 224, 0.7); max-width: 600px; margin: 0 auto;
+      line-height: 1.6; opacity: 0; animation: fadeUp 1s ease 0.6s forwards;
     }
+    @keyframes fadeUp { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
 
-    @keyframes fadeUp {
-      0% { opacity: 0; transform: translateY(30px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ============================================
-       FOUNDER SECTION
-       ============================================ */
-    .founder-section {
-      padding: 6rem 2rem;
-      background: var(--obsidian);
-      position: relative;
-    }
-
+    .founder-section { padding: 6rem 2rem; background: var(--obsidian); position: relative; }
     .founder-container {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1.2fr;
-      gap: 4rem;
-      align-items: center;
+      max-width: 1100px; margin: 0 auto; display: grid;
+      grid-template-columns: 1fr 1.2fr; gap: 4rem; align-items: center;
     }
-
-    .founder-image-wrapper {
-      position: relative;
-      display: flex;
-      justify-content: center;
-    }
-
+    .founder-image-wrapper { position: relative; display: flex; justify-content: center; }
     .founder-glow {
-      position: absolute;
-      width: 100%;
-      height: 100%;
+      position: absolute; width: 100%; height: 100%;
       background: radial-gradient(circle, rgba(240, 112, 128, 0.3), transparent 70%);
-      filter: blur(40px);
-      animation: pulseGlow 4s ease-in-out infinite;
-      z-index: 1;
+      filter: blur(40px); animation: pulseGlow 4s ease-in-out infinite; z-index: 1;
     }
-
-    @keyframes pulseGlow {
-      0%, 100% { transform: scale(1); opacity: 0.5; }
-      50% { transform: scale(1.1); opacity: 0.8; }
-    }
-
+    @keyframes pulseGlow { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.1); opacity: 0.8; } }
     .founder-img {
-      width: 100%;
-      max-width: 350px;
-      aspect-ratio: 1;
-      object-fit: cover;
-      border-radius: 24px;
-      border: 2px solid var(--coral-pink);
-      position: relative;
-      z-index: 2;
-      box-shadow: 0 20px 60px rgba(240, 112, 128, 0.2);
-      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 100%; max-width: 350px; aspect-ratio: 1; object-fit: cover; border-radius: 24px;
+      border: 2px solid var(--coral-pink); position: relative; z-index: 2;
+      box-shadow: 0 20px 60px rgba(240, 112, 128, 0.2); transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     }
-
-    .founder-img:hover {
-      transform: scale(1.03) rotate(-2deg);
-    }
-
-    .founder-content {
-      color: var(--cream);
-    }
-
+    .founder-img:hover { transform: scale(1.03) rotate(-2deg); }
+    .founder-content { color: var(--cream); }
     .section-eyebrow {
-      display: inline-block;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.875rem;
-      font-weight: 700;
-      color: var(--coral-pink);
-      margin-bottom: 1rem;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
+      display: inline-block; font-family: 'Space Mono', monospace; font-size: 0.875rem;
+      font-weight: 700; color: var(--coral-pink); margin-bottom: 1rem; letter-spacing: 0.05em; text-transform: uppercase;
     }
-
     .founder-name {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 2.5rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
+      font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem;
       background: linear-gradient(135deg, var(--cream), var(--tint-200));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
+    .founder-role { font-size: 1.125rem; color: var(--hot-pink); margin-bottom: 1.5rem; font-weight: 500; }
+    .founder-bio { font-size: 1.0625rem; line-height: 1.8; color: rgba(240, 240, 224, 0.8); }
 
-    .founder-role {
-      font-size: 1.125rem;
-      color: var(--hot-pink);
-      margin-bottom: 1.5rem;
-      font-weight: 500;
-    }
-
-    .founder-bio {
-      font-size: 1.0625rem;
-      line-height: 1.8;
-      color: rgba(240, 240, 224, 0.8);
-    }
-
-    /* ============================================
-       VISION & MISSION SECTION
-       ============================================ */
-    .vm-section {
-      padding: 6rem 2rem;
-      background: linear-gradient(180deg, var(--obsidian) 0%, #111111 100%);
-      position: relative;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .section-header {
-      text-align: center;
-      margin-bottom: 4rem;
-    }
-
+    .vm-section { padding: 6rem 2rem; background: linear-gradient(180deg, var(--obsidian) 0%, #111111 100%); position: relative; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .section-header { text-align: center; margin-bottom: 4rem; }
     .section-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(2rem, 4vw, 3rem);
-      font-weight: 700;
-      color: var(--cream);
-      margin-bottom: 1rem;
-      line-height: 1.2;
+      font-family: 'Space Grotesk', sans-serif; font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700; color: var(--cream); margin-bottom: 1rem; line-height: 1.2;
     }
-
     .gradient-text {
       background: linear-gradient(135deg, var(--coral-pink), var(--hot-pink));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-
-    .vm-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-      margin-top: 3rem;
-    }
-
+    .vm-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem; }
     .vm-card {
-      background: rgba(64, 64, 64, 0.15);
-      border: 1px solid rgba(240, 112, 128, 0.2);
-      border-radius: 24px;
-      padding: 2.5rem;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      backdrop-filter: blur(10px);
-      transform-style: preserve-3d;
+      background: rgba(64, 64, 64, 0.15); border: 1px solid rgba(240, 112, 128, 0.2);
+      border-radius: 24px; padding: 2.5rem; position: relative; overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); backdrop-filter: blur(10px); transform-style: preserve-3d;
     }
-
     .vm-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
       background: linear-gradient(90deg, var(--coral-pink), var(--hot-pink));
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.4s ease;
+      transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease;
     }
-
-    .vm-card:hover::before {
-      transform: scaleX(1);
-    }
-
-    .vm-card:hover {
-      border-color: rgba(240, 112, 128, 0.5);
-      box-shadow: 0 20px 60px rgba(240, 112, 128, 0.15);
-    }
-
+    .vm-card:hover::before { transform: scaleX(1); }
+    .vm-card:hover { border-color: rgba(240, 112, 128, 0.5); box-shadow: 0 20px 60px rgba(240, 112, 128, 0.15); }
     .vm-icon {
-      width: 60px;
-      height: 60px;
-      background: rgba(240, 112, 128, 0.15);
-      border-radius: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1.5rem;
-      color: var(--coral-pink);
-      transition: transform 0.4s ease;
+      width: 60px; height: 60px; background: rgba(240, 112, 128, 0.15); border-radius: 16px;
+      display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;
+      color: var(--coral-pink); transition: transform 0.4s ease;
     }
+    .vm-card:hover .vm-icon { transform: scale(1.1) rotate(5deg); background: rgba(240, 112, 128, 0.25); }
+    .vm-icon svg { width: 32px; height: 32px; }
+    .vm-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--cream); margin-bottom: 1rem; }
+    .vm-card p { color: rgba(240, 240, 224, 0.7); line-height: 1.7; font-size: 1rem; }
 
-    .vm-card:hover .vm-icon {
-      transform: scale(1.1) rotate(5deg);
-      background: rgba(240, 112, 128, 0.25);
-    }
-
-    .vm-icon svg {
-      width: 32px;
-      height: 32px;
-    }
-
-    .vm-card h3 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--cream);
-      margin-bottom: 1rem;
-    }
-
-    .vm-card p {
-      color: rgba(240, 240, 224, 0.7);
-      line-height: 1.7;
-      font-size: 1rem;
-    }
-
-    /* ============================================
-       VALUES SECTION
-       ============================================ */
-    .values-section {
-      padding: 6rem 2rem;
-      background: var(--obsidian);
-      position: relative;
-      overflow: hidden;
-    }
-
+    .values-section { padding: 6rem 2rem; background: var(--obsidian); position: relative; overflow: hidden; }
     .values-section::before {
-      content: '';
-      position: absolute;
-      inset: 0;
+      content: ''; position: absolute; inset: 0;
       background-image: radial-gradient(rgba(240, 112, 128, 0.1) 1px, transparent 1px);
-      background-size: 40px 40px;
-      opacity: 0.5;
-      z-index: 0;
+      background-size: 40px 40px; opacity: 0.5; z-index: 0;
     }
-
     .values-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-      margin-top: 3rem;
-      position: relative;
-      z-index: 2;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem; margin-top: 3rem; position: relative; z-index: 2;
     }
-
     .value-card {
       background: linear-gradient(145deg, rgba(64, 64, 64, 0.2), rgba(10, 10, 10, 0.4));
-      border: 1px solid var(--graphite);
-      border-radius: 20px;
-      padding: 2.5rem;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.4s ease;
+      border: 1px solid var(--graphite); border-radius: 20px; padding: 2.5rem;
+      position: relative; overflow: hidden; transition: all 0.4s ease;
     }
-
     .value-number {
-      font-family: 'Space Mono', monospace;
-      font-size: 4rem;
-      font-weight: 700;
+      font-family: 'Space Mono', monospace; font-size: 4rem; font-weight: 700;
       background: linear-gradient(135deg, rgba(240, 112, 128, 0.2), rgba(240, 80, 144, 0.05));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      position: absolute;
-      top: 1rem;
-      right: 1.5rem;
-      line-height: 1;
-      transition: all 0.4s ease;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      position: absolute; top: 1rem; right: 1.5rem; line-height: 1; transition: all 0.4s ease;
     }
-
     .value-card:hover .value-number {
       background: linear-gradient(135deg, var(--coral-pink), var(--hot-pink));
-      -webkit-background-clip: text;
-      transform: scale(1.1);
+      -webkit-background-clip: text; transform: scale(1.1);
     }
+    .value-card:hover { transform: translateY(-8px); border-color: var(--coral-pink); box-shadow: 0 15px 40px rgba(240, 112, 128, 0.15); }
+    .value-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--cream); margin-bottom: 1rem; position: relative; z-index: 2; }
+    .value-card p { color: rgba(240, 240, 224, 0.7); line-height: 1.7; position: relative; z-index: 2; }
 
-    .value-card:hover {
-      transform: translateY(-8px);
-      border-color: var(--coral-pink);
-      box-shadow: 0 15px 40px rgba(240, 112, 128, 0.15);
-    }
+    .reveal, .reveal-left, .reveal-right { opacity: 0; transition: all 0.8s cubic-bezier(0.77, 0, 0.175, 1); }
+    .reveal { transform: translateY(40px); }
+    .reveal-left { transform: translateX(-40px); }
+    .reveal-right { transform: translateX(40px); }
+    .reveal.visible, .reveal-left.visible, .reveal-right.visible { opacity: 1; transform: translate(0, 0); }
 
-    .value-card h3 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--cream);
-      margin-bottom: 1rem;
-      position: relative;
-      z-index: 2;
-    }
-
-    .value-card p {
-      color: rgba(240, 240, 224, 0.7);
-      line-height: 1.7;
-      position: relative;
-      z-index: 2;
-    }
-
-    /* ============================================
-       SCROLL REVEAL ANIMATIONS
-       ============================================ */
-    .reveal {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: all 0.8s cubic-bezier(0.77, 0, 0.175, 1);
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .reveal-left {
-      opacity: 0;
-      transform: translateX(-40px);
-      transition: all 0.8s cubic-bezier(0.77, 0, 0.175, 1);
-    }
-
-    .reveal-left.visible {
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    .reveal-right {
-      opacity: 0;
-      transform: translateX(40px);
-      transition: all 0.8s cubic-bezier(0.77, 0, 0.175, 1);
-    }
-
-    .reveal-right.visible {
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    /* ============================================
-       RESPONSIVE DESIGN
-       ============================================ */
     @media (max-width: 968px) {
-      .founder-container {
-        grid-template-columns: 1fr;
-        text-align: center;
-        gap: 3rem;
-      }
-      
-      .founder-image-wrapper {
-        justify-content: center;
-      }
+      .founder-container { grid-template-columns: 1fr; text-align: center; gap: 3rem; }
+      .founder-image-wrapper { justify-content: center; }
     }
-
     @media (max-width: 640px) {
-      .vm-grid, .values-grid {
-        grid-template-columns: 1fr;
-      }
+      .vm-grid, .values-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <!-- Particle Background Canvas -->
   <canvas id="particleCanvas"></canvas>
 
   <!-- Mobile Navigation -->
   <nav class="mobile-nav" id="mobileNav">
     <button class="hamburger" id="hamburger" aria-label="Toggle menu">
-      <span></span>
-      <span></span>
-      <span></span>
+      <span></span><span></span><span></span>
     </button>
     <div class="mobile-menu" id="mobileMenu">
       <div class="mobile-menu-logo">
@@ -476,28 +180,16 @@
       </div>
       <ul class="mobile-menu-items">
         <li><a href="index.html" class="mobile-link" data-index="0">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-          Home
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> Home
         </a></li>
         <li><a href="AI.html" class="mobile-link" data-index="1">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg>
-          AI
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg> AI
         </a></li>
         <li><a href="services.html" class="mobile-link" data-index="2">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-          Services
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> Services
         </a></li>
-        <li><a href="pricing.html" class="mobile-link" data-index="3">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-          Pricing
-        </a></li>
-        <li><a href="contact.html" class="mobile-link" data-index="4">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          Contact
-        </a></li>
-        <li><a href="about.html" class="mobile-link active" data-index="5">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-          About Us
+        <li><a href="about.html" class="mobile-link active" data-index="3">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg> About Us
         </a></li>
       </ul>
     </div>
@@ -510,21 +202,16 @@
         <img src="favicon.ico" alt="Parsing Logo" class="nav-favicon" />
         <span><span class="accent"></span></span>
       </a>
-      
       <ul class="nav-tabs" id="navTabs">
         <li class="nav-tab" data-href="index.html">Home</li>
         <li class="nav-tab" data-href="AI.html">
-          <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg>
-          AI
+          <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg> AI
         </li>
         <li class="nav-tab" data-href="services.html">Services</li>
-        <li class="nav-tab" data-href="pricing.html">Pricing</li>
-        <li class="nav-tab" data-href="contact.html">Contact</li>
         <li class="nav-tab" data-href="about.html">About Us</li>
         <div class="nav-cursor" id="navCursor"></div>
       </ul>
-
-      <a href="contact.html" class="nav-cta">Get Started</a>
+      <a href="services.html" class="nav-cta">Get Started</a>
     </div>
   </header>
 
@@ -541,8 +228,7 @@
     <div class="founder-container">
       <div class="founder-image-wrapper reveal-left">
         <div class="founder-glow"></div>
-        <!-- Fallback image included in case founder.jpeg is missing -->
-        <img src="founder.jpeg" alt="Buhle Manyike" class="founder-img">
+        <img src="founder.jpeg" alt="Buhle Manyike" class="founder-img" onerror="this.src='https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&q=80';">
       </div>
       <div class="founder-content reveal-right">
         <span class="section-eyebrow">Meet The Founder</span>
@@ -617,37 +303,25 @@
           </a>
           <p>Taking software to the next level. Parsing builds custom solutions that solve real problems.</p>
         </div>
-
         <div class="footer-links">
           <h4>Quick Links</h4>
           <ul>
             <li><a href="index.html">Home</a></li>
+            <li><a href="AI.html">AI</a></li>
             <li><a href="services.html">Services</a></li>
-            <li><a href="pricing.html">Pricing</a></li>
-            <li><a href="contact.html">Contact</a></li>
             <li><a href="about.html">About Us</a></li>
           </ul>
         </div>
-
         <div class="footer-social">
           <h4>Follow Us</h4>
           <div class="social-icons">
-            <a href="#" aria-label="Twitter">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/></svg>
-            </a>
-            <a href="#" aria-label="GitHub">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-            </a>
-            <a href="#" aria-label="LinkedIn">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.063 2.063 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-            </a>
-            <a href="#" aria-label="Instagram">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-            </a>
+            <a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/></svg></a>
+            <a href="#" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+            <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.063 2.063 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+            <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
           </div>
         </div>
       </div>
-
       <div class="footer-bottom">
         <p>© 2026. All rights reserved.</p>
       </div>
@@ -656,75 +330,36 @@
 
   <script src="script.js"></script>
   <script>
-    /* ============================================
-       ABOUT PAGE INTERACTIONS & ANIMATIONS
-       ============================================ */
     document.addEventListener('DOMContentLoaded', () => {
-      
-      // 1. Intersection Observer for Scroll Reveals
-      const observerOptions = {
-        threshold: 0.15,
-        rootMargin: '0px 0px -50px 0px'
-      };
-
+      const observerOptions = { threshold: 0.15, rootMargin: '0px 0px -50px 0px' };
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            // Add staggered delay for grid items
             const siblings = entry.target.parentElement.querySelectorAll('.reveal, .reveal-left, .reveal-right');
             const idx = Array.from(siblings).indexOf(entry.target);
             entry.target.style.transitionDelay = `${idx * 0.15}s`;
-            
             entry.target.classList.add('visible');
             observer.unobserve(entry.target);
           }
         });
       }, observerOptions);
+      document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => observer.observe(el));
 
-      document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
-        observer.observe(el);
-      });
-
-      // 2. 3D Tilt Effect for Vision/Mission Cards
       const tiltCards = document.querySelectorAll('[data-tilt]');
-      
       tiltCards.forEach(card => {
         card.addEventListener('mousemove', (e) => {
           const rect = card.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-          
-          const centerX = rect.width / 2;
-          const centerY = rect.height / 2;
-          
-          // Calculate rotation (divided by 15 for a subtle effect)
-          const rotateX = (y - centerY) / 15;
-          const rotateY = (centerX - x) / 15;
-          
+          const x = e.clientX - rect.left; const y = e.clientY - rect.top;
+          const centerX = rect.width / 2; const centerY = rect.height / 2;
+          const rotateX = (y - centerY) / 15; const rotateY = (centerX - x) / 15;
           card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
         });
-        
         card.addEventListener('mouseleave', () => {
           card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
           card.style.transition = 'transform 0.5s ease';
         });
-
-        card.addEventListener('mouseenter', () => {
-          card.style.transition = 'none'; // Disable transition during mousemove for smooth tracking
-        });
+        card.addEventListener('mouseenter', () => { card.style.transition = 'none'; });
       });
-
-      // 3. Parallax effect on Founder Image
-      const founderImg = document.querySelector('.founder-img');
-      if (founderImg) {
-        window.addEventListener('scroll', () => {
-          const scrolled = window.pageYOffset;
-          const rate = scrolled * -0.05;
-          if (founderImg.getBoundingClientRect().top < window.innerHeight) {
-            founderImg.style.transform = `translateY(${rate}px)`;
-          }
-        });
-      }
     });
   </script>
 </body>
