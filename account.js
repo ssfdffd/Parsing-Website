@@ -102,3 +102,128 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+// ============================================
+// OAUTH INTEGRATION
+// ============================================
+
+// ⚠️ REPLACE THIS WITH YOUR ACTUAL WORKER URL
+const WORKER_URL = 'https://parsing-auth.your-subdomain.workers.dev';
+
+// OAuth Login Buttons
+document.addEventListener('DOMContentLoaded', () => {
+  
+  const googleBtn = document.getElementById('googleLoginBtn');
+  const githubBtn = document.getElementById('githubLoginBtn');
+  
+  if (googleBtn) {
+    googleBtn.addEventListener('click', () => {
+      window.location.href = `${WORKER_URL}/auth/google`;
+    });
+  }
+  
+  if (githubBtn) {
+    githubBtn.addEventListener('click', () => {
+      window.location.href = `${WORKER_URL}/auth/github`;
+    });
+  }
+  
+  // Check if user just returned from OAuth
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get('token');
+  const provider = urlParams.get('provider');
+  const name = urlParams.get('name');
+  const error = urlParams.get('error');
+  
+  if (error) {
+    alert(`Authentication failed: ${error}. Please try again.`);
+    // Clean URL
+    window.history.replaceState({}, document.title, window.location.pathname);
+    return;
+  }
+  
+  if (token && provider && name) {
+    // Store token in localStorage
+    localStorage.setItem('parsing_auth_token', token);
+    localStorage.setItem('parsing_auth_provider', provider);
+    localStorage.setItem('parsing_auth_name', decodeURIComponent(name));
+    
+    // Clean URL
+    window.history.replaceState({}, document.title, window.location.pathname);
+    
+    // Show success
+    handleOAuthSuccess(decodeURIComponent(name), provider);
+  }
+  
+  // Check if user is already logged in
+  const existingToken = localStorage.getItem('parsing_auth_token');
+  if (existingToken) {
+    verifyToken(existingToken);
+  }
+});
+
+function handleOAuthSuccess(name, provider) {
+  // Update UI to show logged-in state
+  const card = document.querySelector('.account-card');
+  if (card) {
+    card.innerHTML = `
+      <div style="text-align: center; padding: 2rem 0;">
+        <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #F07080, #F05090); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-size: 2rem; font-weight: 800; color: #0A0A0A;">
+          ${name.charAt(0).toUpperCase()}
+        </div>
+        <h2 style="color: #F0F0E0; font-family: 'Space Grotesk', sans-serif; margin-bottom: 0.5rem;">Welcome, ${name}!</h2>
+        <p style="color: rgba(240, 240, 224, 0.7); margin-bottom: 0.5rem;">Signed in with ${provider.charAt(0).toUpperCase() + provider.slice(1)}</p>
+        <p style="color: #10b981; font-weight: 600; margin-bottom: 2rem;">✓ Authentication Successful</p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <a href="portal.html" style="padding: 0.875rem 2rem; background: linear-gradient(135deg, #F07080, #F05090); border-radius: 12px; color: #0A0A0A; font-weight: 700; text-decoration: none; transition: all 0.3s ease;">
+            Go to Portal
+          </a>
+          <button onclick="logout()" style="padding: 0.875rem 2rem; background: rgba(64, 64, 64, 0.3); border: 1px solid rgba(64, 64, 64, 0.5); border-radius: 12px; color: #F0F0E0; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+            Logout
+          </button>
+        </div>
+      </div>
+    `;
+  }
+}
+
+async function verifyToken(token) {
+  try {
+    const response = await fetch(`${WORKER_URL}/auth/verify`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    
+    if (response.ok) {
+      const data = await response.json();
+      handleOAuthSuccess(data.user.name, data.user.provider);
+    } else {
+      // Token expired or invalid
+      localStorage.removeItem('parsing_auth_token');
+      localStorage.removeItem('parsing_auth_provider');
+      localStorage.removeItem('parsing_auth_name');
+    }
+  } catch (error) {
+    console.error('Token verification failed:', error);
+  }
+}
+
+function logout() {
+  const token = localStorage.getItem('parsing_auth_token');
+  
+  if (token) {
+    fetch(`${WORKER_URL}/auth/logout`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    }).catch(console.error);
+  }
+  
+  localStorage.removeItem('parsing_auth_token');
+  localStorage.removeItem('parsing_auth_provider');
+  localStorage.removeItem('parsing_auth_name');
+  
+  // Reload page
+  window.location.reload();
+}
