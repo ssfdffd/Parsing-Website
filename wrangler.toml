@@ -15,3 +15,9 @@ include = ["**/*.html", "**/*.css", "**/*.js", "**/*.png", "**/*.ico", "**/*.jpe
 # Non-secret variables go here
 AUTH_WORKER_URL = "https://authcallback.buhle-1ce.workers.dev"
 FRONTEND_URL = "https://parsing.co.za"
+
+[assets]
+directory = "./"
+binding = "ASSETS"
+# Exclude code/config files from being uploaded as static assets
+exclude = ["node_modules/**", "src/**", ".git/**", "wrangler.toml", "package.json", "package-lock.json", "bun.lockb", ".dev.vars", ".gitignore"]
