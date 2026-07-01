@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+
+# Environment variables - NEVER COMMIT THESE
+.dev.vars
+.env
+.env.local
+.env.production
+
+# Wrangler
+.wrangler/
+wrangler-local-state.toml
+
+# Build outputs
+dist/
+build/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.temp
