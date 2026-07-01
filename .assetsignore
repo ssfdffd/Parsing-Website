@@ -1,1 +1,11 @@
-
+node_modules/
+src/
+.git/
+wrangler.toml
+package.json
+package-lock.json
+bun.lockb
+.dev.vars
+.gitignore
+README.md
+.assetsignore
