@@ -7,6 +7,11 @@ compatibility_date = "2024-09-23"
 binding = "SESSIONS"
 id = "a2130a9a4d1540a19510671b169db91d"
 
+[site]
+bucket = "./"  # Serve from root directory
+include = ["**/*.html", "**/*.css", "**/*.js", "**/*.png", "**/*.ico", "**/*.jpeg"]
+
 [vars]
 # Non-secret variables go here
+AUTH_WORKER_URL = "https://authcallback.buhle-1ce.workers.dev"
 FRONTEND_URL = "https://parsing.co.za"
