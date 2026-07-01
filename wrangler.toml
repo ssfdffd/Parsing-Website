@@ -2,7 +2,5 @@ name = "parsing-website"
 main = "src/index.js"
 compatibility_date = "2024-09-23"
 
-
-# Variables (non-secrets)
 [vars]
 FRONTEND_URL = "https://parsing.co.za"
