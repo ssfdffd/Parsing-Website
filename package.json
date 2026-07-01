@@ -1,0 +1,17 @@
+{
+  "name": "parsing-auth-worker",
+  "version": "1.0.0",
+  "description": "Cloudflare Worker for Parsing OAuth authentication",
+  "main": "src/worker.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "create-kv": "wrangler kv namespace create SESSIONS"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  },
+  "keywords": ["cloudflare", "worker", "oauth", "github"],
+  "author": "Parsing",
+  "license": "MIT"
+}
