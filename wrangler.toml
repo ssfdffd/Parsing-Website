@@ -1,23 +1,23 @@
-name = "authcallback"
+name = "parsing-website"
 main = "src/index.js"
 compatibility_date = "2024-09-23"
-
-# KV Namespace for sessions (you'll create this in Step 3.7)
-[[kv_namespaces]]
-binding = "SESSIONS"
-id = "a2130a9a4d1540a19510671b169db91d"
-
-[site]
-bucket = "./"  # Serve from root directory
-include = ["**/*.html", "**/*.css", "**/*.js", "**/*.png", "**/*.ico", "**/*.jpeg"]
-
-[vars]
-# Non-secret variables go here
-AUTH_WORKER_URL = "https://authcallback.buhle-1ce.workers.dev"
-FRONTEND_URL = "https://parsing.co.za"
 
 [assets]
 directory = "./"
 binding = "ASSETS"
-# Exclude code/config files from being uploaded as static assets
-exclude = ["node_modules/**", "src/**", ".git/**", "wrangler.toml", "package.json", "package-lock.json", "bun.lockb", ".dev.vars", ".gitignore"]
+exclude = [
+  "node_modules/**",
+  "src/**",
+  ".git/**",
+  "wrangler.toml",
+  "package.json",
+  "package-lock.json",
+  "bun.lockb",
+  ".dev.vars",
+  ".gitignore",
+  "README.md"
+]
+
+[vars]
+AUTH_WORKER_URL = "https://authcallback.buhle-1ce.workers.dev"
+FRONTEND_URL = "https://parsing.co.za"
