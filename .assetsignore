@@ -8,3 +8,5 @@ bun.lockb
 .dev.vars
 .gitignore
 README.md
+.assetsignore
+_worker.js
