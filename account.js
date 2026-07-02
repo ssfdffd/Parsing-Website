@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ============================================
 
 // ⚠️ UPDATE THIS WITH YOUR ACTUAL WORKER URL
-const WORKER_URL = 'https://authcallback.buhle-1ce.workers.dev';
+const WORKER_URL = 'https://parsing-auth.buhle-1ce.workers.dev';
 
 document.addEventListener('DOMContentLoaded', () => {
   // GitHub Login Button
