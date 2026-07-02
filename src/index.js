@@ -1,4 +1,3 @@
-// src/index.js - Main Worker Router
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -10,7 +9,7 @@ export default {
       return fetch(authUrl, request);
     }
 
-    // Serve static files (HTML, CSS, JS, images)
+    // Serve static files
     return env.ASSETS.fetch(request);
   }
 };
