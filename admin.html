@@ -612,6 +612,61 @@
         </div>
       </div>
     </section>
+    <!-- Articles Management Section -->
+<section id="admin-articles" class="section">
+  <div class="section-header">
+    <h1 class="section-title">Manage Articles</h1>
+    <p class="section-subtitle">Create and manage AI tips, guides, and articles.</p>
+  </div>
+
+  <div class="card" style="margin-bottom: 2rem;">
+    <h3 style="margin-bottom: 1.5rem; font-family: 'Space Grotesk', sans-serif; color: #F0F0E0;">Create New Article</h3>
+    <form id="createArticleForm" style="display: flex; flex-direction: column; gap: 1.5rem;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div class="form-group">
+          <label>Author Initials</label>
+          <input type="text" id="artInitials" placeholder="BM" required />
+        </div>
+        <div class="form-group">
+          <label>Author Surname</label>
+          <input type="text" id="artSurname" placeholder="Manyike" required />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Article Title</label>
+        <input type="text" id="artTitle" placeholder="How to Write Better AI Prompts" required />
+      </div>
+      <div class="form-group">
+        <label>Topic / Category</label>
+        <select id="artTopic">
+          <option value="Text Generation">Text Generation</option>
+          <option value="Video Generation">Video Generation</option>
+          <option value="Music Creation">Music Creation</option>
+          <option value="Machine Learning">Machine Learning</option>
+          <option value="Prompt Engineering">Prompt Engineering</option>
+          <option value="AI Tools Guide">AI Tools Guide</option>
+          <option value="General">General</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Excerpt (short summary)</label>
+        <input type="text" id="artExcerpt" placeholder="A brief description of this article..." />
+      </div>
+      <div class="form-group">
+        <label>Article Content (HTML supported)</label>
+        <textarea id="artContent" rows="12" placeholder="<h2>Introduction</h2><p>Write your article here...</p>" required style="font-family: monospace;"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Publish Article</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Published Articles</h3>
+    </div>
+    <div id="adminArticlesList" style="color: #a1a1aa;">Loading...</div>
+  </div>
+</section>
   </main>
 
   <!-- Application Detail Modal -->
