@@ -236,6 +236,92 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }, 300);
 });
+// ============================================
+// ADMIN ARTICLES MANAGEMENT
+// ============================================
+const ADMIN_API = 'https://parsing-auth.buhle-1ce.workers.dev';
+
+function getAdminToken() {
+  return localStorage.getItem('parsing_auth_token') || localStorage.getItem('parsing_token');
+}
+
+// Create Article
+document.getElementById('createArticleForm')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const token = getAdminToken();
+  if (!token) { alert('Please login first'); return; }
+
+  const body = {
+    title: document.getElementById('artTitle').value,
+    author_initials: document.getElementById('artInitials').value,
+    author_surname: document.getElementById('artSurname').value,
+    topic: document.getElementById('artTopic').value,
+    excerpt: document.getElementById('artExcerpt').value,
+    content: document.getElementById('artContent').value
+  };
+
+  try {
+    const res = await fetch(`${ADMIN_API}/api/articles`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify(body)
+    });
+    const data = await res.json();
+    if (res.ok) {
+      alert('Article published successfully!');
+      e.target.reset();
+      loadAdminArticles();
+    } else {
+      alert('Error: ' + (data.error || 'Unknown error'));
+    }
+  } catch { alert('Network error'); }
+});
+
+// Load Admin Articles
+async function loadAdminArticles() {
+  const container = document.getElementById('adminArticlesList');
+  if (!container) return;
+  const token = getAdminToken();
+  if (!token) return;
+
+  try {
+    const res = await fetch(`${ADMIN_API}/api/articles/admin`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    const data = await res.json();
+
+    if (!data.articles || data.articles.length === 0) {
+      container.innerHTML = '<p style="text-align:center; padding:2rem;">No articles yet.</p>';
+      return;
+    }
+
+    container.innerHTML = `<div class="table-responsive"><table class="data-table">
+      <thead><tr><th>Title</th><th>Author</th><th>Topic</th><th>Date</th><th>Actions</th></tr></thead>
+      <tbody>${data.articles.map(a => `<tr>
+        <td>${a.title}</td>
+        <td>${a.author_initials}. ${a.author_surname}</td>
+        <td>${a.topic}</td>
+        <td>${new Date(a.published_at).toLocaleDateString()}</td>
+        <td>
+          <button class="btn-icon" onclick="deleteArticle(${a.id})" title="Delete">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          </button>
+        </td>
+      </tr>`).join('')}</tbody></table></div>`;
+  } catch { container.innerHTML = '<p style="color:#ef4444;">Failed to load articles.</p>'; }
+}
+
+async function deleteArticle(id) {
+  if (!confirm('Delete this article?')) return;
+  const token = getAdminToken();
+  await fetch(`${ADMIN_API}/api/articles/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+  loadAdminArticles();
+}
+
+// Load on init
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(loadAdminArticles, 500);
+});
 
 // Export for global access
 window.navigateToSection = navigateToSection;
