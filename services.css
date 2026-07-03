@@ -15,7 +15,7 @@
               radial-gradient(ellipse at bottom, rgba(240, 80, 144, 0.1), transparent 60%),
               #0A0A0A;
   overflow: hidden;
-  margin-bottom: 4rem;
+  margin-bottom: 0;
   z-index: 1;
 }
 
@@ -149,8 +149,11 @@
   z-index: 1;
 }
 
+/* FIX: Increased margin-top for proper separation from hero */
 #web-design {
-  margin-top: 2rem;
+  margin-top: 4rem;
+  padding-top: 4rem;
+  border-top: 1px solid rgba(64, 64, 64, 0.3);
 }
 
 .container {
@@ -603,6 +606,10 @@
   .email-visual {
     order: -1;
   }
+  
+  #web-design {
+    margin-top: 3rem;
+  }
 }
 
 /* Mobile devices */
@@ -613,7 +620,7 @@
   
   .services-hero {
     padding: 6rem 1rem 3rem;
-    margin-bottom: 2rem;
+    margin-bottom: 0;
   }
   
   .services-hero-content {
@@ -640,6 +647,12 @@
   
   .section-subtitle {
     font-size: 1rem;
+  }
+  
+  /* FIX: Proper mobile spacing */
+  #web-design {
+    margin-top: 2rem;
+    padding-top: 2rem;
   }
   
   /* Cards - Single column on mobile */
@@ -743,6 +756,11 @@
   
   .section {
     padding: 3rem 0.75rem;
+  }
+  
+  #web-design {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
   }
   
   .svc-card,
