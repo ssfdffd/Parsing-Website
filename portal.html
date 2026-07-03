@@ -1,393 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Parsing User Portal - Manage your services and payments" />
-  <title>User Portal | Parsing</title>
-  <link rel="icon" type="image/x-icon" href="favicon.ico" />
-  
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
-  <link rel="stylesheet" href="portal.css" />
-  <style>
-    /* Favicon logo replacement */
-    .logo-wrapper {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-    .nav-favicon {
-      width: 2.5rem;
-      height: 2.5rem;
-      border-radius: 0.5rem;
-      object-fit: cover;
-    }
-    .logo-text {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.25rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, #F0F0E0, #F4A0B8);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .empty-state {
-      text-align: center;
-      padding: 3rem 1rem;
-      color: rgba(240, 240, 224, 0.5);
-      font-size: 0.9375rem;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Portal | Parsing</title>
+    <link rel="stylesheet" href="portal.css"> <!-- Link your portal CSS -->
 </head>
 <body>
-  <!-- Sidebar -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <div class="logo-wrapper">
-        <img src="favicon.ico" alt="Parsing Logo" class="nav-favicon" />
-        <span class="logo-text">Parsing</span>
-      </div>
-      <button class="sidebar-close" id="sidebarClose">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar">
+        <div class="sidebar-header">
+            <h2>Parsing</h2>
+            <button id="sidebarClose" class="close-btn">&times;</button>
+        </div>
+        <nav>
+            <a href="#" class="nav-link active" data-section="dashboard">Dashboard</a>
+            <a href="#" class="nav-link" data-section="services">My Services</a>
+            <a href="#" class="nav-link" data-section="apply">Apply for Service</a>
+            <a href="#" class="nav-link" data-section="payments">Payments</a>
+            <a href="#" class="nav-link" data-section="progress">Track Progress</a>
+            <a href="#" class="nav-link" data-section="settings">Settings</a>
+            <a href="#" class="nav-link" onclick="logoutUser()">Logout</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main>
+        <header>
+            <button id="menuToggle" class="menu-btn">&#9776;</button>
+            <h1>User Portal</h1>
+            <div class="user-profile">
+                <div id="userAvatar" class="avatar">U</div>
+                <span id="portalUserName">User</span>
+            </div>
+        </header>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section active">
+            <h2>Welcome back, <span id="welcomeName">User</span>!</h2>
+            <p>Email: <span id="portalUserEmail"></span></p>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Active Services</h3>
+                    <p id="statActiveServices">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Pending Applications</h3>
+                    <p id="statPendingApps">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Spent</h3>
+                    <p id="statTotalSpent">R0</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- My Services Section -->
+        <section id="services" class="section">
+            <h2>My Services</h2>
+            <div id="applicationsList">Loading...</div>
+        </section>
+
+        <!-- Apply for Service Section -->
+        <section id="apply" class="section">
+            <h2>Apply for Service</h2>
+            <form id="applicationForm">
+                <div class="form-group">
+                    <label>Service Type *</label>
+                    <select id="serviceType" required>
+                        <option value="">Select a service</option>
+                        <option value="Static Website - R500">Static Website - R500</option>
+                        <option value="Dynamic Website - R1,200">Dynamic Website - R1,200</option>
+                        <option value="Social Media Starter - R3,500/mo">Social Media Starter - R3,500/mo</option>
+                        <option value="Social Media Growth - R5,500/mo">Social Media Growth - R5,500/mo</option>
+                        <option value="Social Media Premium - R7,500/mo">Social Media Premium - R7,500/mo</option>
+                        <option value="SEO Package - R200">SEO Package - R200</option>
+                        <option value="Advertising Package - R140">Advertising Package - R140</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Project Name *</label><input type="text" id="projectName" required></div>
+                <div class="form-group"><label>Project Description *</label><textarea id="description" rows="4" required></textarea></div>
+                <div class="form-group"><label>Timeline</label><input type="text" id="timeline" placeholder="e.g., 2 weeks"></div>
+                <div class="form-group"><label>Budget</label><input type="text" id="budget" placeholder="e.g., R1,200"></div>
+                <div class="form-group"><label>Contact Name *</label><input type="text" id="contactName" required></div>
+                <div class="form-group"><label>Contact Email *</label><input type="email" id="contactEmail" required></div>
+                <div class="form-group"><label>Contact Phone</label><input type="tel" id="contactPhone"></div>
+                <div class="form-group"><label>Company Name</label><input type="text" id="companyName"></div>
+                <button type="submit">Submit Application</button>
+            </form>
+        </section>
+
+        <!-- Payments Section -->
+        <section id="payments" class="section">
+            <h2>Payments</h2>
+            <p>Total Paid: <span id="paymentTotalPaid">R0</span></p>
+            <button onclick="showPaymentModal()" class="btn-primary">Make a Payment</button>
+            <table>
+                <thead>
+                    <tr><th>Date</th><th>Description</th><th>Amount</th><th>Status</th></tr>
+                </thead>
+                <tbody id="paymentsTableBody">
+                    <tr><td colspan="4">Loading...</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Track Progress Section -->
+        <section id="progress" class="section">
+            <h2>Track Progress</h2>
+            <p>No active projects to track.</p>
+        </section>
+
+        <!-- Settings Section -->
+        <section id="settings" class="section">
+            <h2>Account Settings</h2>
+            <form id="settingsForm">
+                <div class="form-group"><label>Full Name</label><input type="text" id="settingsName" readonly></div>
+                <div class="form-group"><label>Email Address</label><input type="email" id="settingsEmail" readonly></div>
+                <button type="button" onclick="alert('Settings saved!')">Save Changes</button>
+            </form>
+        </section>
+    </main>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePaymentModal()">&times;</span>
+            <h2>Make a Payment</h2>
+            <form id="paymentForm">
+                <div class="form-group">
+                    <label>Amount (R)</label>
+                    <input type="number" id="paymentAmount" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <select id="paymentDescription" required>
+                        <option value="Service Payment">Service Payment</option>
+                        <option value="Monthly Maintenance">Monthly Maintenance</option>
+                        <option value="Consulting">Consulting</option>
+                    </select>
+                </div>
+                <button type="submit">Complete Payment</button>
+            </form>
+        </div>
     </div>
 
-    <nav class="sidebar-nav">
-      <a href="#dashboard" class="nav-link active" data-section="dashboard">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-        Dashboard
-      </a>
-      <a href="#services" class="nav-link" data-section="services">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
-        My Services
-      </a>
-      <a href="#apply" class="nav-link" data-section="apply">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"></path></svg>
-        Apply for Service
-      </a>
-      <a href="#payments" class="nav-link" data-section="payments">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-        Payments
-      </a>
-      <a href="#progress" class="nav-link" data-section="progress">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-        Track Progress
-      </a>
-      <a href="#settings" class="nav-link" data-section="settings">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-        Settings
-      </a>
-    </nav>
-
-    <div class="sidebar-footer">
-      <button class="logout-btn" onclick="logoutUser()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-          <polyline points="16 17 21 12 16 7"></polyline>
-          <line x1="21" y1="12" x2="9" y2="12"></line>
-        </svg>
-        Logout
-      </button>
-    </div>
-  </aside>
-
-  <!-- Main Content -->
-  <main class="main-content">
-    <!-- Header -->
-    <header class="top-header">
-      <button class="menu-toggle" id="menuToggle">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="3" y1="12" x2="21" y2="12"></line>
-          <line x1="3" y1="6" x2="21" y2="6"></line>
-          <line x1="3" y1="18" x2="21" y2="18"></line>
-        </svg>
-      </button>
-
-      <div class="header-search">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="8"></circle>
-          <path d="m21 21-4.35-4.35"></path>
-        </svg>
-        <input type="text" placeholder="Search services, payments..." />
-      </div>
-
-      <div class="header-actions">
-        <button class="notification-btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-          </svg>
-          <span class="notification-badge">0</span>
-        </button>
-
-        <div class="user-profile">
-          <div class="avatar" id="userAvatar">U</div>
-          <div class="user-info">
-            <span class="user-name" id="portalUserName">User</span>
-            <span class="user-email" id="portalUserEmail">user@example.com</span>
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <!-- Dashboard Section -->
-    <section id="dashboard" class="section active">
-      <div class="section-header">
-        <h1 class="section-title">Welcome back, <span id="welcomeName">User</span>!</h1>
-        <p class="section-subtitle">Here's an overview of your account.</p>
-      </div>
-
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg></div>
-          <div class="stat-content">
-            <span class="stat-value" id="statActiveServices">0</span>
-            <span class="stat-label">Total Applications</span>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"></path></svg></div>
-          <div class="stat-content">
-            <span class="stat-value" id="statPendingApps">0</span>
-            <span class="stat-label">Pending Review</span>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
-          <div class="stat-content">
-            <span class="stat-value" id="statTotalSpent">R0</span>
-            <span class="stat-label">Total Spent</span>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></div>
-          <div class="stat-content">
-            <span class="stat-value">—</span>
-            <span class="stat-label">Avg. Progress</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="dashboard-grid">
-        <div class="card">
-          <div class="card-header"><h3>Recent Activity</h3></div>
-          <div class="activity-list">
-            <div class="empty-state">No recent activity to display. Apply for a service to get started!</div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header"><h3>Quick Actions</h3></div>
-          <div class="quick-actions">
-            <button class="action-btn" onclick="navigateToSection('apply')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"></path></svg>Apply for Service</button>
-            <button class="action-btn" onclick="navigateToSection('payments')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>Make Payment</button>
-            <button class="action-btn" onclick="navigateToSection('progress')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>Track Progress</button>
-            <button class="action-btn" onclick="navigateToSection('services')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>View Services</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Services Section -->
-    <section id="services" class="section">
-      <div class="section-header">
-        <h1 class="section-title">My Services</h1>
-        <p class="section-subtitle">Manage and track all your active services and applications.</p>
-      </div>
-      <div class="services-list" id="applicationsList">
-        <div class="empty-state" style="padding: 4rem 1rem;">
-          You haven't applied for any services yet.
-          <br><br>
-          <button class="btn btn-primary" onclick="navigateToSection('apply')">Apply for a Service</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- Apply Section -->
-    <section id="apply" class="section">
-      <div class="section-header">
-        <h1 class="section-title">Apply for Service</h1>
-        <p class="section-subtitle">Fill out the form below to request a new service.</p>
-      </div>
-      <div class="apply-container">
-        <div class="application-form-container">
-          <form id="applicationForm" class="application-form">
-            <div class="form-section">
-              <h3>Service Details</h3>
-              <div class="form-group">
-                <label for="serviceType">Service Type *</label>
-                <select id="serviceType" required>
-                  <option value="">Select a service</option>
-                  <option value="Static Website">Static Website - R500</option>
-                  <option value="Dynamic Website">Dynamic Website - R1,200</option>
-                  <option value="Social Media Starter">Social Media Starter - R3,500/mo</option>
-                  <option value="Social Media Growth">Social Media Growth - R5,500/mo</option>
-                  <option value="Social Media Premium">Social Media Premium - R7,500/mo</option>
-                  <option value="SEO Package">SEO Package - R200</option>
-                  <option value="Advertising Package">Advertising Package - R140</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="projectName">Project Name *</label>
-                <input type="text" id="projectName" placeholder="e.g., Company Website Redesign" required />
-              </div>
-              <div class="form-group">
-                <label for="description">Project Description *</label>
-                <textarea id="description" rows="5" placeholder="Describe your project requirements..." required></textarea>
-              </div>
-              <div class="form-group">
-                <label for="timeline">Expected Timeline</label>
-                <select id="timeline">
-                  <option value="Urgent (1-2 weeks)">Urgent (1-2 weeks)</option>
-                  <option value="Standard (3-4 weeks)" selected>Standard (3-4 weeks)</option>
-                  <option value="Flexible (1-2 months)">Flexible (1-2 months)</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="budget">Budget Range</label>
-                <select id="budget">
-                  <option value="R500 - R1,000">R500 - R1,000</option>
-                  <option value="R1,000 - R5,000">R1,000 - R5,000</option>
-                  <option value="R5,000 - R10,000">R5,000 - R10,000</option>
-                  <option value="R10,000+">R10,000+</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-section">
-              <h3>Contact Information</h3>
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="contactName">Full Name *</label>
-                  <input type="text" id="contactName" required />
-                </div>
-                <div class="form-group">
-                  <label for="contactEmail">Email Address *</label>
-                  <input type="email" id="contactEmail" required />
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="contactPhone">Phone Number *</label>
-                  <input type="tel" id="contactPhone" required />
-                </div>
-                <div class="form-group">
-                  <label for="companyName">Company Name</label>
-                  <input type="text" id="companyName" />
-                </div>
-              </div>
-            </div>
-            <div class="form-actions">
-              <button type="submit" class="btn btn-primary">Submit Application</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </section>
-
-    <!-- Payments Section -->
-    <section id="payments" class="section">
-      <div class="section-header">
-        <h1 class="section-title">Payments</h1>
-        <p class="section-subtitle">Manage your payments and view transaction history.</p>
-      </div>
-      <div class="payments-grid">
-        <div class="payment-summary card">
-          <h3>Payment Summary</h3>
-          <div class="summary-stats">
-            <div class="summary-item">
-              <span class="summary-label">Total Paid</span>
-              <span class="summary-value" id="paymentTotalPaid">R0</span>
-            </div>
-          </div>
-          <button class="btn btn-primary btn-full" onclick="showPaymentModal()">Make a Payment</button>
-        </div>
-      </div>
-      <div class="card" style="margin-top: 1.5rem;">
-        <div class="card-header"><h3>Transaction History</h3></div>
-        <div class="transactions-table">
-          <table>
-            <thead><tr><th>Date</th><th>Description</th><th>Amount</th><th>Status</th></tr></thead>
-            <tbody id="paymentsTableBody">
-              <tr><td colspan="4" class="empty-state">No transactions found.</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- Progress Section -->
-    <section id="progress" class="section">
-      <div class="section-header">
-        <h1 class="section-title">Track Progress</h1>
-        <p class="section-subtitle">Monitor the status of your ongoing projects.</p>
-      </div>
-      <div class="card">
-        <div class="empty-state">No active projects to track. Submit an application to see progress updates here.</div>
-      </div>
-    </section>
-
-    <!-- Settings Section -->
-    <section id="settings" class="section">
-      <div class="section-header">
-        <h1 class="section-title">Account Settings</h1>
-        <p class="section-subtitle">Manage your account preferences.</p>
-      </div>
-      <div class="settings-grid">
-        <div class="card">
-          <h3>Profile Information</h3>
-          <form class="settings-form">
-            <div class="form-group">
-              <label>Full Name</label>
-              <input type="text" id="settingsName" value="" placeholder="Your Name" />
-            </div>
-            <div class="form-group">
-              <label>Email Address</label>
-              <input type="email" id="settingsEmail" value="" placeholder="your@email.com" disabled />
-            </div>
-            <button type="button" class="btn btn-primary">Save Changes</button>
-          </form>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- Payment Modal -->
-  <div class="modal" id="paymentModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Make a Payment</h2>
-        <button class="modal-close" onclick="closePaymentModal()">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </button>
-      </div>
-      <form id="paymentForm" class="payment-form">
-        <div class="form-group">
-          <label>Amount (ZAR) *</label>
-          <input type="number" id="paymentAmount" placeholder="0.00" min="1" required />
-        </div>
-        <div class="form-group">
-          <label>Payment For *</label>
-          <select id="paymentDescription" required>
-            <option value="">Select service</option>
-            <option value="Social Media Marketing">Social Media Marketing</option>
-            <option value="Website Maintenance">Website Maintenance</option>
-            <option value="SEO Package">SEO Package</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-        <button type="submit" class="btn btn-primary btn-full">Complete Payment</button>
-      </form>
-    </div>
-  </div>
-
-  <script src="portal.js"></script>
+    <script src="portal.js"></script>
 </body>
 </html>
