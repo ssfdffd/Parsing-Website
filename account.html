@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Parsing Account - Login or Create Account" />
-  <title>Account | Parsing</title>
+  <meta name="description" content="Parsing User Portal - Manage your services and payments" />
+  <title>User Portal | Parsing</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   
   <!-- Google Fonts -->
@@ -12,168 +12,426 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- Page Specific CSS -->
-  <link rel="stylesheet" href="account.css" />
+  <link rel="stylesheet" href="portal.css" />
+  <style>
+    /* Quick fix for the logo area to match other pages */
+    .logo-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .nav-favicon {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 0.5rem;
+      object-fit: cover;
+    }
+    .logo-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #F0F0E0, #F4A0B8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: rgba(240, 240, 224, 0.5);
+      font-size: 0.9375rem;
+    }
+  </style>
 </head>
 <body>
-  <!-- Animated Background -->
-  <div class="bg-animation">
-    <div class="circle"></div>
-    <div class="circle"></div>
-    <div class="circle"></div>
-  </div>
-
-  <!-- Particles -->
-  <div class="particles" id="particles"></div>
-
-  <!-- Back to Home -->
-  <a href="index.html" class="back-home">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M19 12H5M12 19l-7-7 7-7"/>
-    </svg>
-    Back to Home
-  </a>
-
-  <!-- Main Container -->
-  <div class="account-container">
-    <!-- Logo Section -->
-    <div class="logo-section">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
       <div class="logo-wrapper">
-        <link rel="icon" type="image/x-icon" href="favicon.ico" />
+        <img src="favicon.ico" alt="Parsing Logo" class="nav-favicon" />
+        <span class="logo-text">Parsing</span>
       </div>
+      <button class="sidebar-close" id="sidebarClose">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
     </div>
 
-    <!-- Account Card -->
-    <div class="account-card">
-      <!-- Toggle Tabs -->
-      <div class="toggle-container">
-        <div class="toggle-slider" id="toggleSlider"></div>
-        <button class="toggle-btn active" data-tab="login">Login</button>
-        <button class="toggle-btn" data-tab="signup">Sign Up</button>
+    <nav class="sidebar-nav">
+      <a href="#dashboard" class="nav-link active" data-section="dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"></rect>
+          <rect x="14" y="3" width="7" height="7"></rect>
+          <rect x="14" y="14" width="7" height="7"></rect>
+          <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+        Dashboard
+      </a>
+      <a href="#services" class="nav-link" data-section="services">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="7" width="20" height="14" rx="2"></rect>
+          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+        </svg>
+        My Services
+      </a>
+      <a href="#apply" class="nav-link" data-section="apply">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2v20M2 12h20"></path>
+        </svg>
+        Apply for Service
+      </a>
+      <a href="#payments" class="nav-link" data-section="payments">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="1" x2="12" y2="23"></line>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+        </svg>
+        Payments
+      </a>
+      <a href="#progress" class="nav-link" data-section="progress">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+        </svg>
+        Track Progress
+      </a>
+      <a href="#settings" class="nav-link" data-section="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+        Settings
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="logout-btn" onclick="logoutUser()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+        Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Header -->
+    <header class="top-header">
+      <button class="menu-toggle" id="menuToggle">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="header-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+        <input type="text" placeholder="Search services, payments..." />
       </div>
 
-      <!-- Forms Container -->
-      <div class="form-container">
-        <!-- Login Form -->
-        <div class="form-wrapper login active" id="loginForm">
-          <form id="loginFormElement">
-            <div class="form-group">
-              <label for="loginEmail">Email Address</label>
-              <div class="input-wrapper">
-                <input type="email" id="loginEmail" placeholder="you@example.com" required />
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                  <polyline points="22,6 12,13 2,6"/>
-                </svg>
-              </div>
-            </div>
+      <div class="header-actions">
+        <button class="notification-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <span class="notification-badge">0</span>
+        </button>
 
-            <div class="form-group">
-              <label for="loginPassword">Password</label>
-              <div class="input-wrapper">
-                <input type="password" id="loginPassword" placeholder="Enter your password" required />
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                </svg>
-                <button type="button" class="password-toggle" data-target="loginPassword">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                    <circle cx="12" cy="12" r="3"/>
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            <div class="options-row">
-              <label class="remember-me">
-                <input type="checkbox" />
-                Remember me
-              </label>
-              <a href="#" class="forgot-password">Forgot password?</a>
-            </div>
-
-            <button type="submit" class="submit-btn">Login to Account</button>
-          </form>
-
-          <div class="divider">
-            <span>or continue with</span>
-          </div>
-
-       <!-- Replace the entire social-login div with this -->
-<div class="social-login">
-  <button class="social-btn" id="githubLoginBtn" type="button">
-    <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-      <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.998.108-.776.418-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12z"/>
-    </svg>
-    Continue with GitHub
-  </button>
-</div>
-        <!-- Signup Form -->
-        <div class="form-wrapper signup" id="signupForm">
-          <form id="signupFormElement">
-            <div class="form-group">
-              <label for="signupName">Full Name</label>
-              <div class="input-wrapper">
-                <input type="text" id="signupName" placeholder="John Doe" required />
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                  <circle cx="12" cy="7" r="4"/>
-                </svg>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="signupEmail">Email Address</label>
-              <div class="input-wrapper">
-                <input type="email" id="signupEmail" placeholder="you@example.com" required />
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                  <polyline points="22,6 12,13 2,6"/>
-                </svg>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="signupPassword">Password</label>
-              <div class="input-wrapper">
-                <input type="password" id="signupPassword" placeholder="Create a password" required />
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                </svg>
-                <button type="button" class="password-toggle" data-target="signupPassword">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                    <circle cx="12" cy="12" r="3"/>
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="confirmPassword">Confirm Password</label>
-              <div class="input-wrapper">
-                <input type="password" id="confirmPassword" placeholder="Confirm your password" required />
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                </svg>
-              </div>
-            </div>
-
-            <button type="submit" class="submit-btn">Create Account</button>
-          </form>
-
-          <div class="terms-text">
-            By signing up, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+        <div class="user-profile">
+          <div class="avatar" id="userAvatar">U</div>
+          <div class="user-info">
+            <span class="user-name" id="portalUserName">User</span>
+            <span class="user-email" id="portalUserEmail">user@example.com</span>
           </div>
         </div>
       </div>
-    </div>
-  </div>
+    </header>
 
-  <!-- Page Specific JS -->
-  <script src="account.js"></script>
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="section active">
+      <div class="section-header">
+        <h1 class="section-title">Welcome back, <span id="welcomeName">User</span>!</h1>
+        <p class="section-subtitle">Here's an overview of your account.</p>
+      </div>
+
+      <!-- Stats Grid (Cleared) -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="7" width="20" height="14" rx="2"></rect>
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+            </svg>
+          </div>
+          <div class="stat-content">
+            <span class="stat-value">0</span>
+            <span class="stat-label">Active Services</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2v20M2 12h20"></path>
+            </svg>
+          </div>
+          <div class="stat-content">
+            <span class="stat-value">0</span>
+            <span class="stat-label">Pending Applications</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="1" x2="12" y2="23"></line>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </div>
+          <div class="stat-content">
+            <span class="stat-value">R0</span>
+            <span class="stat-label">Total Spent</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+            </svg>
+          </div>
+          <div class="stat-content">
+            <span class="stat-value">—</span>
+            <span class="stat-label">Avg. Progress</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity (Cleared) -->
+      <div class="dashboard-grid">
+        <div class="card">
+          <div class="card-header">
+            <h3>Recent Activity</h3>
+          </div>
+          <div class="activity-list">
+            <div class="empty-state">No recent activity to display.</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>Quick Actions</h3>
+          </div>
+          <div class="quick-actions">
+            <button class="action-btn" onclick="navigateToSection('apply')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2v20M2 12h20"></path>
+              </svg>
+              Apply for Service
+            </button>
+            <button class="action-btn" onclick="navigateToSection('payments')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                <line x1="1" y1="10" x2="23" y2="10"></line>
+              </svg>
+              Make Payment
+            </button>
+            <button class="action-btn" onclick="navigateToSection('progress')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+              </svg>
+              Track Progress
+            </button>
+            <button class="action-btn" onclick="navigateToSection('services')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+              View Services
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Section (Cleared) -->
+    <section id="services" class="section">
+      <div class="section-header">
+        <h1 class="section-title">My Services</h1>
+        <p class="section-subtitle">Manage and track all your active services.</p>
+      </div>
+      <div class="card">
+        <div class="empty-state" style="padding: 4rem 1rem;">
+          You haven't purchased any services yet.
+          <br><br>
+          <button class="btn btn-primary" onclick="navigateToSection('apply')">Apply for a Service</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Apply Section (Kept form structure, cleared values) -->
+    <section id="apply" class="section">
+      <div class="section-header">
+        <h1 class="section-title">Apply for Service</h1>
+        <p class="section-subtitle">Choose from our range of professional services.</p>
+      </div>
+
+      <div class="apply-container">
+        <div class="application-form-container">
+          <form id="applicationForm" class="application-form">
+            <div class="form-section">
+              <h3>Service Details</h3>
+              <div class="form-group">
+                <label for="serviceType">Service Type *</label>
+                <select id="serviceType" required>
+                  <option value="">Select a service</option>
+                  <option value="static-website">Static Website - R500</option>
+                  <option value="dynamic-website">Dynamic Website - R1,200</option>
+                  <option value="social-starter">Social Media Starter - R3,500/mo</option>
+                  <option value="social-growth">Social Media Growth - R5,500/mo</option>
+                  <option value="social-premium">Social Media Premium - R7,500/mo</option>
+                  <option value="seo">SEO Package - R200</option>
+                  <option value="advertising">Advertising Package - R140</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="projectName">Project Name *</label>
+                <input type="text" id="projectName" placeholder="e.g., Company Website Redesign" required />
+              </div>
+
+              <div class="form-group">
+                <label for="description">Project Description *</label>
+                <textarea id="description" rows="5" placeholder="Describe your project requirements..." required></textarea>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Submit Application</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Payments Section (Cleared) -->
+    <section id="payments" class="section">
+      <div class="section-header">
+        <h1 class="section-title">Payments</h1>
+        <p class="section-subtitle">Manage your payments and view transaction history.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3>Transaction History</h3>
+        </div>
+        <div class="transactions-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="transactionsBody">
+              <!-- Empty by default -->
+            </tbody>
+          </table>
+          <div id="noTransactionsMsg" class="empty-state">No transactions found.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Progress Section (Cleared) -->
+    <section id="progress" class="section">
+      <div class="section-header">
+        <h1 class="section-title">Track Progress</h1>
+        <p class="section-subtitle">Monitor the status of your ongoing projects.</p>
+      </div>
+      <div class="card">
+        <div class="empty-state">No active projects to track.</div>
+      </div>
+    </section>
+
+    <!-- Settings Section (Cleared) -->
+    <section id="settings" class="section">
+      <div class="section-header">
+        <h1 class="section-title">Account Settings</h1>
+        <p class="section-subtitle">Manage your account preferences.</p>
+      </div>
+
+      <div class="settings-grid">
+        <div class="card">
+          <h3>Profile Information</h3>
+          <form class="settings-form">
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" id="settingsName" value="" placeholder="Your Name" />
+            </div>
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" id="settingsEmail" value="" placeholder="your@email.com" />
+            </div>
+            <button type="button" class="btn btn-primary">Save Changes</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="portal.js"></script>
+  <script>
+    // ============================================
+    // PORTAL AUTH & USER DATA LOGIC
+    // ============================================
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Check if user is logged in
+      const token = localStorage.getItem('parsing_auth_token') || sessionStorage.getItem('parsing_auth_token');
+      if (!token) {
+        // Redirect to login if no token
+        window.location.href = 'account.html';
+        return;
+      }
+
+      // 2. Fetch user data from localStorage
+      const userName = localStorage.getItem('parsing_auth_name') || 'User';
+      const userEmail = localStorage.getItem('parsing_auth_email') || ''; // You can store this during login if needed
+      const userProvider = localStorage.getItem('parsing_auth_provider') || 'email';
+
+      // 3. Update UI with user data
+      document.getElementById('portalUserName').textContent = userName;
+      document.getElementById('welcomeName').textContent = userName;
+      document.getElementById('settingsName').value = userName;
+      
+      // Set Avatar Initial
+      const initial = userName.charAt(0).toUpperCase();
+      document.getElementById('userAvatar').textContent = initial;
+
+      // If you stored email during login, uncomment below:
+      // if(userEmail) {
+      //   document.getElementById('portalUserEmail').textContent = userEmail;
+      //   document.getElementById('settingsEmail').value = userEmail;
+      // } else {
+      //   document.getElementById('portalUserEmail').style.display = 'none';
+      // }
+    });
+
+    function logoutUser() {
+      localStorage.removeItem('parsing_auth_token');
+      sessionStorage.removeItem('parsing_auth_token');
+      localStorage.removeItem('parsing_auth_name');
+      localStorage.removeItem('parsing_auth_provider');
+      localStorage.removeItem('parsing_auth_email');
+      window.location.href = 'account.html';
+    }
+  </script>
 </body>
 </html>
