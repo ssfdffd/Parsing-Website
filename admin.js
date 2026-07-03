@@ -1,329 +1,437 @@
-// Mock Data
-const applicationsData = [
-  {
-    id: 'APP-001',
-    applicant: 'Sarah Johnson',
-    email: 'sarah@techcorp.co.za',
-    service: 'Social Media Growth',
-    date: 'June 28, 2026',
-    budget: 'R5,500/mo',
-    status: 'pending',
-    description: 'Looking to grow our TikTok and Instagram presence. We need 3 posts per week including Reels and monthly analytics.'
-  },
-  {
-    id: 'APP-002',
-    applicant: 'TechCorp Ltd',
-    email: 'info@techcorp.co.za',
-    service: 'Dynamic Website',
-    date: 'June 27, 2026',
-    budget: 'R1,200',
-    status: 'pending',
-    description: 'Need a dynamic website with CMS for our blog and product listings. Must be mobile responsive.'
-  },
-  {
-    id: 'APP-003',
-    applicant: 'Mike Peters',
-    email: 'mike.p@gmail.com',
-    service: 'SEO Package',
-    date: 'June 26, 2026',
-    budget: 'R200',
-    status: 'pending',
-    description: 'Want to improve our search rankings for local keywords in Johannesburg.'
-  },
-  {
-    id: 'APP-004',
-    applicant: 'Lisa Mokoena',
-    email: 'lisa.m@startup.co.za',
-    service: 'Static Website',
-    date: 'June 25, 2026',
-    budget: 'R500',
-    status: 'pending',
-    description: 'Simple portfolio website for my photography business. Need gallery and contact form.'
-  }
-];
-
-// Navigation
-function navigateToSection(sectionId) {
-  document.querySelectorAll('.section').forEach(section => {
-    section.classList.remove('active');
-  });
-
-  const targetSection = document.getElementById(sectionId);
-  if (targetSection) {
-    targetSection.classList.add('active');
-  }
-
-  document.querySelectorAll('.nav-link').forEach(link => {
-    link.classList.remove('active');
-    if (link.dataset.section === sectionId) {
-      link.classList.add('active');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Parsing User Portal - Manage your services and payments" />
+  <title>User Portal | Parsing</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="portal.css" />
+  <style>
+    /* Quick fix for the logo area to match other pages */
+    .logo-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
     }
-  });
+    .nav-favicon {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 0.5rem;
+      object-fit: cover;
+    }
+    .logo-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #F0F0E0, #F4A0B8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: rgba(240, 240, 224, 0.5);
+      font-size: 0.9375rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-wrapper">
+        <img src="favicon.ico" alt="Parsing Logo" class="nav-favicon" />
+        <span class="logo-text">Parsing</span>
+      </div>
+      <button class="sidebar-close" id="sidebarClose">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
 
-  const sidebar = document.getElementById('sidebar');
-  if (sidebar.classList.contains('active')) {
-    sidebar.classList.remove('active');
-  }
+    <nav class="sidebar-nav">
+      <a href="#dashboard" class="nav-link active" data-section="dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"></rect>
+          <rect x="14" y="3" width="7" height="7"></rect>
+          <rect x="14" y="14" width="7" height="7"></rect>
+          <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+        Dashboard
+      </a>
+      <a href="#services" class="nav-link" data-section="services">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="7" width="20" height="14" rx="2"></rect>
+          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+        </svg>
+        My Services
+      </a>
+      <a href="#apply" class="nav-link" data-section="apply">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2v20M2 12h20"></path>
+        </svg>
+        Apply for Service
+      </a>
+      <a href="#payments" class="nav-link" data-section="payments">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="1" x2="12" y2="23"></line>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+        </svg>
+        Payments
+      </a>
+      <a href="#progress" class="nav-link" data-section="progress">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+        </svg>
+        Track Progress
+      </a>
+      <a href="#settings" class="nav-link" data-section="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+        Settings
+      </a>
+    </nav>
 
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+    <div class="sidebar-footer">
+      <button class="logout-btn" onclick="logoutUser()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+        Logout
+      </button>
+    </div>
+  </aside>
 
-// Sidebar toggle
-const menuToggle = document.getElementById('menuToggle');
-const sidebar = document.getElementById('sidebar');
-const sidebarClose = document.getElementById('sidebarClose');
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Header -->
+    <header class="top-header">
+      <button class="menu-toggle" id="menuToggle">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
 
-if (menuToggle) {
-  menuToggle.addEventListener('click', () => {
-    sidebar.classList.add('active');
-  });
-}
+      <div class="header-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+        <input type="text" placeholder="Search services, payments..." />
+      </div>
 
-if (sidebarClose) {
-  sidebarClose.addEventListener('click', () => {
-    sidebar.classList.remove('active');
-  });
-}
+      <div class="header-actions">
+        <button class="notification-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <span class="notification-badge">0</span>
+        </button>
 
-// Nav link clicks
-document.querySelectorAll('.nav-link').forEach(link => {
-  link.addEventListener('click', (e) => {
-    e.preventDefault();
-    const sectionId = link.dataset.section;
-    navigateToSection(sectionId);
-  });
-});
-
-// Filter buttons
-document.querySelectorAll('.filter-btn').forEach(btn => {
-  btn.addEventListener('click', function() {
-    const parent = this.parentElement;
-    parent.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    this.classList.add('active');
-    
-    // In a real app, this would filter the table
-    console.log('Filter:', this.dataset.filter);
-  });
-});
-
-// Render Applications Table
-function renderApplicationsTable(filter = 'all') {
-  const tbody = document.querySelector('#applicationsTable tbody');
-  if (!tbody) return;
-
-  tbody.innerHTML = '';
-
-  const filteredData = filter === 'all' 
-    ? applicationsData 
-    : applicationsData.filter(app => app.status === filter);
-
-  filteredData.forEach(app => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${app.id}</td>
-      <td>
-        <div class="user-cell">
-          <div class="avatar small">${app.applicant.split(' ').map(n => n[0]).join('')}</div>
-          <div>
-            <div>${app.applicant}</div>
-            <div style="font-size: 0.8125rem; color: rgba(240,240,224,0.5);">${app.email}</div>
+        <div class="user-profile">
+          <div class="avatar" id="userAvatar">U</div>
+          <div class="user-info">
+            <span class="user-name" id="portalUserName">User</span>
+            <span class="user-email" id="portalUserEmail">user@example.com</span>
           </div>
         </div>
-      </td>
-      <td>${app.service}</td>
-      <td>${app.date}</td>
-      <td>${app.budget}</td>
-      <td><span class="status-badge ${app.status}">${app.status.charAt(0).toUpperCase() + app.status.slice(1)}</span></td>
-      <td>
-        <button class="btn-icon" onclick="viewApplication('${app.id}')" title="View Details">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-        </button>
-      </td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
+      </div>
+    </header>
 
-// View Application Modal
-function viewApplication(appId) {
-  const app = applicationsData.find(a => a.id === appId);
-  if (!app) return;
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="section active">
+      <div class="section-header">
+        <h1 class="section-title">Welcome back, <span id="welcomeName">User</span>!</h1>
+        <p class="section-subtitle">Here's an overview of your account.</p>
+      </div>
 
-  const modalBody = document.getElementById('modalBody');
-  modalBody.innerHTML = `
-    <div class="detail-row">
-      <span class="detail-label">Application ID</span>
-      <span class="detail-value">${app.id}</span>
-    </div>
-    <div class="detail-row">
-      <span class="detail-label">Applicant Name</span>
-      <span class="detail-value">${app.applicant}</span>
-    </div>
-    <div class="detail-row">
-      <span class="detail-label">Email Address</span>
-      <span class="detail-value">${app.email}</span>
-    </div>
-    <div class="detail-row">
-      <span class="detail-label">Service Requested</span>
-      <span class="detail-value">${app.service}</span>
-    </div>
-    <div class="detail-row">
-      <span class="detail-label">Budget</span>
-      <span class="detail-value">${app.budget}</span>
-    </div>
-    <div class="detail-row">
-      <span class="detail-label">Date Submitted</span>
-      <span class="detail-value">${app.date}</span>
-    </div>
-    <div class="detail-row" style="flex-direction: column; align-items: flex-start; gap: 0.5rem;">
-      <span class="detail-label">Project Description</span>
-      <p style="color: var(--cream); line-height: 1.6; margin-top: 0.5rem;">${app.description}</p>
-    </div>
-  `;
+      <!-- Stats Grid (Cleared) -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="7" width="20" height="14" rx="2"></rect>
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+            </svg>
+          </div>
+          <div class="stat-content">
+            <span class="stat-value">0</span>
+            <span class="stat-label">Active Services</span>
+          </div>
+        </div>
 
-  // Update modal buttons
-  document.getElementById('approveBtn').onclick = () => approveApplication(appId);
-  document.getElementById('rejectBtn').onclick = () => rejectApplication(appId);
+        <div class="stat-card">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2v20M2 12h20"></path>
+            </svg>
+          </div>
+          <div class="stat-content">
+            <span class="stat-value">0</span>
+            <span class="stat-label">Pending Applications</span>
+          </div>
+        </div>
 
-  document.getElementById('applicationModal').classList.add('active');
-}
+        <div class="stat-card">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="1" x2="12" y2="23"></line>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </div>
+          <div class="stat-content">
+            <span class="stat-value">R0</span>
+            <span class="stat-label">Total Spent</span>
+          </div>
+        </div>
 
-function closeApplicationModal() {
-  document.getElementById('applicationModal').classList.remove('active');
-}
+        <div class="stat-card">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+            </svg>
+          </div>
+          <div class="stat-content">
+            <span class="stat-value">—</span>
+            <span class="stat-label">Avg. Progress</span>
+          </div>
+        </div>
+      </div>
 
-function approveApplication(appId) {
-  const app = applicationsData.find(a => a.id === appId);
-  if (app) {
-    app.status = 'approved';
-    renderApplicationsTable();
-    closeApplicationModal();
-    alert(`Application ${appId} approved successfully!`);
-  }
-}
+      <!-- Recent Activity (Cleared) -->
+      <div class="dashboard-grid">
+        <div class="card">
+          <div class="card-header">
+            <h3>Recent Activity</h3>
+          </div>
+          <div class="activity-list">
+            <div class="empty-state">No recent activity to display.</div>
+          </div>
+        </div>
 
-function rejectApplication(appId) {
-  const app = applicationsData.find(a => a.id === appId);
-  if (app) {
-    app.status = 'rejected';
-    renderApplicationsTable();
-    closeApplicationModal();
-    alert(`Application ${appId} rejected.`);
-  }
-}
+        <div class="card">
+          <div class="card-header">
+            <h3>Quick Actions</h3>
+          </div>
+          <div class="quick-actions">
+            <button class="action-btn" onclick="navigateToSection('apply')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2v20M2 12h20"></path>
+              </svg>
+              Apply for Service
+            </button>
+            <button class="action-btn" onclick="navigateToSection('payments')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                <line x1="1" y1="10" x2="23" y2="10"></line>
+              </svg>
+              Make Payment
+            </button>
+            <button class="action-btn" onclick="navigateToSection('progress')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+              </svg>
+              Track Progress
+            </button>
+            <button class="action-btn" onclick="navigateToSection('services')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+              View Services
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
 
-// Close modal on outside click
-document.getElementById('applicationModal')?.addEventListener('click', (e) => {
-  if (e.target.id === 'applicationModal') {
-    closeApplicationModal();
-  }
-});
+    <!-- Services Section (Cleared) -->
+    <section id="services" class="section">
+      <div class="section-header">
+        <h1 class="section-title">My Services</h1>
+        <p class="section-subtitle">Manage and track all your active services.</p>
+      </div>
+      <div class="card">
+        <div class="empty-state" style="padding: 4rem 1rem;">
+          You haven't purchased any services yet.
+          <br><br>
+          <button class="btn btn-primary" onclick="navigateToSection('apply')">Apply for a Service</button>
+        </div>
+      </div>
+    </section>
 
-// Initialize
-document.addEventListener('DOMContentLoaded', () => {
-  renderApplicationsTable();
-  
-  // Animate stats on load
-  setTimeout(() => {
-    document.querySelectorAll('.stat-value').forEach(stat => {
-      stat.style.opacity = '0';
-      stat.style.transform = 'translateY(10px)';
-      setTimeout(() => {
-        stat.style.transition = 'all 0.5s ease';
-        stat.style.opacity = '1';
-        stat.style.transform = 'translateY(0)';
-      }, 100);
+    <!-- Apply Section (Kept form structure, cleared values) -->
+    <section id="apply" class="section">
+      <div class="section-header">
+        <h1 class="section-title">Apply for Service</h1>
+        <p class="section-subtitle">Choose from our range of professional services.</p>
+      </div>
+
+      <div class="apply-container">
+        <div class="application-form-container">
+          <form id="applicationForm" class="application-form">
+            <div class="form-section">
+              <h3>Service Details</h3>
+              <div class="form-group">
+                <label for="serviceType">Service Type *</label>
+                <select id="serviceType" required>
+                  <option value="">Select a service</option>
+                  <option value="static-website">Static Website - R500</option>
+                  <option value="dynamic-website">Dynamic Website - R1,200</option>
+                  <option value="social-starter">Social Media Starter - R3,500/mo</option>
+                  <option value="social-growth">Social Media Growth - R5,500/mo</option>
+                  <option value="social-premium">Social Media Premium - R7,500/mo</option>
+                  <option value="seo">SEO Package - R200</option>
+                  <option value="advertising">Advertising Package - R140</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="projectName">Project Name *</label>
+                <input type="text" id="projectName" placeholder="e.g., Company Website Redesign" required />
+              </div>
+
+              <div class="form-group">
+                <label for="description">Project Description *</label>
+                <textarea id="description" rows="5" placeholder="Describe your project requirements..." required></textarea>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Submit Application</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Payments Section (Cleared) -->
+    <section id="payments" class="section">
+      <div class="section-header">
+        <h1 class="section-title">Payments</h1>
+        <p class="section-subtitle">Manage your payments and view transaction history.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3>Transaction History</h3>
+        </div>
+        <div class="transactions-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="transactionsBody">
+              <!-- Empty by default -->
+            </tbody>
+          </table>
+          <div id="noTransactionsMsg" class="empty-state">No transactions found.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Progress Section (Cleared) -->
+    <section id="progress" class="section">
+      <div class="section-header">
+        <h1 class="section-title">Track Progress</h1>
+        <p class="section-subtitle">Monitor the status of your ongoing projects.</p>
+      </div>
+      <div class="card">
+        <div class="empty-state">No active projects to track.</div>
+      </div>
+    </section>
+
+    <!-- Settings Section (Cleared) -->
+    <section id="settings" class="section">
+      <div class="section-header">
+        <h1 class="section-title">Account Settings</h1>
+        <p class="section-subtitle">Manage your account preferences.</p>
+      </div>
+
+      <div class="settings-grid">
+        <div class="card">
+          <h3>Profile Information</h3>
+          <form class="settings-form">
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" id="settingsName" value="" placeholder="Your Name" />
+            </div>
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" id="settingsEmail" value="" placeholder="your@email.com" />
+            </div>
+            <button type="button" class="btn btn-primary">Save Changes</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="portal.js"></script>
+  <script>
+    // ============================================
+    // PORTAL AUTH & USER DATA LOGIC
+    // ============================================
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Check if user is logged in
+      const token = localStorage.getItem('parsing_auth_token') || sessionStorage.getItem('parsing_auth_token');
+      if (!token) {
+        // Redirect to login if no token
+        window.location.href = 'account.html';
+        return;
+      }
+
+      // 2. Fetch user data from localStorage
+      const userName = localStorage.getItem('parsing_auth_name') || 'User';
+      const userEmail = localStorage.getItem('parsing_auth_email') || ''; // You can store this during login if needed
+      const userProvider = localStorage.getItem('parsing_auth_provider') || 'email';
+
+      // 3. Update UI with user data
+      document.getElementById('portalUserName').textContent = userName;
+      document.getElementById('welcomeName').textContent = userName;
+      document.getElementById('settingsName').value = userName;
+      
+      // Set Avatar Initial
+      const initial = userName.charAt(0).toUpperCase();
+      document.getElementById('userAvatar').textContent = initial;
+
+      // If you stored email during login, uncomment below:
+      // if(userEmail) {
+      //   document.getElementById('portalUserEmail').textContent = userEmail;
+      //   document.getElementById('settingsEmail').value = userEmail;
+      // } else {
+      //   document.getElementById('portalUserEmail').style.display = 'none';
+      // }
     });
-  }, 300);
-});
-// ============================================
-// ADMIN ARTICLES MANAGEMENT
-// ============================================
-const ADMIN_API = 'https://parsing-auth.buhle-1ce.workers.dev';
 
-function getAdminToken() {
-  return localStorage.getItem('parsing_auth_token') || localStorage.getItem('parsing_token');
-}
-
-// Create Article
-document.getElementById('createArticleForm')?.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const token = getAdminToken();
-  if (!token) { alert('Please login first'); return; }
-
-  const body = {
-    title: document.getElementById('artTitle').value,
-    author_initials: document.getElementById('artInitials').value,
-    author_surname: document.getElementById('artSurname').value,
-    topic: document.getElementById('artTopic').value,
-    excerpt: document.getElementById('artExcerpt').value,
-    content: document.getElementById('artContent').value
-  };
-
-  try {
-    const res = await fetch(`${ADMIN_API}/api/articles`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-      body: JSON.stringify(body)
-    });
-    const data = await res.json();
-    if (res.ok) {
-      alert('Article published successfully!');
-      e.target.reset();
-      loadAdminArticles();
-    } else {
-      alert('Error: ' + (data.error || 'Unknown error'));
+    function logoutUser() {
+      localStorage.removeItem('parsing_auth_token');
+      sessionStorage.removeItem('parsing_auth_token');
+      localStorage.removeItem('parsing_auth_name');
+      localStorage.removeItem('parsing_auth_provider');
+      localStorage.removeItem('parsing_auth_email');
+      window.location.href = 'account.html';
     }
-  } catch { alert('Network error'); }
-});
-
-// Load Admin Articles
-async function loadAdminArticles() {
-  const container = document.getElementById('adminArticlesList');
-  if (!container) return;
-  const token = getAdminToken();
-  if (!token) return;
-
-  try {
-    const res = await fetch(`${ADMIN_API}/api/articles/admin`, {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
-    const data = await res.json();
-
-    if (!data.articles || data.articles.length === 0) {
-      container.innerHTML = '<p style="text-align:center; padding:2rem;">No articles yet.</p>';
-      return;
-    }
-
-    container.innerHTML = `<div class="table-responsive"><table class="data-table">
-      <thead><tr><th>Title</th><th>Author</th><th>Topic</th><th>Date</th><th>Actions</th></tr></thead>
-      <tbody>${data.articles.map(a => `<tr>
-        <td>${a.title}</td>
-        <td>${a.author_initials}. ${a.author_surname}</td>
-        <td>${a.topic}</td>
-        <td>${new Date(a.published_at).toLocaleDateString()}</td>
-        <td>
-          <button class="btn-icon" onclick="deleteArticle(${a.id})" title="Delete">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-          </button>
-        </td>
-      </tr>`).join('')}</tbody></table></div>`;
-  } catch { container.innerHTML = '<p style="color:#ef4444;">Failed to load articles.</p>'; }
-}
-
-async function deleteArticle(id) {
-  if (!confirm('Delete this article?')) return;
-  const token = getAdminToken();
-  await fetch(`${ADMIN_API}/api/articles/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
-  loadAdminArticles();
-}
-
-// Load on init
-document.addEventListener('DOMContentLoaded', () => {
-  setTimeout(loadAdminArticles, 500);
-});
-
-// Export for global access
-window.navigateToSection = navigateToSection;
-window.viewApplication = viewApplication;
-window.closeApplicationModal = closeApplicationModal;
+  </script>
+</body>
+</html>
