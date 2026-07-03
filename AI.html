@@ -704,52 +704,81 @@
       }
     }
 
-    async function handleAuthSubmit(e) {
-      e.preventDefault();
-      const errorEl = document.getElementById('authError');
-      errorEl.classList.remove('visible');
-
-      const name = document.getElementById('authName').value.trim();
-      const email = document.getElementById('authEmail').value.trim();
-      const password = document.getElementById('authPassword').value;
-      const remember = document.getElementById('rememberMe').checked;
-      const emailNotif = document.getElementById('emailNotif').checked;
-
-      try {
-        const endpoint = isLoginMode ? '/api/login' : '/api/register';
-        const body = isLoginMode ? { email, password, remember } : { name, email, password, email_notifications: emailNotif };
-
-        const res = await fetch(`${API}${endpoint}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body)
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          errorEl.textContent = data.error || 'Something went wrong';
-          errorEl.classList.add('visible');
-          return;
-        }
-
-        // Store token
-        if (remember) {
-          localStorage.setItem('parsing_token', data.token);
-        } else {
-          sessionStorage.setItem('parsing_token', data.token);
-        }
-        localStorage.setItem('parsing_name', data.user.name);
-
-        // Close auth modal and open articles
-        document.getElementById('authModal').classList.remove('active');
-        loadArticlesList();
-      } catch (err) {
-        errorEl.textContent = 'Network error. Please try again.';
-        errorEl.classList.add('visible');
-      }
+   async function handleAuthSubmit(e) {
+  e.preventDefault();
+  const errorEl = document.getElementById('authError');
+  errorEl.classList.remove('visible');
+  
+  const name = document.getElementById('authName').value.trim();
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value;
+  const remember = document.getElementById('rememberMe').checked;
+  const emailNotif = document.getElementById('emailNotif').checked;
+  
+  // Client-side validation
+  if (!isLoginMode) {
+    if (!name) {
+      errorEl.textContent = 'Name is required';
+      errorEl.classList.add('visible');
+      return;
     }
-
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      errorEl.textContent = 'Please enter a valid email address';
+      errorEl.classList.add('visible');
+      return;
+    }
+    
+    // Password strength check
+    const errors = [];
+    if (password.length < 8) errors.push('at least 8 characters');
+    if (!/[A-Z]/.test(password)) errors.push('one uppercase letter');
+    if (!/[a-z]/.test(password)) errors.push('one lowercase letter');
+    if (!/[0-9]/.test(password)) errors.push('one number');
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) errors.push('one special character');
+    
+    if (errors.length > 0) {
+      errorEl.textContent = `Password must contain: ${errors.join(', ')}`;
+      errorEl.classList.add('visible');
+      return;
+    }
+  }
+  
+  try {
+    const endpoint = isLoginMode ? '/api/login' : '/api/register';
+    const body = isLoginMode ? { email, password, remember } : { name, email, password, email_notifications: emailNotif };
+    
+    const res = await fetch(`${API}${endpoint}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    
+    const data = await res.json();
+    
+    if (!res.ok) {
+      errorEl.textContent = data.error || 'Something went wrong';
+      errorEl.classList.add('visible');
+      return;
+    }
+    
+    // Store token
+    if (remember) {
+      localStorage.setItem('parsing_token', data.token);
+    } else {
+      sessionStorage.setItem('parsing_token', data.token);
+    }
+    localStorage.setItem('parsing_name', data.user.name);
+    
+    // Close auth modal and open articles
+    document.getElementById('authModal').classList.remove('active');
+    loadArticlesList();
+  } catch (err) {
+    errorEl.textContent = 'Network error. Please try again.';
+    errorEl.classList.add('visible');
+  }
+}
     async function loadArticlesList() {
       const container = document.getElementById('articlesListContainer');
       container.innerHTML = '<li style="text-align:center; color:#a1a1aa; padding:2rem;">Loading articles...</li>';
