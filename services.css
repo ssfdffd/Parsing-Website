@@ -10,7 +10,7 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: 8rem 2rem 8rem;
+  padding: 8rem 2rem 4rem;
   background: radial-gradient(ellipse at top, rgba(240, 112, 128, 0.15), transparent 60%),
               radial-gradient(ellipse at bottom, rgba(240, 80, 144, 0.1), transparent 60%),
               #0A0A0A;
@@ -200,8 +200,8 @@
 /* Service Grid */
 .svc-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
   margin-top: 3rem;
 }
 
@@ -209,7 +209,7 @@
   background: linear-gradient(145deg, rgba(64, 64, 64, 0.2), rgba(10, 10, 10, 0.4));
   border: 1px solid rgba(64, 64, 64, 0.5);
   border-radius: 20px;
-  padding: 2.5rem;
+  padding: 2rem;
   position: relative;
   overflow: hidden;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -264,6 +264,7 @@
   color: rgba(240, 240, 224, 0.7);
   line-height: 1.7;
   margin-bottom: 1.5rem;
+  font-size: 0.9375rem;
 }
 
 .svc-price {
@@ -276,8 +277,8 @@
 /* Pricing Grid */
 .pricing-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
   margin-top: 3rem;
   align-items: start;
 }
@@ -286,7 +287,7 @@
   background: linear-gradient(145deg, rgba(64, 64, 64, 0.2), rgba(10, 10, 10, 0.4));
   border: 1px solid rgba(64, 64, 64, 0.5);
   border-radius: 24px;
-  padding: 2.5rem;
+  padding: 2rem;
   position: relative;
   overflow: hidden;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -317,11 +318,11 @@
 
 .pricing-card.featured {
   border-color: rgba(240, 112, 128, 0.5);
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
 .pricing-card.featured:hover {
-  transform: scale(1.05) translateY(-10px);
+  transform: scale(1.02) translateY(-10px);
 }
 
 .badge-popular {
@@ -352,7 +353,7 @@
 }
 
 .pricing-price {
-  font-size: 3rem;
+  font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 800;
   background: linear-gradient(135deg, #F07080, #F05090);
   -webkit-background-clip: text;
@@ -574,11 +575,102 @@
   box-shadow: 0 20px 60px rgba(240, 112, 128, 0.6);
 }
 
-/* Responsive */
-@media (max-width: 968px) {
+/* ============================================
+   RESPONSIVE DESIGN - MOBILE OPTIMIZED
+   ============================================ */
+
+/* Tablet and smaller laptops */
+@media (max-width: 1024px) {
+  .services-hero {
+    padding: 7rem 1.5rem 3rem;
+  }
+  
+  .scramble-title {
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+  }
+  
+  .svc-grid,
+  .pricing-grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+  }
+  
   .email-content {
     grid-template-columns: 1fr;
     gap: 3rem;
+  }
+  
+  .email-visual {
+    order: -1;
+  }
+}
+
+/* Mobile devices */
+@media (max-width: 768px) {
+  .section {
+    padding: 4rem 1rem;
+  }
+  
+  .services-hero {
+    padding: 6rem 1rem 3rem;
+    margin-bottom: 2rem;
+  }
+  
+  .services-hero-content {
+    max-width: 100%;
+  }
+  
+  .scramble-title {
+    font-size: clamp(2rem, 8vw, 3rem);
+    margin-bottom: 1.25rem;
+  }
+  
+  .services-hero-subtitle {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .section-header {
+    margin-bottom: 2.5rem;
+  }
+  
+  .section-title {
+    font-size: clamp(1.75rem, 6vw, 2.5rem);
+  }
+  
+  .section-subtitle {
+    font-size: 1rem;
+  }
+  
+  /* Cards - Single column on mobile */
+  .svc-grid,
+  .pricing-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  
+  .svc-card,
+  .pricing-card {
+    padding: 1.5rem;
+  }
+  
+  .svc-card h3,
+  .pricing-name {
+    font-size: 1.25rem;
+  }
+  
+  .svc-card p,
+  .pricing-features li {
+    font-size: 0.875rem;
+  }
+  
+  .svc-price {
+    font-size: 1.125rem;
+  }
+  
+  .pricing-price {
+    font-size: 2.5rem;
   }
   
   .pricing-card.featured {
@@ -588,30 +680,102 @@
   .pricing-card.featured:hover {
     transform: translateY(-10px);
   }
-}
-
-@media (max-width: 640px) {
-  .svc-grid,
-  .pricing-grid {
-    grid-template-columns: 1fr;
-  }
   
+  /* Jump tabs - Stack on mobile */
   .jump-tabs {
     flex-direction: column;
     align-items: stretch;
+    gap: 0.75rem;
   }
   
   .jump-tab {
     justify-content: center;
+    padding: 0.875rem 1.25rem;
+    font-size: 0.875rem;
+  }
+  
+  /* Email section */
+  .email-section {
+    padding: 2rem 1.5rem;
+    border-radius: 20px;
+  }
+  
+  .email-ring {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .email-ring-inner {
+    width: 90px;
+    height: 90px;
+  }
+  
+  .email-ring-inner svg {
+    width: 36px;
+    height: 36px;
+  }
+  
+  /* CTA section */
+  .cta-section {
+    padding: 3rem 1.5rem;
+    border-radius: 20px;
+  }
+  
+  .btn-large {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+  }
+}
+
+/* Very small mobile devices */
+@media (max-width: 480px) {
+  .services-hero {
+    padding: 5rem 0.75rem 2rem;
+  }
+  
+  .scramble-title {
+    font-size: clamp(1.75rem, 7vw, 2.5rem);
+  }
+  
+  .services-hero-subtitle {
+    font-size: 0.9375rem;
+  }
+  
+  .section {
+    padding: 3rem 0.75rem;
+  }
+  
+  .svc-card,
+  .pricing-card {
+    padding: 1.25rem;
+  }
+  
+  .svc-card h3,
+  .pricing-name {
+    font-size: 1.125rem;
+  }
+  
+  .pricing-price {
+    font-size: 2rem;
   }
   
   .email-section {
-    padding: 2.5rem 1.5rem;
+    padding: 1.5rem 1rem;
   }
   
-  .services-hero {
-    padding: 6rem 2rem;
-    margin-bottom: 2rem;
+  .email-ring {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .email-ring-inner {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .btn-large {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.9375rem;
   }
 }
 
