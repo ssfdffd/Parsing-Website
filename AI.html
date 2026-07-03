@@ -821,7 +821,37 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('articleTitle').textContent = 'Failed to load article';
       }
     }
+    // Add this function after your existing functions
+async function autoLoginIfRemembered() {
+  const token = localStorage.getItem('parsing_token');
+  if (!token) return;
+  
+  try {
+    const res = await fetch(`${API}/auth/verify`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    
+    if (res.ok) {
+      const data = await res.json();
+      // User is still logged in, store their name
+      localStorage.setItem('parsing_name', data.user.name);
+    } else {
+      // Token expired or invalid, clear it
+      localStorage.removeItem('parsing_token');
+      localStorage.removeItem('parsing_name');
+    }
+  } catch (err) {
+    console.error('Auto-login check failed:', err);
+  }
+}
 
+// Call this in your DOMContentLoaded
+document.addEventListener('DOMContentLoaded', () => {
+  // ... your existing code ...
+  
+  // Add this at the end of DOMContentLoaded
+  autoLoginIfRemembered();
+});
     function escapeHtml(text) {
       const div = document.createElement('div');
       div.textContent = text;
