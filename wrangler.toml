@@ -6,6 +6,11 @@ compatibility_date = "2024-09-23"
 directory = "./"
 binding = "ASSETS"
 
+[[d1_databases]]
+binding = "DB"
+database_name = "parsing_accounts"
+database_id = "7c0a30e4-2577-449e-af40-54ffbc668415" 
+
 [vars]
 FRONTEND_URL = "https://parsing.co.za"
 AUTH_WORKER_URL = "https://parsing-auth.buhle-1ce.workers.dev"
