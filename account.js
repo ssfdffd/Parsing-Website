@@ -1,13 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Toggle between Login and Signup
+    // ============================================
+    // 1. UI TOGGLE & PARTICLES
+    // ============================================
     const container = document.querySelector('.container');
     const registerBtn = document.querySelector('.register-btn');
     const loginBtn = document.querySelector('.login-btn');
 
+    // Toggle sliding animation
     if (registerBtn) registerBtn.addEventListener('click', () => container.classList.add("active"));
     if (loginBtn) loginBtn.addEventListener('click', () => container.classList.remove("active"));
 
-    // Create particles background
+    // Create background particles
     const particlesContainer = document.getElementById('particles');
     if (particlesContainer) {
         for (let i = 0; i < 30; i++) {
@@ -21,33 +24,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-const WORKER_URL = 'https://parsing-auth.buhle-1ce.workers.dev'; // Update if your worker URL changes
+// ============================================
+// 2. CONFIGURATION & REDIRECT LOGIC
+// ============================================
+const WORKER_URL = 'https://parsing-auth.buhle-1ce.workers.dev';
 const ADMIN_EMAIL = 'admin@peer-2-peer.co.za';
 
-// Helper to redirect based on user role
 function redirectUser(userData) {
-    // Check if the worker explicitly flagged them as admin, or if their email matches the admin email
-    if (userData.is_admin || (userData.email && userData.email.toLowerCase() === ADMIN_EMAIL)) {
-        window.location.href = 'admin.html'; // Redirect to Admin Portal
-    } else {
-        window.location.href = 'portal.html'; // Redirect to User Portal
-    }
+    // Checks JWT flag OR exact email match for security
+    const isAdmin = userData.is_admin || (userData.email && userData.email.toLowerCase() === ADMIN_EMAIL);
+    window.location.href = isAdmin ? 'admin.html' : 'portal.html';
 }
 
 // ============================================
-// LOGIN FORM
+// 3. LOGIN FORM HANDLER
 // ============================================
 document.getElementById('loginFormElement')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = e.target.querySelector('.btn');
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
-    
+
     btn.classList.add('loading-state');
     btn.disabled = true;
     const originalText = btn.textContent;
     btn.textContent = 'Logging in...';
-    
+
     try {
         const response = await fetch(`${WORKER_URL}/api/login`, {
             method: 'POST',
@@ -55,12 +57,12 @@ document.getElementById('loginFormElement')?.addEventListener('submit', async (e
             body: JSON.stringify({ email, password, remember: true })
         });
         const data = await response.json();
-        
+
         if (response.ok) {
             localStorage.setItem('parsing_auth_token', data.token);
             localStorage.setItem('parsing_auth_name', data.user.name);
             localStorage.setItem('parsing_auth_email', data.user.email);
-            redirectUser(data.user); // Smart Redirect
+            redirectUser(data.user);
         } else {
             alert(data.error || 'Login failed. Please check your credentials.');
         }
@@ -74,7 +76,7 @@ document.getElementById('loginFormElement')?.addEventListener('submit', async (e
 });
 
 // ============================================
-// SIGNUP FORM
+// 4. SIGNUP FORM HANDLER
 // ============================================
 document.getElementById('signupFormElement')?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -82,12 +84,12 @@ document.getElementById('signupFormElement')?.addEventListener('submit', async (
     const name = document.getElementById('signupName').value;
     const email = document.getElementById('signupEmail').value;
     const password = document.getElementById('signupPassword').value;
-    
+
     btn.classList.add('loading-state');
     btn.disabled = true;
     const originalText = btn.textContent;
     btn.textContent = 'Registering...';
-    
+
     try {
         const response = await fetch(`${WORKER_URL}/api/register`, {
             method: 'POST',
@@ -95,12 +97,12 @@ document.getElementById('signupFormElement')?.addEventListener('submit', async (
             body: JSON.stringify({ name, email, password, email_notifications: true, remember: true })
         });
         const data = await response.json();
-        
+
         if (response.ok) {
             localStorage.setItem('parsing_auth_token', data.token);
             localStorage.setItem('parsing_auth_name', data.user.name);
             localStorage.setItem('parsing_auth_email', data.user.email);
-            redirectUser(data.user); // Smart Redirect
+            redirectUser(data.user);
         } else {
             alert(data.error || 'Registration failed.');
         }
@@ -114,17 +116,20 @@ document.getElementById('signupFormElement')?.addEventListener('submit', async (
 });
 
 // ============================================
-// GITHUB OAUTH
+// 5. GITHUB OAUTH HANDLER
 // ============================================
 const githubBtn = document.getElementById('githubLoginBtn');
 if (githubBtn) {
     githubBtn.addEventListener('click', (e) => {
         e.preventDefault();
+        // Redirects to your Worker, which securely handles the GitHub OAuth flow
         window.location.href = `${WORKER_URL}/auth/github`;
     });
 }
 
-// Handle OAuth Return (When redirected back from GitHub)
+// ============================================
+// 6. OAUTH CALLBACK HANDLER
+// ============================================
 const urlParams = new URLSearchParams(window.location.search);
 const token = urlParams.get('token');
 const name = urlParams.get('name');
@@ -133,13 +138,15 @@ const provider = urlParams.get('provider');
 if (token && name) {
     localStorage.setItem('parsing_auth_token', token);
     localStorage.setItem('parsing_auth_name', decodeURIComponent(name));
-    
+
     if (provider === 'github') {
         try {
-            // Decode the JWT payload to check for admin status
+            // Decode JWT payload to check for admin flag from GitHub login
             const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
             redirectUser(payload);
-        } catch (e) { window.location.href = 'portal.html'; }
+        } catch (e) {
+            window.location.href = 'portal.html';
+        }
     } else {
         window.location.href = 'portal.html';
     }
@@ -147,22 +154,22 @@ if (token && name) {
 }
 
 // ============================================
-// SESSION CHECK ON LOAD
+// 7. SESSION CHECK ON LOAD
 // ============================================
 const existingToken = localStorage.getItem('parsing_auth_token') || sessionStorage.getItem('parsing_auth_token');
 if (existingToken) {
     fetch(`${WORKER_URL}/auth/verify`, { headers: { 'Authorization': `Bearer ${existingToken}` } })
-    .then(r => r.json())
-    .then(data => {
-        if (data.user) {
-            redirectUser(data.user); // Auto-redirect if already logged in
-        } else {
+        .then(r => r.json())
+        .then(data => {
+            if (data.user) {
+                redirectUser(data.user); // Auto-redirect if already logged in
+            } else {
+                localStorage.removeItem('parsing_auth_token');
+                sessionStorage.removeItem('parsing_auth_token');
+            }
+        })
+        .catch(() => {
             localStorage.removeItem('parsing_auth_token');
             sessionStorage.removeItem('parsing_auth_token');
-        }
-    })
-    .catch(() => {
-        localStorage.removeItem('parsing_auth_token');
-        sessionStorage.removeItem('parsing_auth_token');
-    });
+        });
 }
