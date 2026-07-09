@@ -101,13 +101,13 @@ form { width: 100%; }
 
 /* When active, Login slides LEFT and hides, Register slides RIGHT and shows */
 .container.active .form-box.login {
-  left: 0;
+  left: 50%;
   visibility: hidden;
   transition: 0.6s ease-in-out 1.2s, visibility 0s 1.8s;
 }
 
 .container.active .form-box.register {
-  left: 50%;
+  left: 0;
   visibility: visible;
   transition: 0.6s ease-in-out 1.2s, visibility 0s 1.2s;
 }
@@ -241,6 +241,7 @@ form { width: 100%; }
 /* Responsive */
 @media screen and (max-width: 650px) {
   .container { height: calc(100vh - 40px); }
+  .form-box, .form-box.login, .form-box.register { left: 0; }
   .form-box { bottom: 0; width: 100%; height: 70%; }
   .container.active .form-box { right: 0; bottom: 30%; }
   .toggle-box::before { left: 0; top: -270%; width: 100%; height: 300%; border-radius: 20vw; }
