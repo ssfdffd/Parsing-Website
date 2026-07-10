@@ -13,12 +13,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const userName = localStorage.getItem('parsing_auth_name') || 'User';
   const userEmail = localStorage.getItem('parsing_auth_email') || '';
 
+  // Update UI
   document.getElementById('portalUserName').textContent = userName;
   document.getElementById('welcomeName').textContent = userName;
   document.getElementById('portalUserEmail').textContent = userEmail;
   document.getElementById('settingsName').value = userName;
   document.getElementById('settingsEmail').value = userEmail;
   document.getElementById('userAvatar').textContent = userName.charAt(0).toUpperCase();
+  
+  // Pre-fill contact info
   document.getElementById('contactName').value = userName;
   document.getElementById('contactEmail').value = userEmail;
 
@@ -31,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Mobile Menu
   document.getElementById('menuToggle')?.addEventListener('click', () => {
     document.getElementById('sidebar').classList.add('active');
   });
@@ -38,13 +42,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('sidebar').classList.remove('active');
   });
 
-  // Load data
+  // Load Data
   loadDashboardStats();
   loadApplications();
   loadPayments();
   loadUpdates();
 
-  // Forms
+  // Form Submissions
   document.getElementById('applicationForm').addEventListener('submit', handleApplicationSubmit);
   document.getElementById('paymentForm').addEventListener('submit', handlePaymentSubmit);
 });
@@ -64,6 +68,9 @@ function getHeaders() {
   };
 }
 
+// ============================================
+// DATA FETCHING
+// ============================================
 async function loadDashboardStats() {
   try {
     const res = await fetch(`${WORKER_URL}/api/dashboard`, { headers: getHeaders() });
@@ -73,7 +80,7 @@ async function loadDashboardStats() {
     document.getElementById('statPendingApps').textContent = data.pendingApps || 0;
     document.getElementById('statTotalSpent').textContent = `R${(data.totalSpent || 0).toLocaleString()}`;
     document.getElementById('paymentTotalPaid').textContent = `R${(data.totalSpent || 0).toLocaleString()}`;
-  } catch (e) { console.error(e); }
+  } catch (e) { console.error('Stats error:', e); }
 }
 
 async function loadApplications() {
@@ -95,7 +102,7 @@ async function loadApplications() {
         <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:0.5rem;">Submitted: ${new Date(app.created_at).toLocaleDateString()}</p>
       </div>
     `).join('');
-  } catch (e) { container.innerHTML = '<div class="empty-state">Failed to load.</div>'; }
+  } catch (e) { container.innerHTML = '<div class="empty-state">Failed to load services.</div>'; }
 }
 
 async function loadPayments() {
@@ -115,7 +122,7 @@ async function loadPayments() {
         <td><span class="status-badge ${p.status}">${p.status}</span></td>
       </tr>
     `).join('');
-  } catch (e) { tbody.innerHTML = '<tr><td colspan="4" class="empty-state">Failed to load.</td></tr>'; }
+  } catch (e) { tbody.innerHTML = '<tr><td colspan="4" class="empty-state">Failed to load payments.</td></tr>'; }
 }
 
 async function loadUpdates() {
@@ -135,13 +142,19 @@ async function loadUpdates() {
         <div class="update-meta">${new Date(m.created_at).toLocaleString()} ${m.is_admin_sender ? '• From Admin' : ''}</div>
       </div>
     `).join('');
-  } catch (e) { container.innerHTML = '<div class="empty-state">Failed to load.</div>'; }
+  } catch (e) { container.innerHTML = '<div class="empty-state">Failed to load updates.</div>'; }
 }
 
+// ============================================
+// FORM SUBMISSIONS (WITH DETAILED ERROR LOGGING)
+// ============================================
 async function handleApplicationSubmit(e) {
   e.preventDefault();
   const btn = e.target.querySelector('button[type="submit"]');
-  btn.disabled = true; btn.textContent = 'Submitting...';
+  const originalText = btn.textContent;
+  btn.disabled = true; 
+  btn.textContent = 'Submitting...';
+  
   const payload = {
     service_type: document.getElementById('serviceType').value,
     project_name: document.getElementById('projectName').value,
@@ -153,46 +166,81 @@ async function handleApplicationSubmit(e) {
     contact_phone: document.getElementById('contactPhone').value,
     company_name: document.getElementById('companyName').value
   };
+
+  console.log('📤 Submitting Application Payload:', payload);
+
   try {
     const res = await fetch(`${WORKER_URL}/api/applications`, {
-      method: 'POST', headers: getHeaders(), body: JSON.stringify(payload)
+      method: 'POST', 
+      headers: getHeaders(), 
+      body: JSON.stringify(payload)
     });
+    
+    const resultData = await res.json();
+    console.log('📥 Worker Response:', res.status, resultData);
+
     if (res.ok) {
-      alert('Application submitted! Admin will review shortly.');
+      alert('✅ Application submitted successfully!');
       e.target.reset();
+      // Restore pre-filled contact info
       document.getElementById('contactName').value = localStorage.getItem('parsing_auth_name') || '';
       document.getElementById('contactEmail').value = localStorage.getItem('parsing_auth_email') || '';
       loadApplications();
       loadDashboardStats();
       navigateToSection('services');
     } else {
-      alert('Failed to submit.');
+      // Show the EXACT error from the worker
+      alert('❌ Error: ' + (resultData.error || 'Failed to submit application.'));
     }
-  } catch (err) { alert('Network error.'); }
-  finally { btn.disabled = false; btn.textContent = 'Submit Application'; }
+  } catch (err) { 
+    console.error('💥 Fetch Error:', err);
+    alert('💥 Network error: ' + err.message); 
+  } finally { 
+    btn.disabled = false; 
+    btn.textContent = originalText; 
+  }
 }
 
 async function handlePaymentSubmit(e) {
   e.preventDefault();
   const btn = e.target.querySelector('button[type="submit"]');
-  btn.disabled = true; btn.textContent = 'Processing...';
+  const originalText = btn.textContent;
+  btn.disabled = true; 
+  btn.textContent = 'Processing...';
+  
+  const payload = {
+    amount: parseFloat(document.getElementById('paymentAmount').value),
+    description: document.getElementById('paymentDescription').value
+  };
+
+  console.log('💳 Submitting Payment Payload:', payload);
+
   try {
     const res = await fetch(`${WORKER_URL}/api/payments`, {
-      method: 'POST', headers: getHeaders(),
-      body: JSON.stringify({
-        amount: parseFloat(document.getElementById('paymentAmount').value),
-        description: document.getElementById('paymentDescription').value
-      })
+      method: 'POST', 
+      headers: getHeaders(), 
+      body: JSON.stringify(payload)
     });
+    
+    const resultData = await res.json();
+    console.log('📥 Worker Response:', res.status, resultData);
+
     if (res.ok) {
-      alert('Payment successful!');
+      alert('✅ Payment successful!');
       e.target.reset();
       closePaymentModal();
       loadPayments();
       loadDashboardStats();
-    } else { alert('Payment failed.'); }
-  } catch (err) { alert('Network error.'); }
-  finally { btn.disabled = false; btn.textContent = 'Complete Payment'; }
+    } else {
+      alert('❌ Error: ' + (resultData.error || 'Payment failed.'));
+    }
+  } catch (err) { 
+    console.error('💥 Fetch Error:', err);
+    alert('💥 Network error: ' + err.message); 
+  } finally { 
+    btn.disabled = false; 
+    btn.textContent = originalText; 
+  }
 }
 
 function showPaymentModal() { document.getElementById('paymentModal').classList.add('active'); }
