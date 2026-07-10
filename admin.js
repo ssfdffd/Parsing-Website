@@ -1,437 +1,326 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Parsing User Portal - Manage your services and payments" />
-  <title>User Portal | Parsing</title>
-  <link rel="icon" type="image/x-icon" href="favicon.ico" />
-  
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
-  <link rel="stylesheet" href="portal.css" />
-  <style>
-    /* Quick fix for the logo area to match other pages */
-    .logo-wrapper {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
+const WORKER_URL = 'https://parsing-auth.buhle-1ce.workers.dev';
+let compressedImageData = null;
+let currentApplicationId = null;
+
+document.addEventListener('DOMContentLoaded', () => {
+  const token = localStorage.getItem('parsing_auth_token');
+  if (!token) { window.location.href = 'account.html'; return; }
+
+  // Decode JWT to verify admin
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+    if (!payload.is_admin) {
+      alert('Access denied. Admin only.');
+      window.location.href = 'portal.html';
+      return;
     }
-    .nav-favicon {
-      width: 2.5rem;
-      height: 2.5rem;
-      border-radius: 0.5rem;
-      object-fit: cover;
-    }
-    .logo-text {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.25rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, #F0F0E0, #F4A0B8);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .empty-state {
-      text-align: center;
-      padding: 3rem 1rem;
-      color: rgba(240, 240, 224, 0.5);
-      font-size: 0.9375rem;
-    }
-  </style>
-</head>
-<body>
-  <!-- Sidebar -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <div class="logo-wrapper">
-        <img src="favicon.ico" alt="Parsing Logo" class="nav-favicon" />
-        <span class="logo-text">Parsing</span>
-      </div>
-      <button class="sidebar-close" id="sidebarClose">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
-    </div>
+    document.getElementById('adminUserName').textContent = payload.name || 'Administrator';
+    document.getElementById('adminAvatar').textContent = (payload.name || 'A').charAt(0).toUpperCase();
+    document.getElementById('adminSettingsName').value = payload.name || '';
+    document.getElementById('adminSettingsEmail').value = payload.email || '';
+  } catch (e) {
+    window.location.href = 'account.html';
+    return;
+  }
 
-    <nav class="sidebar-nav">
-      <a href="#dashboard" class="nav-link active" data-section="dashboard">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="3" y="3" width="7" height="7"></rect>
-          <rect x="14" y="3" width="7" height="7"></rect>
-          <rect x="14" y="14" width="7" height="7"></rect>
-          <rect x="3" y="14" width="7" height="7"></rect>
-        </svg>
-        Dashboard
-      </a>
-      <a href="#services" class="nav-link" data-section="services">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="2" y="7" width="20" height="14" rx="2"></rect>
-          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-        </svg>
-        My Services
-      </a>
-      <a href="#apply" class="nav-link" data-section="apply">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 2v20M2 12h20"></path>
-        </svg>
-        Apply for Service
-      </a>
-      <a href="#payments" class="nav-link" data-section="payments">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="12" y1="1" x2="12" y2="23"></line>
-          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-        </svg>
-        Payments
-      </a>
-      <a href="#progress" class="nav-link" data-section="progress">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-        </svg>
-        Track Progress
-      </a>
-      <a href="#settings" class="nav-link" data-section="settings">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="3"></circle>
-          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-        </svg>
-        Settings
-      </a>
-    </nav>
-
-    <div class="sidebar-footer">
-      <button class="logout-btn" onclick="logoutUser()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-          <polyline points="16 17 21 12 16 7"></polyline>
-          <line x1="21" y1="12" x2="9" y2="12"></line>
-        </svg>
-        Logout
-      </button>
-    </div>
-  </aside>
-
-  <!-- Main Content -->
-  <main class="main-content">
-    <!-- Header -->
-    <header class="top-header">
-      <button class="menu-toggle" id="menuToggle">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="3" y1="12" x2="21" y2="12"></line>
-          <line x1="3" y1="6" x2="21" y2="6"></line>
-          <line x1="3" y1="18" x2="21" y2="18"></line>
-        </svg>
-      </button>
-
-      <div class="header-search">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="8"></circle>
-          <path d="m21 21-4.35-4.35"></path>
-        </svg>
-        <input type="text" placeholder="Search services, payments..." />
-      </div>
-
-      <div class="header-actions">
-        <button class="notification-btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-          </svg>
-          <span class="notification-badge">0</span>
-        </button>
-
-        <div class="user-profile">
-          <div class="avatar" id="userAvatar">U</div>
-          <div class="user-info">
-            <span class="user-name" id="portalUserName">User</span>
-            <span class="user-email" id="portalUserEmail">user@example.com</span>
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <!-- Dashboard Section -->
-    <section id="dashboard" class="section active">
-      <div class="section-header">
-        <h1 class="section-title">Welcome back, <span id="welcomeName">User</span>!</h1>
-        <p class="section-subtitle">Here's an overview of your account.</p>
-      </div>
-
-      <!-- Stats Grid (Cleared) -->
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="2" y="7" width="20" height="14" rx="2"></rect>
-              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-            </svg>
-          </div>
-          <div class="stat-content">
-            <span class="stat-value">0</span>
-            <span class="stat-label">Active Services</span>
-          </div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 2v20M2 12h20"></path>
-            </svg>
-          </div>
-          <div class="stat-content">
-            <span class="stat-value">0</span>
-            <span class="stat-label">Pending Applications</span>
-          </div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="12" y1="1" x2="12" y2="23"></line>
-              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-            </svg>
-          </div>
-          <div class="stat-content">
-            <span class="stat-value">R0</span>
-            <span class="stat-label">Total Spent</span>
-          </div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-            </svg>
-          </div>
-          <div class="stat-content">
-            <span class="stat-value">—</span>
-            <span class="stat-label">Avg. Progress</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Recent Activity (Cleared) -->
-      <div class="dashboard-grid">
-        <div class="card">
-          <div class="card-header">
-            <h3>Recent Activity</h3>
-          </div>
-          <div class="activity-list">
-            <div class="empty-state">No recent activity to display.</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-header">
-            <h3>Quick Actions</h3>
-          </div>
-          <div class="quick-actions">
-            <button class="action-btn" onclick="navigateToSection('apply')">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 2v20M2 12h20"></path>
-              </svg>
-              Apply for Service
-            </button>
-            <button class="action-btn" onclick="navigateToSection('payments')">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-                <line x1="1" y1="10" x2="23" y2="10"></line>
-              </svg>
-              Make Payment
-            </button>
-            <button class="action-btn" onclick="navigateToSection('progress')">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-              </svg>
-              Track Progress
-            </button>
-            <button class="action-btn" onclick="navigateToSection('services')">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-              </svg>
-              View Services
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Services Section (Cleared) -->
-    <section id="services" class="section">
-      <div class="section-header">
-        <h1 class="section-title">My Services</h1>
-        <p class="section-subtitle">Manage and track all your active services.</p>
-      </div>
-      <div class="card">
-        <div class="empty-state" style="padding: 4rem 1rem;">
-          You haven't purchased any services yet.
-          <br><br>
-          <button class="btn btn-primary" onclick="navigateToSection('apply')">Apply for a Service</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- Apply Section (Kept form structure, cleared values) -->
-    <section id="apply" class="section">
-      <div class="section-header">
-        <h1 class="section-title">Apply for Service</h1>
-        <p class="section-subtitle">Choose from our range of professional services.</p>
-      </div>
-
-      <div class="apply-container">
-        <div class="application-form-container">
-          <form id="applicationForm" class="application-form">
-            <div class="form-section">
-              <h3>Service Details</h3>
-              <div class="form-group">
-                <label for="serviceType">Service Type *</label>
-                <select id="serviceType" required>
-                  <option value="">Select a service</option>
-                  <option value="static-website">Static Website - R500</option>
-                  <option value="dynamic-website">Dynamic Website - R1,200</option>
-                  <option value="social-starter">Social Media Starter - R3,500/mo</option>
-                  <option value="social-growth">Social Media Growth - R5,500/mo</option>
-                  <option value="social-premium">Social Media Premium - R7,500/mo</option>
-                  <option value="seo">SEO Package - R200</option>
-                  <option value="advertising">Advertising Package - R140</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label for="projectName">Project Name *</label>
-                <input type="text" id="projectName" placeholder="e.g., Company Website Redesign" required />
-              </div>
-
-              <div class="form-group">
-                <label for="description">Project Description *</label>
-                <textarea id="description" rows="5" placeholder="Describe your project requirements..." required></textarea>
-              </div>
-            </div>
-
-            <div class="form-actions">
-              <button type="submit" class="btn btn-primary">Submit Application</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </section>
-
-    <!-- Payments Section (Cleared) -->
-    <section id="payments" class="section">
-      <div class="section-header">
-        <h1 class="section-title">Payments</h1>
-        <p class="section-subtitle">Manage your payments and view transaction history.</p>
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <h3>Transaction History</h3>
-        </div>
-        <div class="transactions-table">
-          <table>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Description</th>
-                <th>Amount</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody id="transactionsBody">
-              <!-- Empty by default -->
-            </tbody>
-          </table>
-          <div id="noTransactionsMsg" class="empty-state">No transactions found.</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Progress Section (Cleared) -->
-    <section id="progress" class="section">
-      <div class="section-header">
-        <h1 class="section-title">Track Progress</h1>
-        <p class="section-subtitle">Monitor the status of your ongoing projects.</p>
-      </div>
-      <div class="card">
-        <div class="empty-state">No active projects to track.</div>
-      </div>
-    </section>
-
-    <!-- Settings Section (Cleared) -->
-    <section id="settings" class="section">
-      <div class="section-header">
-        <h1 class="section-title">Account Settings</h1>
-        <p class="section-subtitle">Manage your account preferences.</p>
-      </div>
-
-      <div class="settings-grid">
-        <div class="card">
-          <h3>Profile Information</h3>
-          <form class="settings-form">
-            <div class="form-group">
-              <label>Full Name</label>
-              <input type="text" id="settingsName" value="" placeholder="Your Name" />
-            </div>
-            <div class="form-group">
-              <label>Email Address</label>
-              <input type="email" id="settingsEmail" value="" placeholder="your@email.com" />
-            </div>
-            <button type="button" class="btn btn-primary">Save Changes</button>
-          </form>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <script src="portal.js"></script>
-  <script>
-    // ============================================
-    // PORTAL AUTH & USER DATA LOGIC
-    // ============================================
-    document.addEventListener('DOMContentLoaded', () => {
-      // 1. Check if user is logged in
-      const token = localStorage.getItem('parsing_auth_token') || sessionStorage.getItem('parsing_auth_token');
-      if (!token) {
-        // Redirect to login if no token
-        window.location.href = 'account.html';
-        return;
-      }
-
-      // 2. Fetch user data from localStorage
-      const userName = localStorage.getItem('parsing_auth_name') || 'User';
-      const userEmail = localStorage.getItem('parsing_auth_email') || ''; // You can store this during login if needed
-      const userProvider = localStorage.getItem('parsing_auth_provider') || 'email';
-
-      // 3. Update UI with user data
-      document.getElementById('portalUserName').textContent = userName;
-      document.getElementById('welcomeName').textContent = userName;
-      document.getElementById('settingsName').value = userName;
-      
-      // Set Avatar Initial
-      const initial = userName.charAt(0).toUpperCase();
-      document.getElementById('userAvatar').textContent = initial;
-
-      // If you stored email during login, uncomment below:
-      // if(userEmail) {
-      //   document.getElementById('portalUserEmail').textContent = userEmail;
-      //   document.getElementById('settingsEmail').value = userEmail;
-      // } else {
-      //   document.getElementById('portalUserEmail').style.display = 'none';
-      // }
+  // Navbar navigation
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const sectionId = link.getAttribute('data-section');
+      if (sectionId) navigateToAdminSection(sectionId);
     });
+  });
 
-    function logoutUser() {
-      localStorage.removeItem('parsing_auth_token');
-      sessionStorage.removeItem('parsing_auth_token');
-      localStorage.removeItem('parsing_auth_name');
-      localStorage.removeItem('parsing_auth_provider');
-      localStorage.removeItem('parsing_auth_email');
-      window.location.href = 'account.html';
+  // Mobile menu
+  document.getElementById('menuToggle')?.addEventListener('click', () => {
+    document.getElementById('sidebar').classList.add('active');
+  });
+  document.getElementById('sidebarClose')?.addEventListener('click', () => {
+    document.getElementById('sidebar').classList.remove('active');
+  });
+
+  // Load data
+  loadAdminStats();
+  loadAdminArticles();
+  loadAdminApplications();
+  loadAdminUsers();
+  loadAdminPayments();
+  loadAdminMessages();
+
+  // Article form
+  document.getElementById('createArticleForm').addEventListener('submit', handleArticleSubmit);
+  document.getElementById('artCoverImage').addEventListener('change', handleImageUpload);
+  document.getElementById('adminSettingsForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    alert('Settings saved!');
+  });
+});
+
+function navigateToAdminSection(sectionId) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(sectionId)?.classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  document.querySelector(`.nav-link[data-section="${sectionId}"]`)?.classList.add('active');
+  document.getElementById('sidebar').classList.remove('active');
+}
+
+function getHeaders() {
+  return {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${localStorage.getItem('parsing_auth_token')}`
+  };
+}
+
+async function loadAdminStats() {
+  try {
+    const res = await fetch(`${WORKER_URL}/api/admin/stats`, { headers: getHeaders() });
+    if (!res.ok) return;
+    const data = await res.json();
+    document.getElementById('stat-totalUsers').textContent = data.totalUsers || 0;
+    document.getElementById('stat-activeServices').textContent = data.activeServices || 0;
+    document.getElementById('stat-pendingApps').textContent = data.pendingApps || 0;
+    document.getElementById('stat-revenue').textContent = `R${(data.totalRevenue || 0).toLocaleString()}`;
+    document.getElementById('appCount').textContent = data.pendingApps || 0;
+  } catch (e) { console.error(e); }
+}
+
+function handleImageUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(event) {
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.createElement('canvas');
+      const MAX_WIDTH = 800, MAX_HEIGHT = 600;
+      let width = img.width, height = img.height;
+      if (width > height) {
+        if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+      } else {
+        if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
+      }
+      canvas.width = width; canvas.height = height;
+      canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+      compressedImageData = canvas.toDataURL('image/jpeg', 0.7);
+      const preview = document.getElementById('coverImagePreview');
+      preview.src = compressedImageData;
+      preview.style.display = 'block';
+    };
+    img.src = event.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+async function handleArticleSubmit(e) {
+  e.preventDefault();
+  const btn = document.getElementById('publishArticleBtn');
+  btn.disabled = true; btn.textContent = 'Publishing...';
+  const payload = {
+    title: document.getElementById('artTitle').value,
+    author_initials: document.getElementById('artInitials').value,
+    author_surname: document.getElementById('artSurname').value,
+    topic: document.getElementById('artTopic').value,
+    excerpt: document.getElementById('artExcerpt').value,
+    content: document.getElementById('artContent').value,
+    cover_image: compressedImageData
+  };
+  try {
+    const res = await fetch(`${WORKER_URL}/api/articles`, {
+      method: 'POST', headers: getHeaders(), body: JSON.stringify(payload)
+    });
+    if (res.ok) {
+      alert('Article published!');
+      e.target.reset();
+      document.getElementById('coverImagePreview').style.display = 'none';
+      compressedImageData = null;
+      loadAdminArticles();
+      loadAdminStats();
+    } else {
+      const err = await res.json();
+      alert('Error: ' + (err.error || 'Failed'));
     }
-  </script>
-</body>
-</html>
+  } catch (err) { alert('Network error.'); }
+  finally { btn.disabled = false; btn.textContent = 'Publish Article'; }
+}
+
+async function loadAdminArticles() {
+  const container = document.getElementById('adminArticlesList');
+  try {
+    const res = await fetch(`${WORKER_URL}/api/articles/admin`, { headers: getHeaders() });
+    const data = await res.json();
+    document.getElementById('articleCount').textContent = data.articles?.length || 0;
+    if (!data.articles || data.articles.length === 0) {
+      container.innerHTML = '<div class="empty-state">No articles yet.</div>';
+      return;
+    }
+    container.innerHTML = data.articles.map(art => `
+      <div style="display:flex; gap:1.5rem; padding:1.5rem; border-bottom:1px solid var(--border-color); align-items:center;">
+        ${art.cover_image ? `<img src="${art.cover_image}" style="width:100px; height:70px; object-fit:cover; border-radius:8px;" />` : '<div style="width:100px; height:70px; background:var(--bg-card); border-radius:8px;"></div>'}
+        <div style="flex:1;">
+          <h4 style="color:var(--cream); margin-bottom:0.25rem;">${art.title}</h4>
+          <p style="font-size:0.85rem; color:var(--text-secondary);">By ${art.author_initials} ${art.author_surname} • ${art.topic}</p>
+        </div>
+        <button class="btn btn-danger btn-sm" onclick="deleteArticle(${art.id})">Delete</button>
+      </div>
+    `).join('');
+  } catch (e) { container.innerHTML = '<div class="empty-state">Failed to load.</div>'; }
+}
+
+async function deleteArticle(id) {
+  if (!confirm('Delete this article?')) return;
+  await fetch(`${WORKER_URL}/api/articles/${id}`, { method: 'DELETE', headers: getHeaders() });
+  loadAdminArticles();
+}
+
+async function loadAdminApplications() {
+  const tbody = document.getElementById('applicationsTableBody');
+  try {
+    const res = await fetch(`${WORKER_URL}/api/admin/applications`, { headers: getHeaders() });
+    const data = await res.json();
+    if (!data.applications || data.applications.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="empty-state">No applications.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = data.applications.map(app => `
+      <tr>
+        <td>#${app.id}</td>
+        <td>${app.user_name || 'Unknown'}</td>
+        <td>${app.service_type}</td>
+        <td>${new Date(app.created_at).toLocaleDateString()}</td>
+        <td>${app.budget || '-'}</td>
+        <td><span class="status-badge ${app.status}">${app.status}</span></td>
+        <td><button class="btn btn-primary btn-sm" onclick="openApplicationModal(${app.id}, '${app.user_name}', '${app.service_type}', '${app.project_name}', '${(app.description||'').replace(/'/g, "\\'")}', '${app.budget||''}', ${app.user_id})">Review</button></td>
+      </tr>
+    `).join('');
+  } catch (e) { tbody.innerHTML = '<tr><td colspan="7" class="empty-state">Failed to load.</td></tr>'; }
+}
+
+function openApplicationModal(id, user, service, project, desc, budget, userId) {
+  currentApplicationId = id;
+  currentUserId = userId;
+  document.getElementById('modalBody').innerHTML = `
+    <p><strong>User:</strong> ${user}</p>
+    <p><strong>Service:</strong> ${service}</p>
+    <p><strong>Project:</strong> ${project}</p>
+    <p><strong>Description:</strong> ${desc}</p>
+    <p><strong>Budget:</strong> ${budget || 'Not specified'}</p>
+    <div class="form-group" style="margin-top:1rem;">
+      <label>Admin Message (sent to user)</label>
+      <textarea id="adminReplyMessage" rows="3" placeholder="Optional message to user..."></textarea>
+    </div>
+  `;
+  document.getElementById('applicationModal').classList.add('active');
+}
+
+function closeApplicationModal() {
+  document.getElementById('applicationModal').classList.remove('active');
+}
+
+document.getElementById('approveBtn').addEventListener('click', async () => {
+  if (!currentApplicationId) return;
+  const message = document.getElementById('adminReplyMessage')?.value || '';
+  await fetch(`${WORKER_URL}/api/admin/applications/${currentApplicationId}`, {
+    method: 'PUT', headers: getHeaders(),
+    body: JSON.stringify({ status: 'approved', admin_message: message })
+  });
+  closeApplicationModal();
+  loadAdminApplications();
+  loadAdminStats();
+  loadAdminMessages();
+});
+
+document.getElementById('rejectBtn').addEventListener('click', async () => {
+  if (!currentApplicationId) return;
+  const message = document.getElementById('adminReplyMessage')?.value || '';
+  await fetch(`${WORKER_URL}/api/admin/applications/${currentApplicationId}`, {
+    method: 'PUT', headers: getHeaders(),
+    body: JSON.stringify({ status: 'rejected', admin_message: message })
+  });
+  closeApplicationModal();
+  loadAdminApplications();
+  loadAdminStats();
+  loadAdminMessages();
+});
+
+async function loadAdminUsers() {
+  const tbody = document.getElementById('usersTableBody');
+  try {
+    const res = await fetch(`${WORKER_URL}/api/admin/users`, { headers: getHeaders() });
+    const data = await res.json();
+    if (!data.users || data.users.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="3" class="empty-state">No users.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = data.users.map(u => `
+      <tr>
+        <td>${u.name}</td>
+        <td>${u.email}</td>
+        <td>${new Date(u.created_at).toLocaleDateString()}</td>
+      </tr>
+    `).join('');
+  } catch (e) { tbody.innerHTML = '<tr><td colspan="3" class="empty-state">Failed to load.</td></tr>'; }
+}
+
+async function loadAdminPayments() {
+  const tbody = document.getElementById('paymentsTableBody');
+  try {
+    const res = await fetch(`${WORKER_URL}/api/admin/payments`, { headers: getHeaders() });
+    const data = await res.json();
+    if (!data.payments || data.payments.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No payments.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = data.payments.map(p => `
+      <tr>
+        <td>#${p.id}</td>
+        <td>${p.user_name || 'Unknown'}</td>
+        <td>R${(p.amount || 0).toLocaleString()}</td>
+        <td>${new Date(p.created_at).toLocaleDateString()}</td>
+        <td><span class="status-badge ${p.status}">${p.status}</span></td>
+      </tr>
+    `).join('');
+  } catch (e) { tbody.innerHTML = '<tr><td colspan="5" class="empty-state">Failed to load.</td></tr>'; }
+}
+
+async function loadAdminMessages() {
+  const container = document.getElementById('adminMessagesList');
+  try {
+    const res = await fetch(`${WORKER_URL}/api/admin/messages`, { headers: getHeaders() });
+    const data = await res.json();
+    document.getElementById('msgCount').textContent = data.messages?.length || 0;
+    if (!data.messages || data.messages.length === 0) {
+      container.innerHTML = '<div class="empty-state">No messages.</div>';
+      return;
+    }
+    container.innerHTML = data.messages.map(m => `
+      <div style="padding:1rem; border-bottom:1px solid var(--border-color);">
+        <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
+          <strong style="color:var(--coral-pink);">${m.subject || 'Message'}</strong>
+          <span style="font-size:0.75rem; color:var(--text-secondary);">${new Date(m.created_at).toLocaleString()}</span>
+        </div>
+        <p style="color:var(--cream); margin-bottom:0.5rem;">${m.content}</p>
+        <p style="font-size:0.8rem; color:var(--text-secondary);">From: ${m.user_name || 'Admin'} ${m.is_admin_sender ? '(Admin)' : '(User)'}</p>
+        ${!m.is_admin_sender ? `<button class="btn btn-primary btn-sm" style="margin-top:0.5rem;" onclick="replyToUser(${m.sender_id}, '${(m.subject||'').replace(/'/g, "\\'")}')">Reply</button>` : ''}
+      </div>
+    `).join('');
+  } catch (e) { container.innerHTML = '<div class="empty-state">Failed to load.</div>'; }
+}
+
+function replyToUser(userId, subject) {
+  const reply = prompt('Your reply:');
+  if (!reply) return;
+  fetch(`${WORKER_URL}/api/admin/messages`, {
+    method: 'POST', headers: getHeaders(),
+    body: JSON.stringify({ recipient_id: userId, content: reply, subject: 'Re: ' + subject })
+  }).then(() => {
+    alert('Reply sent!');
+    loadAdminMessages();
+  });
+}
+
+function adminLogout() {
+  localStorage.removeItem('parsing_auth_token');
+  localStorage.removeItem('parsing_auth_name');
+  window.location.href = 'account.html';
+}
