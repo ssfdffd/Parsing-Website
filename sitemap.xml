@@ -1,39 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  
-  <!-- Homepage -->
+<?xml-stylesheet type="text/xsl" href="/download/da274e525-783754a5b/sitemap.xsl"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
   <url>
-    <loc>https://parsing.co.za/</loc>
-    <lastmod>2026-07-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
+       <loc>https://parsing.co.za/</loc>
+       <lastmod>2026-07-13T10:54:59+00:00</lastmod>
+       <changefreq>daily</changefreq>
+       <priority>1.0000</priority>
   </url>
-
-  <!-- About Page -->
   <url>
-    <loc>https://parsing.co.za/about</loc>
-    <lastmod>2026-07-13</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.8</priority>
+       <loc>https://parsing.co.za/AI</loc>
+       <lastmod>2026-07-13T10:54:59+00:00</lastmod>
+       <changefreq>daily</changefreq>
+       <priority>0.6400</priority>
   </url>
-
-  <!-- Services Page -->
   <url>
-    <loc>https://parsing.co.za/services</loc>
-    <lastmod>2026-07-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+       <loc>https://parsing.co.za/services</loc>
+       <lastmod>2026-07-13T10:54:59+00:00</lastmod>
+       <changefreq>daily</changefreq>
+       <priority>0.6400</priority>
   </url>
-
-<!-- AI Page -->
   <url>
-    <loc>https://parsing.co.za/AI/loc>
-    <lastmod>2026-07-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+       <loc>https://parsing.co.za/about</loc>
+       <lastmod>2026-07-13T10:54:59+00:00</lastmod>
+       <changefreq>daily</changefreq>
+       <priority>0.6400</priority>
   </url>
-
-
-  <!-- Add more URLs below by copying the <url>...</url> block -->
-
+  <url>
+       <loc>https://parsing.co.za/account</loc>
+       <lastmod>2026-07-13T10:54:59+00:00</lastmod>
+       <changefreq>daily</changefreq>
+       <priority>0.6400</priority>
+  </url>
 </urlset>
